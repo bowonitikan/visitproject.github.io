@@ -497,6 +497,10 @@ tr:hover td { background: var(--surface2); }
     <div class="card">
       <div class="card-title">Data Pekerja</div>
       <div class="field">
+        <label>Employee ID <span style="color:var(--danger)">*</span></label>
+        <input type="text" id="f-empid" placeholder="Contoh: EMP-001">
+      </div>
+      <div class="field">
         <label>Nama Pekerja <span style="color:var(--danger)">*</span></label>
         <input type="text" id="f-nama" placeholder="Nama lengkap pekerja">
       </div>
@@ -610,6 +614,7 @@ tr:hover td { background: var(--surface2); }
           <thead>
             <tr>
               <th>Tanggal</th>
+              <th>Emp ID</th>
               <th>Nama</th>
               <th>Lokasi</th>
               <th>Keperluan</th>
@@ -803,17 +808,19 @@ function fallbackGPS() {
 // ============================================================
 async function submitForm() {
   const fields = {
-    nama:      document.getElementById('f-nama').value.trim(),
-    keperluan: document.getElementById('f-keperluan').value,
-    deskripsi: document.getElementById('f-deskripsi').value.trim(),
-    hasil:     document.getElementById('f-hasil').value,
-    tanggal:   document.getElementById('f-tanggal').value,
-    jam:       document.getElementById('f-jam').value,
-    kodeQR:    document.getElementById('f-qr').value.trim(),
-    gkp:       document.getElementById('f-gkp').value.trim(),
-    gps:       gpsValue || 'Tidak diambil'
+    employeeId: document.getElementById('f-empid').value.trim(),
+    nama:       document.getElementById('f-nama').value.trim(),
+    keperluan:  document.getElementById('f-keperluan').value,
+    deskripsi:  document.getElementById('f-deskripsi').value.trim(),
+    hasil:      document.getElementById('f-hasil').value,
+    tanggal:    document.getElementById('f-tanggal').value,
+    jam:        document.getElementById('f-jam').value,
+    kodeQR:     document.getElementById('f-qr').value.trim(),
+    gkp:        document.getElementById('f-gkp').value.trim(),
+    gps:        gpsValue || 'Tidak diambil'
   };
 
+  if (!fields.employeeId){ toast('Employee ID wajib diisi', 'error'); return; }
   if (!fields.nama)      { toast('Nama pekerja wajib diisi', 'error'); return; }
   if (!fields.keperluan) { toast('Keperluan wajib dipilih', 'error'); return; }
   if (!fields.deskripsi) { toast('Deskripsi wajib diisi', 'error'); return; }
@@ -854,6 +861,7 @@ function setLoading(on) {
 }
 
 function resetForm() {
+  document.getElementById('f-empid').value = '';
   document.getElementById('f-nama').value = '';
   document.getElementById('f-keperluan').value = '';
   document.getElementById('f-deskripsi').value = '';
@@ -923,10 +931,10 @@ async function loadAdminData() {
 }
 
 const SAMPLE_DATA = [
-  {Tanggal:'2025-04-29',Jam:'08:15','Nama Pekerja':'Budi Santoso','Kode QR':'LOK-GUDANG-01',GKP:'GKP-001',Keperluan:'Maintenance','Deskripsi Pekerjaan':'Periksa mesin pompa',Hasil:'Selesai','GPS Lokasi':'-7.4014, 109.2316'},
-  {Tanggal:'2025-04-28',Jam:'10:30','Nama Pekerja':'Siti Rahayu','Kode QR':'LOK-KANTOR-02',GKP:'GKP-002',Keperluan:'Perbaikan','Deskripsi Pekerjaan':'Ganti lampu koridor',Hasil:'Selesai','GPS Lokasi':'-7.4021, 109.2320'},
-  {Tanggal:'2025-04-27',Jam:'14:00','Nama Pekerja':'Agus Wijaya','Kode QR':'LOK-GUDANG-01',GKP:'GKP-001',Keperluan:'Instalasi baru','Deskripsi Pekerjaan':'Pasang CCTV pintu masuk',Hasil:'Belum selesai','GPS Lokasi':'-7.4014, 109.2316'},
-  {Tanggal:'2025-04-26',Jam:'09:45','Nama Pekerja':'Budi Santoso','Kode QR':'LOK-PANEL-03',GKP:'GKP-003',Keperluan:'Maintenance','Deskripsi Pekerjaan':'Cek panel listrik rutin',Hasil:'Selesai','GPS Lokasi':'-7.4030, 109.2310'},
+  {Tanggal:'2025-04-29',Jam:'08:15','Employee ID':'EMP-001','Nama Pekerja':'Budi Santoso','Kode QR':'LOK-GUDANG-01',GKP:'GKP-001',Keperluan:'Maintenance','Deskripsi Pekerjaan':'Periksa mesin pompa',Hasil:'Selesai','GPS Lokasi':'-7.4014, 109.2316'},
+  {Tanggal:'2025-04-28',Jam:'10:30','Employee ID':'EMP-002','Nama Pekerja':'Siti Rahayu','Kode QR':'LOK-KANTOR-02',GKP:'GKP-002',Keperluan:'Perbaikan','Deskripsi Pekerjaan':'Ganti lampu koridor',Hasil:'Selesai','GPS Lokasi':'-7.4021, 109.2320'},
+  {Tanggal:'2025-04-27',Jam:'14:00','Employee ID':'EMP-003','Nama Pekerja':'Agus Wijaya','Kode QR':'LOK-GUDANG-01',GKP:'GKP-001',Keperluan:'Instalasi baru','Deskripsi Pekerjaan':'Pasang CCTV pintu masuk',Hasil:'Belum selesai','GPS Lokasi':'-7.4014, 109.2316'},
+  {Tanggal:'2025-04-26',Jam:'09:45','Employee ID':'EMP-001','Nama Pekerja':'Budi Santoso','Kode QR':'LOK-PANEL-03',GKP:'GKP-003',Keperluan:'Maintenance','Deskripsi Pekerjaan':'Cek panel listrik rutin',Hasil:'Selesai','GPS Lokasi':'-7.4030, 109.2310'},
 ];
 
 function renderAdminTable(data) {
@@ -950,6 +958,7 @@ function renderAdminTable(data) {
     const badgeCls = hasil === 'Selesai' ? 'badge-success' : 'badge-warn';
     return `<tr>
       <td>${r['Tanggal']||r.tanggal||''}<br><span class="col-mono">${r['Jam']||r.jam||''}</span></td>
+      <td><span class="col-mono">${r['Employee ID']||r.employeeId||'—'}</span></td>
       <td>${r['Nama Pekerja']||r.nama||''}</td>
       <td><span class="col-mono">${r['Kode QR']||r.kodeQR||''}</span></td>
       <td>${r['Keperluan']||r.keperluan||''}</td>
@@ -966,7 +975,7 @@ function resetFilter() {
 
 function exportCSV() {
   const data = allData.length ? allData : SAMPLE_DATA;
-  const cols = ['Tanggal','Jam','Nama Pekerja','Kode QR','GKP','Keperluan','Deskripsi Pekerjaan','Hasil','GPS Lokasi'];
+  const cols = ['Tanggal','Jam','Employee ID','Nama Pekerja','Kode QR','GKP','Keperluan','Deskripsi Pekerjaan','Hasil','GPS Lokasi'];
   const header = cols.join(',');
   const rows = data.map(r => cols.map(c => '"' + (r[c] || '') + '"').join(','));
   const csv = [header, ...rows].join('\n');
