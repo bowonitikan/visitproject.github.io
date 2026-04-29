@@ -836,18 +836,17 @@ async function submitForm() {
   }
 
   try {
-    const res = await fetch(CFG.gasUrl, {
+    // Gunakan no-cors + FormData untuk menghindari CORS preflight
+    const form = new FormData();
+    form.append('payload', JSON.stringify(fields));
+    await fetch(CFG.gasUrl, {
       method: 'POST',
-      body: JSON.stringify(fields),
-      headers: {'Content-Type': 'application/json'}
+      mode: 'no-cors',
+      body: form
     });
-    const result = await res.json();
-    if (result.status === 'ok') {
-      toast('Laporan berhasil dikirim!', 'success');
-      resetForm();
-    } else {
-      toast('Gagal: ' + (result.msg || 'Coba lagi'), 'error');
-    }
+    // no-cors tidak bisa baca response, asumsikan sukses jika tidak throw
+    toast('Laporan berhasil dikirim!', 'success');
+    resetForm();
   } catch(e) {
     toast('Koneksi gagal. Periksa URL Apps Script.', 'error');
   }
@@ -920,7 +919,8 @@ async function loadAdminData() {
 
   try {
     const qs = new URLSearchParams(params).toString();
-    const res = await fetch(CFG.gasUrl + (qs ? '?' + qs : ''));
+    const url = CFG.gasUrl + '?action=get' + (qs ? '&' + qs : '');
+    const res = await fetch(url);
     const data = await res.json();
     allData = data.rows || [];
     renderAdminTable(allData);
