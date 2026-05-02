@@ -240,8 +240,8 @@ tr:hover td{background:var(--surface2)}
 
     <div class="card">
       <div class="card-title">Data Pekerja</div>
-      <div class="field"><label>Employee ID <span style="color:var(--danger)">*</span></label><input type="text" id="f-empid" placeholder="Contoh: EMP-001"></div>
-      <div class="field"><label>Nama Pekerja <span style="color:var(--danger)">*</span></label><input type="text" id="f-nama" placeholder="Nama lengkap"></div>
+      <div class="field"><label>Employee ID <span style="color:var(--danger)">*</span></label><input type="text" id="f-empid" placeholder="Contoh: EMP-001" onchange="lookupNamaPekerja()"></div>
+      <div class="field"><label>Nama Pekerja <span style="color:var(--danger)">*</span></label><input type="text" id="f-nama" placeholder="Nama lengkap (otomatis terisi)" readonly style="background:var(--surface2);color:var(--text2)"></div>
       <div class="field">
         <label>Keperluan <span style="color:var(--danger)">*</span></label>
         <select id="f-keperluan">
@@ -929,6 +929,40 @@ function toast(msg, type='') {
 }
 
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+// ============================================================
+// LOOKUP NAMA PEKERJA
+// ============================================================
+async function lookupNamaPekerja() {
+  const empId = document.getElementById('f-empid').value.trim();
+  const namaField = document.getElementById('f-nama');
+  
+  if (!empId) {
+    namaField.value = '';
+    return;
+  }
+
+  if (!CFG.gasUrl) {
+    toast('URL Apps Script belum diisi', 'warn');
+    return;
+  }
+
+  try {
+    const url = CFG.gasUrl + '?action=lookup-pekerja&empId=' + encodeURIComponent(empId);
+    const res = await fetch(url);
+    const data = await res.json();
+    
+    if (data.nama) {
+      namaField.value = data.nama;
+      toast('Nama pekerja ditemukan', 'success');
+    } else {
+      namaField.value = '';
+      toast('Employee ID tidak ditemukan di data Pekerja', 'error');
+    }
+  } catch(e) {
+    toast('Gagal lookup nama pekerja', 'error');
+  }
+}
 
 // ============================================================
 // START
