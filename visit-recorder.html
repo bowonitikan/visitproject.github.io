@@ -4,525 +4,257 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rekam Kunjungan</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #f0ede8;
-  --surface: #faf9f7;
-  --surface2: #f0ede8;
-  --border: #ddd9d2;
-  --text: #1a1816;
-  --text2: #6b6560;
-  --text3: #9e9890;
-  --accent: #2d6a4f;
-  --accent-light: #e8f5ee;
-  --accent-border: #a8d5b8;
-  --warn: #b45309;
-  --warn-light: #fef3c7;
-  --danger: #991b1b;
-  --danger-light: #fee2e2;
-  --info: #1e40af;
-  --info-light: #eff6ff;
-  --radius: 10px;
-  --radius-sm: 6px;
-  --mono: 'DM Mono', monospace;
+  --bg:#f0ede8;--surface:#faf9f7;--surface2:#f0ede8;--border:#ddd9d2;
+  --text:#1a1816;--text2:#6b6560;--text3:#9e9890;
+  --accent:#2d6a4f;--accent-dark:#1e4d38;--accent-light:#e8f5ee;--accent-border:#a8d5b8;
+  --warn:#b45309;--warn-light:#fef3c7;
+  --danger:#991b1b;--danger-light:#fee2e2;
+  --info:#1e40af;--info-light:#eff6ff;
+  --radius:10px;--radius-sm:6px;--mono:'DM Mono',monospace;
 }
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px}
+.shell{max-width:480px;margin:0 auto;min-height:100vh;background:var(--surface);box-shadow:0 0 60px rgba(0,0,0,0.08);display:flex;flex-direction:column}
+.screen{display:none;flex:1;flex-direction:column}
+.screen.active{display:flex}
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+/* TOPBAR */
+.topbar{padding:14px 20px;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-shrink:0}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-icon{width:34px;height:34px;background:var(--accent);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-icon svg{width:18px;height:18px;color:white}
+.logo-name{font-size:15px;font-weight:600;letter-spacing:-0.3px}
+.logo-sub{font-size:11px;color:var(--text2);margin-top:1px}
 
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  font-size: 15px;
-}
+/* ADMIN LAYOUT */
+.admin-layout{display:flex;flex:1;overflow:hidden}
+.sidebar{width:0;overflow:hidden;background:var(--surface);border-right:1px solid var(--border);transition:width .25s;flex-shrink:0}
+.sidebar.open{width:200px}
+.sidebar-inner{width:200px;padding:16px 12px}
+.sidebar-section{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.7px;padding:0 8px;margin-bottom:6px;margin-top:16px}
+.sidebar-section:first-child{margin-top:0}
+.sidebar-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:var(--radius-sm);color:var(--text2);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;border:none;background:none;font-family:inherit;width:100%;text-align:left}
+.sidebar-item svg{width:16px;height:16px;flex-shrink:0}
+.sidebar-item:hover{background:var(--surface2);color:var(--text)}
+.sidebar-item.active{background:var(--accent-light);color:var(--accent)}
+.admin-content{flex:1;overflow-y:auto;display:flex;flex-direction:column}
 
-/* ---- LAYOUT ---- */
-.app-shell {
-  max-width: 480px;
-  margin: 0 auto;
-  min-height: 100vh;
-  background: var(--surface);
-  position: relative;
-  box-shadow: 0 0 60px rgba(0,0,0,0.08);
-}
+/* HAMBURGER */
+.hamburger{width:34px;height:34px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;border:1px solid var(--border);border-radius:var(--radius-sm);background:none;padding:0;flex-shrink:0}
+.hamburger span{display:block;width:16px;height:2px;background:var(--text);border-radius:2px;transition:all .2s}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
 
-/* ---- TOP BAR ---- */
-.topbar {
-  padding: 16px 20px 14px;
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-.topbar-inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.logo-icon {
-  width: 34px;
-  height: 34px;
-  background: var(--accent);
-  border-radius: var(--radius-sm);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.logo-icon svg { width: 18px; height: 18px; color: white; }
-.logo-name { font-size: 15px; font-weight: 600; letter-spacing: -0.3px; }
-.logo-sub { font-size: 11px; color: var(--text2); margin-top: 1px; }
+/* PAGE */
+.page{display:none;padding:20px;overflow-y:auto;flex:1}
+.page.active{display:block}
 
-/* ---- NAV TABS ---- */
-.nav-tabs {
-  display: flex;
-  border-bottom: 1px solid var(--border);
-  background: var(--surface);
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-.nav-tabs::-webkit-scrollbar { display: none; }
-.nav-tab {
-  flex: 1;
-  padding: 11px 8px;
-  text-align: center;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--text2);
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
-  white-space: nowrap;
-  transition: all .15s;
-  background: none;
-  border-top: none;
-  border-left: none;
-  border-right: none;
-  font-family: inherit;
-  min-width: 80px;
-}
-.nav-tab:hover { color: var(--text); }
-.nav-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px}
+.card-title{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:14px}
 
-/* ---- PAGE CONTENT ---- */
-.page { display: none; padding: 20px; }
-.page.active { display: block; }
+/* FORM */
+.field{margin-bottom:14px}.field:last-child{margin-bottom:0}
+label{display:block;font-size:12px;font-weight:500;color:var(--text2);margin-bottom:5px}
+input,select,textarea{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);font-size:14px;font-family:inherit;transition:border-color .15s;-webkit-appearance:none}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(45,106,79,0.1)}
+input[readonly]{background:var(--surface2);color:var(--text2);font-family:var(--mono);font-size:12px}
+textarea{resize:vertical;min-height:80px;line-height:1.5}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%236b6560' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 
-/* ---- CARDS ---- */
-.card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 16px;
-  margin-bottom: 12px;
-}
-.card-title {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text2);
-  text-transform: uppercase;
-  letter-spacing: 0.6px;
-  margin-bottom: 14px;
-}
+/* QR BANNER */
+.qr-banner{background:var(--accent);border-radius:var(--radius);padding:16px;margin-bottom:12px;display:flex;align-items:center;gap:14px}
+.qr-banner-icon{width:48px;height:48px;background:rgba(255,255,255,0.15);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.qr-banner-icon svg{width:24px;height:24px;color:white}
+.qr-banner-label{font-size:11px;color:rgba(255,255,255,0.7);font-weight:500;letter-spacing:0.4px;text-transform:uppercase}
+.qr-banner-value{font-size:16px;font-weight:600;color:white;margin-top:2px;font-family:var(--mono)}
+.qr-banner-empty{font-size:13px;color:rgba(255,255,255,0.7);margin-top:2px}
 
-/* ---- FORM ELEMENTS ---- */
-.field { margin-bottom: 14px; }
-.field:last-child { margin-bottom: 0; }
-label {
-  display: block;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--text2);
-  margin-bottom: 5px;
-}
-input, select, textarea {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--surface);
-  color: var(--text);
-  font-size: 14px;
-  font-family: inherit;
-  transition: border-color .15s;
-  -webkit-appearance: none;
-}
-input:focus, select:focus, textarea:focus {
-  outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(45,106,79,0.1);
-}
-input[readonly] {
-  background: var(--surface2);
-  color: var(--text2);
-  font-family: var(--mono);
-  font-size: 12px;
-}
-textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
-select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%236b6560' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; }
+/* GPS */
+.gps-display{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;font-family:var(--mono);font-size:12px;color:var(--text2);min-height:38px;display:flex;align-items:center;gap:8px}
+.gps-dot{width:7px;height:7px;border-radius:50%;background:var(--text3);flex-shrink:0}
+.gps-dot.active{background:var(--accent);animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
 
-.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 16px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:13px;font-weight:500;font-family:inherit;cursor:pointer;transition:all .15s;white-space:nowrap}
+.btn:hover{background:var(--surface2)}
+.btn:active{transform:scale(0.98)}
+.btn svg{width:15px;height:15px;flex-shrink:0}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:white}
+.btn-primary:hover{background:var(--accent-dark);border-color:var(--accent-dark)}
+.btn-danger{background:var(--danger-light);border-color:#fca5a5;color:var(--danger)}
+.btn-block{width:100%}
+.btn-sm{padding:7px 12px;font-size:12px}
+.btn-group{display:flex;gap:8px;flex-wrap:wrap}
 
-/* ---- QR BANNER ---- */
-.qr-banner {
-  background: var(--accent);
-  border-radius: var(--radius);
-  padding: 16px;
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-.qr-banner-icon {
-  width: 48px;
-  height: 48px;
-  background: rgba(255,255,255,0.15);
-  border-radius: var(--radius-sm);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-.qr-banner-icon svg { width: 24px; height: 24px; color: white; }
-.qr-banner-info { flex: 1; }
-.qr-banner-label { font-size: 11px; color: rgba(255,255,255,0.7); font-weight: 500; letter-spacing: 0.4px; text-transform: uppercase; }
-.qr-banner-value { font-size: 16px; font-weight: 600; color: white; margin-top: 2px; font-family: var(--mono); }
-.qr-banner-empty { font-size: 13px; color: rgba(255,255,255,0.7); margin-top:2px; }
+/* BADGE */
+.badge{display:inline-flex;align-items:center;padding:3px 8px;border-radius:20px;font-size:11px;font-weight:500}
+.badge-success{background:var(--accent-light);color:var(--accent)}
+.badge-warn{background:var(--warn-light);color:var(--warn)}
+.badge-info{background:var(--info-light);color:var(--info)}
+.badge-admin{background:#fdf4ff;color:#7c3aed;border:1px solid #e9d5ff}
+.badge-opr{background:var(--accent-light);color:var(--accent);border:1px solid var(--accent-border)}
 
-/* ---- GPS BOX ---- */
-.gps-display {
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 10px 12px;
-  font-family: var(--mono);
-  font-size: 12px;
-  color: var(--text2);
-  min-height: 38px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.gps-dot {
-  width: 7px; height: 7px;
-  border-radius: 50%;
-  background: var(--text3);
-  flex-shrink: 0;
-}
-.gps-dot.active { background: var(--accent); animation: pulse 1.5s infinite; }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+/* STAT */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.stat-card{background:var(--surface2);border-radius:var(--radius);padding:14px;text-align:center}
+.stat-num{font-size:28px;font-weight:600;letter-spacing:-1px}
+.stat-label{font-size:11px;color:var(--text2);margin-top:3px;font-weight:500}
 
-/* ---- BUTTONS ---- */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  padding: 10px 16px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border);
-  background: var(--surface);
-  color: var(--text);
-  font-size: 13px;
-  font-weight: 500;
-  font-family: inherit;
-  cursor: pointer;
-  transition: all .15s;
-  white-space: nowrap;
-}
-.btn:hover { background: var(--surface2); }
-.btn:active { transform: scale(0.98); }
-.btn svg { width: 15px; height: 15px; flex-shrink: 0; }
+/* TABLE */
+.table-wrap{overflow-x:auto;margin:0}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:480px}
+th{text-align:left;font-size:11px;font-weight:600;color:var(--text2);letter-spacing:0.4px;text-transform:uppercase;padding:8px 12px;border-bottom:1px solid var(--border);background:var(--surface2)}
+td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--surface2)}
+.col-mono{font-family:var(--mono);font-size:11px;color:var(--text2)}
 
-.btn-primary {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: white;
-}
-.btn-primary:hover { background: #245c43; border-color: #245c43; }
+/* FILTER */
+.filter-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
 
-.btn-block { width: 100%; }
-.btn-sm { padding: 7px 12px; font-size: 12px; }
+/* SETUP ALERT */
+.setup-alert{background:var(--warn-light);border:1px solid #fbbf24;border-radius:var(--radius);padding:12px 14px;font-size:13px;color:var(--warn);margin-bottom:14px;display:flex;gap:10px;align-items:flex-start}
+.setup-alert svg{width:16px;height:16px;flex-shrink:0;margin-top:1px}
 
-.btn-group { display: flex; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
+/* QR */
+.qr-item{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.qr-item-info{flex:1;min-width:0}
+.qr-item-code{font-family:var(--mono);font-size:13px;font-weight:500}
+.qr-item-url{font-size:10px;color:var(--text2);margin-top:3px;word-break:break-all}
+.qr-item-actions{display:flex;flex-direction:column;gap:5px;flex-shrink:0}
+.qr-add-row{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.qr-add-row input{flex:1;min-width:100px}
 
-/* ---- BADGE ---- */
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 3px 8px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 500;
-}
-.badge-success { background: var(--accent-light); color: var(--accent); }
-.badge-warn { background: var(--warn-light); color: var(--warn); }
-.badge-info { background: var(--info-light); color: var(--info); }
+/* PRINT MODAL */
+.print-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9998;align-items:center;justify-content:center}
+.print-modal.open{display:flex}
+.print-modal-inner{background:var(--surface);border-radius:var(--radius);padding:24px;max-width:360px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.2)}
+.print-modal-title{font-size:15px;font-weight:600;margin-bottom:16px}
+.qr-card-preview{background:white;border:3px solid var(--accent);border-radius:12px;padding:20px;text-align:center;margin-bottom:16px}
+.qr-card-preview img{width:170px;height:170px;display:block;margin:0 auto 10px}
+.qr-card-nama{font-size:15px;font-weight:700;color:#1a1816}
+.qr-card-gkp{font-size:11px;color:#6b6560;margin-top:3px;font-family:monospace}
+.qr-card-hint{font-size:10px;color:#9e9890;margin-top:6px}
 
-/* ---- DIVIDER ---- */
-.divider { height: 1px; background: var(--border); margin: 16px 0; }
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--text);color:white;padding:10px 18px;border-radius:40px;font-size:13px;font-weight:500;z-index:9999;transition:transform .3s cubic-bezier(0.34,1.56,0.64,1);white-space:nowrap;pointer-events:none;max-width:90vw}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast.success{background:var(--accent)}
+.toast.error{background:var(--danger)}
+.toast.warn{background:var(--warn)}
 
-/* ---- STAT GRID ---- */
-.stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
-.stat-card {
-  background: var(--surface2);
-  border-radius: var(--radius);
-  padding: 14px;
-  text-align: center;
-}
-.stat-num { font-size: 28px; font-weight: 600; color: var(--text); letter-spacing: -1px; }
-.stat-label { font-size: 11px; color: var(--text2); margin-top: 3px; font-weight: 500; }
+/* SPINNER */
+.spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,0.4);border-top-color:white;border-radius:50%;animation:spin .6s linear infinite;display:none}
+.spinner.visible{display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-/* ---- TABLE ---- */
-.table-wrap { overflow-x: auto; margin: 0 -16px; }
-table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 500px; }
-th {
-  text-align: left;
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text2);
-  letter-spacing: 0.4px;
-  text-transform: uppercase;
-  padding: 8px 12px;
-  border-bottom: 1px solid var(--border);
-  background: var(--surface2);
-}
-td {
-  padding: 10px 12px;
-  border-bottom: 1px solid var(--border);
-  vertical-align: top;
-  color: var(--text);
-}
-tr:last-child td { border-bottom: none; }
-tr:hover td { background: var(--surface2); }
-.col-mono { font-family: var(--mono); font-size: 11px; color: var(--text2); }
-
-/* ---- FILTER BAR ---- */
-.filter-bar { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
-.filter-row-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-
-/* ---- LOGIN ---- */
-.login-center { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; }
-.login-card { width: 100%; max-width: 340px; }
-.login-logo { text-align: center; margin-bottom: 24px; }
-.login-logo-icon { width: 52px; height: 52px; background: var(--accent); border-radius: 14px; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; }
-.login-logo-icon svg { width: 26px; height: 26px; color: white; }
-.login-logo-title { font-size: 18px; font-weight: 600; letter-spacing: -0.4px; }
-.login-logo-sub { font-size: 13px; color: var(--text2); margin-top: 3px; }
-
-/* ---- TOAST ---- */
-.toast {
-  position: fixed;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%) translateY(80px);
-  background: var(--text);
-  color: white;
-  padding: 10px 18px;
-  border-radius: 40px;
-  font-size: 13px;
-  font-weight: 500;
-  z-index: 9999;
-  transition: transform .3s cubic-bezier(0.34,1.56,0.64,1);
-  white-space: nowrap;
-  pointer-events: none;
-  max-width: 90vw;
-}
-.toast.show { transform: translateX(-50%) translateY(0); }
-.toast.success { background: var(--accent); }
-.toast.error { background: var(--danger); }
-.toast.warn { background: var(--warn); }
-
-/* ---- LOADING SPINNER ---- */
-.spinner {
-  width: 16px; height: 16px;
-  border: 2px solid rgba(255,255,255,0.4);
-  border-top-color: white;
-  border-radius: 50%;
-  animation: spin .6s linear infinite;
-  display: none;
-}
-.spinner.visible { display: inline-block; }
-@keyframes spin { to { transform: rotate(360deg); } }
-
-/* ---- EMPTY STATE ---- */
-.empty {
-  text-align: center;
-  padding: 40px 20px;
-  color: var(--text2);
-}
-.empty svg { width: 40px; height: 40px; margin-bottom: 12px; opacity: 0.3; }
-.empty p { font-size: 13px; }
-
-/* ---- SETUP ALERT ---- */
-.setup-alert {
-  background: var(--warn-light);
-  border: 1px solid #fbbf24;
-  border-radius: var(--radius);
-  padding: 12px 14px;
-  font-size: 13px;
-  color: var(--warn);
-  margin-bottom: 14px;
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-}
-.setup-alert svg { width: 16px; height: 16px; flex-shrink: 0; margin-top: 1px; }
-
-/* ---- QR GENERATE ---- */
-.qr-list { display: flex; flex-direction: column; gap: 10px; }
-.qr-item {
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 12px 14px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-}
-.qr-item-info { flex: 1; }
-.qr-item-code { font-family: var(--mono); font-size: 13px; font-weight: 500; }
-.qr-item-url { font-size: 11px; color: var(--text2); margin-top: 3px; word-break: break-all; }
-.qr-add-row { display: flex; gap: 8px; margin-bottom: 14px; }
-.qr-add-row input { flex: 1; }
-
-/* ---- CONFIG PANEL ---- */
-.config-section { margin-bottom: 20px; }
-.config-label { font-size: 12px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+/* EMPTY */
+.empty{text-align:center;padding:40px 20px;color:var(--text2)}
+.empty svg{width:40px;height:40px;margin-bottom:12px;opacity:0.3}
+.empty p{font-size:13px}
 
 /* SCROLLBAR */
-::-webkit-scrollbar { width: 4px; height: 4px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+
+/* PRINT */
+@media print{
+  body *{visibility:hidden}
+  .print-area,.print-area *{visibility:visible}
+  .print-area{position:fixed;inset:0;display:flex;flex-wrap:wrap;gap:16px;padding:20px;align-content:flex-start;background:white}
+  .print-card{width:200px;border:3px solid #2d6a4f;border-radius:12px;padding:16px;text-align:center;page-break-inside:avoid;background:white}
+  .print-card img{width:160px;height:160px}
+  .print-card-nama{font-size:14px;font-weight:700;margin-top:10px;color:#1a1816}
+  .print-card-gkp{font-size:11px;color:#6b6560;margin-top:3px;font-family:monospace}
+  .print-card-logo{font-size:10px;color:#9e9890;margin-top:6px}
+}
 </style>
 </head>
 <body>
 
-<div class="app-shell">
+<div class="shell">
 
-  <!-- TOP BAR -->
+<!-- ===================================================
+     SCREEN: FORM PEKERJA (publik)
+     =================================================== -->
+<div id="screen-form" class="screen active">
   <div class="topbar">
-    <div class="topbar-inner">
-      <div class="logo">
-        <div class="logo-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-        </div>
-        <div>
-          <div class="logo-name">Rekam Kunjungan</div>
-          <div class="logo-sub" id="topbar-sub">Pekerja</div>
-        </div>
+    <div class="logo">
+      <div class="logo-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
       </div>
-      <div id="admin-badge" style="display:none">
-        <span class="badge badge-success">Admin</span>
-        <button class="btn btn-sm" style="margin-left:6px" onclick="logout()">Keluar</button>
-      </div>
+      <div><div class="logo-name">Rekam Kunjungan</div><div class="logo-sub">Form Pekerja</div></div>
     </div>
+    <button class="btn btn-sm" onclick="goAdmin()">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+      Admin
+    </button>
   </div>
 
-  <!-- NAV TABS -->
-  <div class="nav-tabs" id="nav-tabs">
-    <button class="nav-tab active" onclick="showPage('form',this)">Kunjungan</button>
-    <button class="nav-tab" onclick="showPage('login',this)">Admin</button>
-    <button class="nav-tab" onclick="showPage('qr-gen',this)">QR Lokasi</button>
-    <button class="nav-tab" onclick="showPage('config',this)">Pengaturan</button>
-  </div>
-
-  <!-- ===== PAGE: FORM KUNJUNGAN ===== -->
-  <div id="page-form" class="page active">
-
-    <div id="gas-warning" class="setup-alert" style="display:none">
+  <div class="page active" style="padding-bottom:32px">
+    <div id="gas-warning-pub" class="setup-alert" style="display:none">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
-      <span>URL Google Apps Script belum diisi. Pergi ke tab <strong>Pengaturan</strong> untuk mengisi URL Web App.</span>
+      <span>URL Apps Script belum diisi. Hubungi admin.</span>
     </div>
 
-    <!-- QR Banner -->
-    <div class="qr-banner" id="qr-banner">
+    <div class="qr-banner">
       <div class="qr-banner-icon">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
       </div>
-      <div class="qr-banner-info">
+      <div>
         <div class="qr-banner-label">Lokasi terpindai</div>
-        <div class="qr-banner-value" id="banner-qr-code" style="display:none"></div>
+        <div class="qr-banner-value" id="banner-qr-val" style="display:none"></div>
         <div class="qr-banner-empty" id="banner-qr-empty">Belum ada QR yang discan</div>
       </div>
     </div>
 
-    <!-- Field tersembunyi otomatis -->
     <div class="card">
       <div class="card-title">Data Otomatis</div>
       <div class="field-row">
-        <div class="field">
-          <label>Kode QR</label>
-          <input type="text" id="f-qr" readonly placeholder="Dari URL scan">
-        </div>
-        <div class="field">
-          <label>GKP</label>
-          <input type="text" id="f-gkp" readonly placeholder="Dari URL scan">
-        </div>
+        <div class="field"><label>Kode QR</label><input type="text" id="f-qr" readonly placeholder="Dari scan QR"></div>
+        <div class="field"><label>GKP</label><input type="text" id="f-gkp" readonly placeholder="Dari scan QR"></div>
       </div>
       <div class="field-row">
-        <div class="field">
-          <label>Tanggal</label>
-          <input type="date" id="f-tanggal">
-        </div>
-        <div class="field">
-          <label>Jam</label>
-          <input type="time" id="f-jam">
-        </div>
+        <div class="field"><label>Tanggal</label><input type="date" id="f-tanggal"></div>
+        <div class="field"><label>Jam</label><input type="time" id="f-jam"></div>
       </div>
       <div class="field">
         <label>GPS Lokasi</label>
-        <div class="gps-display">
-          <div class="gps-dot" id="gps-dot"></div>
-          <span id="gps-text">Belum diambil</span>
-        </div>
-        <div class="btn-group">
+        <div class="gps-display"><div class="gps-dot" id="gps-dot"></div><span id="gps-text">Belum diambil</span></div>
+        <div class="btn-group" style="margin-top:8px">
           <button class="btn btn-sm" onclick="getGPS()">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 2v3m0 14v3m10-10h-3M5 12H2m15.364-7.364l-2.121 2.121M8.757 15.243l-2.121 2.121m12.728 0l-2.121-2.121M8.757 8.757L6.636 6.636"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 2v3m0 14v3m10-10h-3M5 12H2"/></svg>
             Ambil GPS
           </button>
         </div>
       </div>
     </div>
 
-    <!-- Field manual pekerja -->
     <div class="card">
       <div class="card-title">Data Pekerja</div>
-      <div class="field">
-        <label>Employee ID <span style="color:var(--danger)">*</span></label>
-        <input type="text" id="f-empid" placeholder="Contoh: EMP-001">
-      </div>
-      <div class="field">
-        <label>Nama Pekerja <span style="color:var(--danger)">*</span></label>
-        <input type="text" id="f-nama" placeholder="Nama lengkap pekerja">
-      </div>
+      <div class="field"><label>Employee ID <span style="color:var(--danger)">*</span></label><input type="text" id="f-empid" placeholder="Contoh: EMP-001"></div>
+      <div class="field"><label>Nama Pekerja <span style="color:var(--danger)">*</span></label><input type="text" id="f-nama" placeholder="Nama lengkap"></div>
       <div class="field">
         <label>Keperluan <span style="color:var(--danger)">*</span></label>
         <select id="f-keperluan">
           <option value="">— Pilih keperluan —</option>
-          <option value="Maintenance">Maintenance</option>
-          <option value="Perbaikan">Perbaikan</option>
-          <option value="Instalasi baru">Instalasi baru</option>
+          <option>Maintenance</option><option>Perbaikan</option><option>Instalasi baru</option>
         </select>
       </div>
-      <div class="field">
-        <label>Deskripsi pekerjaan <span style="color:var(--danger)">*</span></label>
-        <textarea id="f-deskripsi" placeholder="Jelaskan pekerjaan yang dilakukan secara singkat..."></textarea>
-      </div>
+      <div class="field"><label>Deskripsi pekerjaan <span style="color:var(--danger)">*</span></label><textarea id="f-deskripsi" placeholder="Jelaskan pekerjaan yang dilakukan..."></textarea></div>
       <div class="field">
         <label>Hasil <span style="color:var(--danger)">*</span></label>
         <select id="f-hasil">
           <option value="">— Pilih hasil —</option>
-          <option value="Selesai">Selesai</option>
-          <option value="Belum selesai">Belum selesai</option>
+          <option>Selesai</option><option>Belum selesai</option>
         </select>
       </div>
     </div>
@@ -532,235 +264,313 @@ tr:hover td { background: var(--surface2); }
       <span id="submit-text">Kirim Laporan</span>
       <div class="spinner" id="submit-spinner"></div>
     </button>
+  </div>
+</div>
 
-    <div style="height:24px"></div>
+<!-- ===================================================
+     SCREEN: LOGIN ADMIN
+     =================================================== -->
+<div id="screen-login" class="screen" style="align-items:center;justify-content:center;background:var(--bg);padding:20px">
+  <div style="width:100%;max-width:380px">
+    <div style="background:var(--surface);border-radius:16px;padding:32px 28px;box-shadow:0 8px 40px rgba(0,0,0,0.1)">
+      <div style="text-align:center;margin-bottom:28px">
+        <div style="width:60px;height:60px;background:var(--accent);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2" width="30" height="30"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+        </div>
+        <div style="font-size:22px;font-weight:700;letter-spacing:-0.5px">Portal Admin</div>
+        <div style="font-size:13px;color:var(--text2);margin-top:5px">Rekam Kunjungan</div>
+      </div>
+      <div id="login-err" style="background:var(--danger-light);border:1px solid #fca5a5;color:var(--danger);border-radius:var(--radius-sm);padding:10px 12px;font-size:13px;margin-bottom:12px;display:none">
+        Username atau password salah.
+      </div>
+      <div class="field"><label>Username</label><input type="text" id="l-user" placeholder="Masukkan username" onkeydown="if(event.key==='Enter')doLogin()"></div>
+      <div class="field"><label>Password</label><input type="password" id="l-pass" placeholder="Masukkan password" onkeydown="if(event.key==='Enter')doLogin()"></div>
+      <button class="btn btn-primary btn-block" style="margin-top:6px;padding:12px" onclick="doLogin()">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14"/></svg>
+        Masuk
+      </button>
+      <div style="text-align:center;margin-top:20px">
+        <button class="btn btn-sm" style="background:none;border:none;color:var(--text3);font-size:12px;cursor:pointer" onclick="showScreen('form')">← Kembali ke Form Pekerja</button>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:14px;font-size:11px;color:var(--text3)">Akses terbatas untuk administrator</div>
+  </div>
+</div>
+
+<!-- ===================================================
+     SCREEN: DASHBOARD ADMIN
+     =================================================== -->
+<div id="screen-admin" class="screen">
+  <!-- Admin topbar -->
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:10px">
+      <button class="hamburger" id="hamburger" onclick="toggleSidebar()">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="logo">
+        <div class="logo-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+        </div>
+        <div><div class="logo-name">Admin Panel</div><div class="logo-sub" id="admin-logged-as">—</div></div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="badge" id="admin-role-badge"></span>
+      <button class="btn btn-sm btn-danger" onclick="doLogout()">Keluar</button>
+    </div>
   </div>
 
-  <!-- ===== PAGE: LOGIN / ADMIN ===== -->
-  <div id="page-login" class="page">
-    <div class="login-center">
-      <div class="login-card">
-        <div class="login-logo">
-          <div class="login-logo-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-          </div>
-          <div class="login-logo-title">Login Admin</div>
-          <div class="login-logo-sub">Dashboard laporan kunjungan</div>
-        </div>
-        <div class="card login-card-form">
-          <div class="field">
-            <label>Username</label>
-            <input type="text" id="l-user" placeholder="Username admin" onkeydown="if(event.key==='Enter')doLogin()">
-          </div>
-          <div class="field">
-            <label>Password</label>
-            <input type="password" id="l-pass" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()">
-          </div>
-          <div id="login-err" style="color:var(--danger);font-size:13px;margin-bottom:10px;display:none">
-            Username atau password salah.
-          </div>
-          <button class="btn btn-primary btn-block" onclick="doLogin()">Masuk</button>
-          <p style="font-size:11px;color:var(--text3);text-align:center;margin-top:12px">Kredensial diatur di tab Pengaturan</p>
-        </div>
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-inner">
+        <div class="sidebar-section">Menu</div>
+        <button class="sidebar-item active" id="sbar-laporan" onclick="adminPage('laporan')">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          Laporan
+        </button>
+        <button class="sidebar-item" id="sbar-qr" onclick="adminPage('qr')">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
+          QR Lokasi
+        </button>
+        <button class="sidebar-item" id="sbar-setting" style="display:none" onclick="adminPage('setting')">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg>
+          Pengaturan
+        </button>
+        <div class="sidebar-section">Lainnya</div>
+        <button class="sidebar-item" onclick="showScreen('form');toggleSidebar()">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+          Form Pekerja
+        </button>
       </div>
+    </div>
+
+    <!-- Admin pages -->
+    <div class="admin-content">
+
+      <!-- LAPORAN -->
+      <div class="page active" id="apage-laporan">
+        <div class="stat-grid">
+          <div class="stat-card"><div class="stat-num" id="s-total">0</div><div class="stat-label">Total Kunjungan</div></div>
+          <div class="stat-card"><div class="stat-num" id="s-selesai">0</div><div class="stat-label">Selesai</div></div>
+          <div class="stat-card"><div class="stat-num" id="s-belum">0</div><div class="stat-label">Belum Selesai</div></div>
+          <div class="stat-card"><div class="stat-num" id="s-pekerja">0</div><div class="stat-label">Pekerja Aktif</div></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Filter</div>
+          <div class="filter-grid">
+            <div class="field" style="margin:0"><label>Dari tanggal</label><input type="date" id="d-dari"></div>
+            <div class="field" style="margin:0"><label>Sampai</label><input type="date" id="d-sampai"></div>
+            <div class="field" style="margin:0"><label>Nama / Emp ID</label><input type="text" id="d-nama" placeholder="Semua"></div>
+            <div class="field" style="margin:0"><label>Keperluan</label>
+              <select id="d-keperluan">
+                <option value="">Semua</option>
+                <option>Maintenance</option><option>Perbaikan</option><option>Instalasi baru</option>
+              </select>
+            </div>
+          </div>
+          <div class="btn-group" style="margin-top:10px">
+            <button class="btn btn-primary btn-sm" onclick="loadAdminData()">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L13 13.414V19a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-7.586L3.293 6.707A1 1 0 013 6V4z"/></svg>
+              Terapkan
+            </button>
+            <button class="btn btn-sm" onclick="resetFilter()">Reset</button>
+            <button class="btn btn-sm" style="margin-left:auto" onclick="exportCSV()">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+              CSV
+            </button>
+          </div>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Tanggal</th><th>Emp ID</th><th>Nama</th><th>Lokasi</th><th>Keperluan</th><th>Hasil</th></tr></thead>
+              <tbody id="admin-tbody"></tbody>
+            </table>
+          </div>
+          <div id="admin-empty" class="empty" style="display:none">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            <p>Tidak ada data ditemukan</p>
+          </div>
+        </div>
+        <div style="height:20px"></div>
+      </div>
+
+      <!-- QR LOKASI -->
+      <div class="page" id="apage-qr">
+        <div class="card">
+          <div class="card-title">Tambah Lokasi</div>
+          <div class="qr-add-row">
+            <input type="text" id="qr-new-code" placeholder="Kode: LOK-GUDANG-01">
+            <input type="text" id="qr-new-gkp" placeholder="GKP-001" style="width:90px;flex:none">
+            <button class="btn btn-primary btn-sm" onclick="addQRLocation()">+ Tambah</button>
+          </div>
+          <p style="font-size:12px;color:var(--text2)">QR code membawa URL unik yang mengisi form otomatis saat discan.</p>
+        </div>
+        <div id="qr-list"></div>
+        <div style="height:20px"></div>
+      </div>
+
+      <!-- PENGATURAN (khusus admin) -->
+      <div class="page" id="apage-setting">
+        <div class="card">
+          <div class="card-title" style="margin-bottom:10px">Google Apps Script</div>
+          <div class="field"><label>URL Web App</label><input type="url" id="cfg-gas-url" placeholder="https://script.google.com/macros/s/.../exec"></div>
+          <p style="font-size:12px;color:var(--text2)">URL dari hasil deploy Apps Script. Data form dikirim ke sini.</p>
+        </div>
+        <div class="card">
+          <div class="card-title" style="margin-bottom:10px">Base URL Aplikasi</div>
+          <div class="field"><label>URL Hosting</label><input type="url" id="cfg-base-url" placeholder="https://bowonitikan.github.io/visitproject.github.io/visit-recorder.html"></div>
+          <p style="font-size:12px;color:var(--text2)">URL tempat file ini di-hosting, untuk generate link QR.</p>
+        </div>
+        <div class="card">
+          <div class="card-title" style="margin-bottom:10px">Akun Admin</div>
+          <div id="admin-accounts"></div>
+          <button class="btn btn-sm" style="margin-top:8px" onclick="addAdminAccount()">+ Tambah akun</button>
+          <p style="font-size:12px;color:var(--text3);margin-top:8px">⚠ Perubahan tersimpan di browser ini saja.</p>
+        </div>
+        <button class="btn btn-primary" onclick="saveConfig()">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
+          Simpan Pengaturan
+        </button>
+        <div style="height:20px"></div>
+      </div>
+
+    </div><!-- end admin-content -->
+  </div><!-- end admin-layout -->
+</div><!-- end screen-admin -->
+
+</div><!-- end shell -->
+
+<!-- PRINT MODAL -->
+<div class="print-modal" id="print-modal">
+  <div class="print-modal-inner">
+    <div class="print-modal-title">Cetak QR Code</div>
+    <div class="qr-card-preview">
+      <img id="qr-preview-img" src="" alt="QR Code">
+      <div class="qr-card-nama" id="qr-preview-nama"></div>
+      <div class="qr-card-gkp" id="qr-preview-gkp"></div>
+      <div class="qr-card-hint">Scan untuk rekam kunjungan</div>
+    </div>
+    <div class="field" style="margin-bottom:14px">
+      <label>Nama label</label>
+      <input type="text" id="qr-print-label" placeholder="Contoh: Gudang Utama" oninput="updatePrintLabel()">
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="doPrint()">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+        Cetak
+      </button>
+      <button class="btn" onclick="closePrintModal()">Batal</button>
     </div>
   </div>
+</div>
 
-  <!-- ===== PAGE: DASHBOARD ADMIN ===== -->
-  <div id="page-admin" class="page">
-    <div class="stat-grid" id="stats-grid">
-      <div class="stat-card"><div class="stat-num" id="s-total">0</div><div class="stat-label">Total Kunjungan</div></div>
-      <div class="stat-card"><div class="stat-num" id="s-selesai">0</div><div class="stat-label">Selesai</div></div>
-      <div class="stat-card"><div class="stat-num" id="s-belum">0</div><div class="stat-label">Belum Selesai</div></div>
-      <div class="stat-card"><div class="stat-num" id="s-pekerja">0</div><div class="stat-label">Pekerja Aktif</div></div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Filter</div>
-      <div class="filter-bar">
-        <div class="filter-row-grid">
-          <div class="field" style="margin:0"><label>Dari tanggal</label><input type="date" id="d-dari"></div>
-          <div class="field" style="margin:0"><label>Sampai</label><input type="date" id="d-sampai"></div>
-        </div>
-        <div class="filter-row-grid">
-          <div class="field" style="margin:0"><label>Nama pekerja</label><input type="text" id="d-nama" placeholder="Semua"></div>
-          <div class="field" style="margin:0">
-            <label>Keperluan</label>
-            <select id="d-keperluan">
-              <option value="">Semua</option>
-              <option>Maintenance</option>
-              <option>Perbaikan</option>
-              <option>Instalasi baru</option>
-            </select>
-          </div>
-        </div>
-        <div class="btn-group" style="margin-top:2px">
-          <button class="btn btn-primary btn-sm" onclick="loadAdminData()">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L13 13.414V19a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-7.586L3.293 6.707A1 1 0 013 6V4z"/></svg>
-            Terapkan
-          </button>
-          <button class="btn btn-sm" onclick="resetFilter()">Reset</button>
-          <button class="btn btn-sm" style="margin-left:auto" onclick="exportCSV()">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-            Export CSV
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <div class="card" style="padding:0;overflow:hidden">
-      <div class="table-wrap">
-        <table id="admin-table">
-          <thead>
-            <tr>
-              <th>Tanggal</th>
-              <th>Emp ID</th>
-              <th>Nama</th>
-              <th>Lokasi</th>
-              <th>Keperluan</th>
-              <th>Hasil</th>
-            </tr>
-          </thead>
-          <tbody id="admin-tbody"></tbody>
-        </table>
-      </div>
-      <div id="admin-empty" class="empty" style="display:none">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-        <p>Tidak ada data ditemukan</p>
-      </div>
-    </div>
-    <div style="height:20px"></div>
-  </div>
-
-  <!-- ===== PAGE: QR GENERATOR ===== -->
-  <div id="page-qr-gen" class="page">
-    <div class="card">
-      <div class="card-title">Tambah Lokasi QR</div>
-      <div class="qr-add-row">
-        <input type="text" id="qr-new-code" placeholder="Contoh: LOK-GUDANG-01">
-        <input type="text" id="qr-new-gkp" placeholder="GKP-001" style="width:100px;flex:none">
-        <button class="btn btn-primary btn-sm" onclick="addQRLocation()">Tambah</button>
-      </div>
-      <p style="font-size:12px;color:var(--text2)">Setiap lokasi menghasilkan URL unik yang bisa diubah menjadi QR code dan ditempel di lokasi tersebut.</p>
-    </div>
-
-    <div id="qr-list" class="qr-list"></div>
-    <div style="height:20px"></div>
-  </div>
-
-  <!-- ===== PAGE: PENGATURAN ===== -->
-  <div id="page-config" class="page">
-    <div class="card">
-      <div class="config-label">Google Apps Script</div>
-      <div class="field">
-        <label>URL Web App (dari Deploy)</label>
-        <input type="url" id="cfg-gas-url" placeholder="https://script.google.com/macros/s/.../exec">
-      </div>
-      <p style="font-size:12px;color:var(--text2);margin-top:6px">Dapatkan URL ini setelah deploy Apps Script. Lihat panduan di bawah.</p>
-    </div>
-
-    <div class="card">
-      <div class="config-label">Akun Admin</div>
-      <div id="admin-accounts"></div>
-      <button class="btn btn-sm" style="margin-top:8px" onclick="addAdminAccount()">+ Tambah akun</button>
-    </div>
-
-    <div class="card">
-      <div class="config-label">URL Aplikasi (untuk QR)</div>
-      <div class="field">
-        <label>Base URL aplikasi ini</label>
-        <input type="url" id="cfg-base-url" placeholder="https://bowonitikan.github.io/visitproject.github.io/visit-recorder.html">
-      </div>
-      <p style="font-size:12px;color:var(--text2);margin-top:6px">Masukkan URL tempat file HTML ini di-hosting. Dipakai untuk generate link QR di tab QR Lokasi.</p>
-    </div>
-
-    <button class="btn btn-primary" onclick="saveConfig()">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
-      Simpan Pengaturan
-    </button>
-
-    <div class="divider"></div>
-
-    <div class="card" style="background:var(--accent-light);border-color:var(--accent-border)">
-      <div class="config-label" style="color:var(--accent)">Panduan cepat Google Apps Script</div>
-      <ol style="font-size:13px;color:var(--text2);padding-left:18px;line-height:2">
-        <li>Buka Google Sheets baru → catat ID dari URL</li>
-        <li>Menu <strong>Extensions</strong> → <strong>Apps Script</strong></li>
-        <li>Paste kode GAS (tersedia saat klik tombol di bawah)</li>
-        <li>Ganti <code style="font-family:var(--mono);font-size:11px;background:rgba(0,0,0,0.08);padding:1px 4px;border-radius:3px">SHEET_ID</code> dengan ID Sheets kamu</li>
-        <li><strong>Deploy</strong> → New deployment → Web app → Anyone → Deploy</li>
-        <li>Salin URL → paste di kolom "URL Web App" di atas</li>
-      </ol>
-    </div>
-
-    <div style="height:20px"></div>
-  </div>
-
-</div><!-- end app-shell -->
-
-<!-- TOAST -->
+<div class="print-area" id="print-area" style="display:none"></div>
 <div class="toast" id="toast"></div>
 
 <script>
 // ============================================================
-// CONFIG & STATE
+// CREDENTIALS (hardcoded + localStorage override)
 // ============================================================
+const DEFAULT_ADMINS = [
+  { user:'admin', pass:'erawibowo', role:'admin' },
+  { user:'opr',   pass:'123',       role:'opr'   }
+];
+
 let CFG = {
-  gasUrl: '',
+  gasUrl:  '',
   baseUrl: 'https://bowonitikan.github.io/visitproject.github.io/visit-recorder.html',
-  admins: [{user:'admin', pass:'admin123'}, {user:'supervisor', pass:'super456'}],
+  admins:  JSON.parse(JSON.stringify(DEFAULT_ADMINS)),
   qrLocations: [
-    {code:'LOK-GUDANG-01', gkp:'GKP-001'},
-    {code:'LOK-KANTOR-02', gkp:'GKP-002'},
-    {code:'LOK-PANEL-03',  gkp:'GKP-003'}
+    { code:'LOK-GUDANG-01', gkp:'GKP-001', label:'Gudang Utama' },
+    { code:'LOK-KANTOR-02', gkp:'GKP-002', label:'Kantor Pusat' },
+    { code:'LOK-PANEL-03',  gkp:'GKP-003', label:'Panel Listrik' }
   ]
 };
-let isAdmin = false;
+
+let currentUser = null;
 let allData = [];
 let gpsValue = '';
+let currentPrintIdx = -1;
+let sidebarOpen = false;
 
 // ============================================================
-// INIT — baca URL params & localStorage
+// INIT
 // ============================================================
 function init() {
   loadConfig();
-  readURLParams();
-  setDateTime();
-  renderQRList();
-  renderAdminAccounts();
-  checkGASWarning();
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('view') === 'admin') {
+    showScreen('login');
+  } else {
+    showScreen('form');
+    readURLParams();
+    setDateTime();
+    checkGASWarning();
+  }
 }
 
+function showScreen(name) {
+  ['form','login','admin'].forEach(s => {
+    const el = document.getElementById('screen-' + s);
+    el.style.display = 'none';
+    el.classList.remove('active');
+  });
+  const el = document.getElementById('screen-' + name);
+  el.style.display = 'flex';
+  el.classList.add('active');
+}
+
+function goAdmin() { showScreen('login'); }
+
+// ============================================================
+// CONFIG
+// ============================================================
 function loadConfig() {
   try {
-    const saved = localStorage.getItem('rkv_cfg');
-    if (saved) CFG = Object.assign(CFG, JSON.parse(saved));
+    const saved = localStorage.getItem('rkv_cfg3');
+    if (saved) {
+      const s = JSON.parse(saved);
+      if (s.gasUrl)      CFG.gasUrl = s.gasUrl;
+      if (s.baseUrl)     CFG.baseUrl = s.baseUrl;
+      if (s.admins && s.admins.length) CFG.admins = s.admins;
+      if (s.qrLocations && s.qrLocations.length) CFG.qrLocations = s.qrLocations;
+    }
   } catch(e) {}
-  document.getElementById('cfg-gas-url').value = CFG.gasUrl || '';
-  document.getElementById('cfg-base-url').value = CFG.baseUrl || '';
 }
 
 function saveConfig() {
-  CFG.gasUrl   = document.getElementById('cfg-gas-url').value.trim();
-  CFG.baseUrl  = document.getElementById('cfg-base-url').value.trim();
-  localStorage.setItem('rkv_cfg', JSON.stringify(CFG));
-  renderQRList();
+  CFG.gasUrl  = document.getElementById('cfg-gas-url').value.trim();
+  CFG.baseUrl = document.getElementById('cfg-base-url').value.trim();
+  localStorage.setItem('rkv_cfg3', JSON.stringify(CFG));
   checkGASWarning();
+  renderQRList();
   toast('Pengaturan disimpan', 'success');
 }
 
 function checkGASWarning() {
-  document.getElementById('gas-warning').style.display = CFG.gasUrl ? 'none' : 'flex';
+  const el = document.getElementById('gas-warning-pub');
+  if (el) el.style.display = CFG.gasUrl ? 'none' : 'flex';
 }
 
+function populateConfigForm() {
+  document.getElementById('cfg-gas-url').value  = CFG.gasUrl  || '';
+  document.getElementById('cfg-base-url').value = CFG.baseUrl || '';
+  renderAdminAccounts();
+}
+
+// ============================================================
+// URL PARAMS
+// ============================================================
 function readURLParams() {
   const p = new URLSearchParams(window.location.search);
   const qr  = p.get('qr')  || p.get('kode') || '';
   const gkp = p.get('gkp') || '';
   if (qr) {
     document.getElementById('f-qr').value = qr;
-    document.getElementById('banner-qr-code').textContent = qr;
-    document.getElementById('banner-qr-code').style.display = 'block';
+    document.getElementById('banner-qr-val').textContent = qr;
+    document.getElementById('banner-qr-val').style.display = 'block';
     document.getElementById('banner-qr-empty').style.display = 'none';
   }
   if (gkp) document.getElementById('f-gkp').value = gkp;
@@ -776,24 +586,19 @@ function setDateTime() {
 // GPS
 // ============================================================
 function getGPS() {
-  const dot  = document.getElementById('gps-dot');
-  const text = document.getElementById('gps-text');
+  const dot = document.getElementById('gps-dot');
+  const txt = document.getElementById('gps-text');
   dot.classList.add('active');
-  text.textContent = 'Mengambil lokasi...';
-  if (!navigator.geolocation) {
-    fallbackGPS(); return;
-  }
+  txt.textContent = 'Mengambil lokasi...';
+  if (!navigator.geolocation) { fallbackGPS(); return; }
   navigator.geolocation.getCurrentPosition(
     pos => {
-      const lat = pos.coords.latitude.toFixed(6);
-      const lng = pos.coords.longitude.toFixed(6);
-      gpsValue = lat + ', ' + lng;
-      text.textContent = gpsValue;
-      dot.classList.add('active');
+      gpsValue = pos.coords.latitude.toFixed(6) + ', ' + pos.coords.longitude.toFixed(6);
+      txt.textContent = gpsValue;
       toast('GPS berhasil diambil', 'success');
     },
     () => fallbackGPS(),
-    {timeout: 10000, enableHighAccuracy: true}
+    { timeout: 10000, enableHighAccuracy: true }
   );
 }
 function fallbackGPS() {
@@ -804,7 +609,7 @@ function fallbackGPS() {
 }
 
 // ============================================================
-// SUBMIT FORM
+// SUBMIT
 // ============================================================
 async function submitForm() {
   const fields = {
@@ -819,32 +624,18 @@ async function submitForm() {
     gkp:        document.getElementById('f-gkp').value.trim(),
     gps:        gpsValue || 'Tidak diambil'
   };
-
-  if (!fields.employeeId){ toast('Employee ID wajib diisi', 'error'); return; }
-  if (!fields.nama)      { toast('Nama pekerja wajib diisi', 'error'); return; }
-  if (!fields.keperluan) { toast('Keperluan wajib dipilih', 'error'); return; }
-  if (!fields.deskripsi) { toast('Deskripsi wajib diisi', 'error'); return; }
-  if (!fields.hasil)     { toast('Hasil wajib dipilih', 'error'); return; }
+  if (!fields.employeeId) { toast('Employee ID wajib diisi', 'error'); return; }
+  if (!fields.nama)       { toast('Nama pekerja wajib diisi', 'error'); return; }
+  if (!fields.keperluan)  { toast('Keperluan wajib dipilih', 'error'); return; }
+  if (!fields.deskripsi)  { toast('Deskripsi wajib diisi', 'error'); return; }
+  if (!fields.hasil)      { toast('Hasil wajib dipilih', 'error'); return; }
 
   setLoading(true);
-
-  if (!CFG.gasUrl) {
-    await sleep(800);
-    setLoading(false);
-    toast('URL Apps Script belum diisi. Data tidak terkirim.', 'warn');
-    return;
-  }
-
+  if (!CFG.gasUrl) { await sleep(600); setLoading(false); toast('URL Apps Script belum diisi', 'warn'); return; }
   try {
-    // Gunakan no-cors + FormData untuk menghindari CORS preflight
     const form = new FormData();
     form.append('payload', JSON.stringify(fields));
-    await fetch(CFG.gasUrl, {
-      method: 'POST',
-      mode: 'no-cors',
-      body: form
-    });
-    // no-cors tidak bisa baca response, asumsikan sukses jika tidak throw
+    await fetch(CFG.gasUrl, { method:'POST', mode:'no-cors', body:form });
     toast('Laporan berhasil dikirim!', 'success');
     resetForm();
   } catch(e) {
@@ -860,11 +651,8 @@ function setLoading(on) {
 }
 
 function resetForm() {
-  document.getElementById('f-empid').value = '';
-  document.getElementById('f-nama').value = '';
-  document.getElementById('f-keperluan').value = '';
-  document.getElementById('f-deskripsi').value = '';
-  document.getElementById('f-hasil').value = '';
+  ['f-empid','f-nama','f-deskripsi'].forEach(id => document.getElementById(id).value = '');
+  ['f-keperluan','f-hasil'].forEach(id => document.getElementById(id).value = '');
   gpsValue = '';
   document.getElementById('gps-text').textContent = 'Belum diambil';
   document.getElementById('gps-dot').classList.remove('active');
@@ -877,50 +665,76 @@ function resetForm() {
 function doLogin() {
   const u = document.getElementById('l-user').value.trim();
   const p = document.getElementById('l-pass').value;
-  const ok = CFG.admins.find(a => a.user === u && a.pass === p);
-  if (ok) {
-    isAdmin = true;
-    document.getElementById('admin-badge').style.display = 'flex';
-    document.getElementById('topbar-sub').textContent = 'Admin: ' + u;
+  const found = CFG.admins.find(a => a.user === u && a.pass === p);
+  if (found) {
+    currentUser = found;
     document.getElementById('login-err').style.display = 'none';
-    showPage('admin', null, true);
-    loadAdminData();
+    document.getElementById('l-pass').value = '';
+    enterAdmin();
   } else {
     document.getElementById('login-err').style.display = 'block';
   }
 }
 
-function logout() {
-  isAdmin = false;
-  document.getElementById('admin-badge').style.display = 'none';
-  document.getElementById('topbar-sub').textContent = 'Pekerja';
-  showPage('form', document.querySelector('.nav-tab'));
+function enterAdmin() {
+  document.getElementById('admin-logged-as').textContent = currentUser.user;
+  const rb = document.getElementById('admin-role-badge');
+  if (currentUser.role === 'admin') {
+    rb.textContent = 'Admin'; rb.className = 'badge badge-admin';
+    document.getElementById('sbar-setting').style.display = 'flex';
+  } else {
+    rb.textContent = 'Operator'; rb.className = 'badge badge-opr';
+    document.getElementById('sbar-setting').style.display = 'none';
+  }
+  showScreen('admin');
+  populateConfigForm();
+  renderQRList();
+  loadAdminData();
+  adminPage('laporan');
+}
+
+function doLogout() {
+  currentUser = null;
+  document.getElementById('l-user').value = '';
+  document.getElementById('l-pass').value = '';
+  document.getElementById('login-err').style.display = 'none';
+  showScreen('login');
 }
 
 // ============================================================
-// ADMIN DASHBOARD
+// ADMIN NAV
+// ============================================================
+function toggleSidebar() {
+  sidebarOpen = !sidebarOpen;
+  document.getElementById('sidebar').classList.toggle('open', sidebarOpen);
+  document.getElementById('hamburger').classList.toggle('open', sidebarOpen);
+}
+
+function adminPage(name) {
+  document.querySelectorAll('[id^="apage-"]').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sidebar-item').forEach(b => b.classList.remove('active'));
+  document.getElementById('apage-' + name).classList.add('active');
+  document.getElementById('sbar-' + name).classList.add('active');
+  if (sidebarOpen) toggleSidebar();
+}
+
+// ============================================================
+// ADMIN DATA
 // ============================================================
 async function loadAdminData() {
-  if (!isAdmin) return;
-  const params = {};
-  const dari   = document.getElementById('d-dari').value;
-  const sampai = document.getElementById('d-sampai').value;
-  const nama   = document.getElementById('d-nama').value.trim();
-  const kep    = document.getElementById('d-keperluan').value;
-  if (dari)   params.dari   = dari;
-  if (sampai) params.sampai = sampai;
-  if (nama)   params.nama   = nama;
-  if (kep)    params.keperluan = kep;
-
-  if (!CFG.gasUrl) {
-    renderAdminTable(SAMPLE_DATA);
-    return;
-  }
-
+  if (!CFG.gasUrl) { renderAdminTable(SAMPLE_DATA); return; }
   try {
+    const params = {};
+    const dari  = document.getElementById('d-dari').value;
+    const sampai= document.getElementById('d-sampai').value;
+    const nama  = document.getElementById('d-nama').value.trim();
+    const kep   = document.getElementById('d-keperluan').value;
+    if (dari)   params.dari = dari;
+    if (sampai) params.sampai = sampai;
+    if (nama)   params.nama = nama;
+    if (kep)    params.keperluan = kep;
     const qs = new URLSearchParams(params).toString();
-    const url = CFG.gasUrl + '?action=get' + (qs ? '&' + qs : '');
-    const res = await fetch(url);
+    const res = await fetch(CFG.gasUrl + '?action=get' + (qs ? '&' + qs : ''));
     const data = await res.json();
     allData = data.rows || [];
     renderAdminTable(allData);
@@ -931,38 +745,33 @@ async function loadAdminData() {
 }
 
 const SAMPLE_DATA = [
-  {Tanggal:'2025-04-29',Jam:'08:15','Employee ID':'EMP-001','Nama Pekerja':'Budi Santoso','Kode QR':'LOK-GUDANG-01',GKP:'GKP-001',Keperluan:'Maintenance','Deskripsi Pekerjaan':'Periksa mesin pompa',Hasil:'Selesai','GPS Lokasi':'-7.4014, 109.2316'},
-  {Tanggal:'2025-04-28',Jam:'10:30','Employee ID':'EMP-002','Nama Pekerja':'Siti Rahayu','Kode QR':'LOK-KANTOR-02',GKP:'GKP-002',Keperluan:'Perbaikan','Deskripsi Pekerjaan':'Ganti lampu koridor',Hasil:'Selesai','GPS Lokasi':'-7.4021, 109.2320'},
-  {Tanggal:'2025-04-27',Jam:'14:00','Employee ID':'EMP-003','Nama Pekerja':'Agus Wijaya','Kode QR':'LOK-GUDANG-01',GKP:'GKP-001',Keperluan:'Instalasi baru','Deskripsi Pekerjaan':'Pasang CCTV pintu masuk',Hasil:'Belum selesai','GPS Lokasi':'-7.4014, 109.2316'},
-  {Tanggal:'2025-04-26',Jam:'09:45','Employee ID':'EMP-001','Nama Pekerja':'Budi Santoso','Kode QR':'LOK-PANEL-03',GKP:'GKP-003',Keperluan:'Maintenance','Deskripsi Pekerjaan':'Cek panel listrik rutin',Hasil:'Selesai','GPS Lokasi':'-7.4030, 109.2310'},
+  { Tanggal:'2025-04-29', Jam:'08:15', 'Employee ID':'EMP-001', 'Nama Pekerja':'Budi Santoso', 'Kode QR':'LOK-GUDANG-01', GKP:'GKP-001', Keperluan:'Maintenance',   Hasil:'Selesai',       'GPS Lokasi':'-7.4014, 109.2316' },
+  { Tanggal:'2025-04-28', Jam:'10:30', 'Employee ID':'EMP-002', 'Nama Pekerja':'Siti Rahayu',  'Kode QR':'LOK-KANTOR-02', GKP:'GKP-002', Keperluan:'Perbaikan',     Hasil:'Selesai',       'GPS Lokasi':'-7.4021, 109.2320' },
+  { Tanggal:'2025-04-27', Jam:'14:00', 'Employee ID':'EMP-003', 'Nama Pekerja':'Agus Wijaya',  'Kode QR':'LOK-GUDANG-01', GKP:'GKP-001', Keperluan:'Instalasi baru',Hasil:'Belum selesai', 'GPS Lokasi':'-7.4014, 109.2316' },
+  { Tanggal:'2025-04-26', Jam:'09:45', 'Employee ID':'EMP-001', 'Nama Pekerja':'Budi Santoso', 'Kode QR':'LOK-PANEL-03',  GKP:'GKP-003', Keperluan:'Maintenance',   Hasil:'Selesai',       'GPS Lokasi':'-7.4030, 109.2310' },
 ];
 
 function renderAdminTable(data) {
-  const selesai = data.filter(r => (r['Hasil'] || r.hasil) === 'Selesai').length;
-  const names   = new Set(data.map(r => r['Nama Pekerja'] || r.nama));
+  const selesai = data.filter(r => (r['Hasil']||r.hasil) === 'Selesai').length;
+  const names   = new Set(data.map(r => r['Nama Pekerja']||r.nama));
   document.getElementById('s-total').textContent   = data.length;
   document.getElementById('s-selesai').textContent  = selesai;
   document.getElementById('s-belum').textContent    = data.length - selesai;
   document.getElementById('s-pekerja').textContent  = names.size;
-
   const tbody = document.getElementById('admin-tbody');
   const empty = document.getElementById('admin-empty');
-  if (!data.length) {
-    tbody.innerHTML = '';
-    empty.style.display = 'block';
-    return;
-  }
+  if (!data.length) { tbody.innerHTML = ''; empty.style.display = 'block'; return; }
   empty.style.display = 'none';
   tbody.innerHTML = data.map(r => {
-    const hasil = r['Hasil'] || r.hasil || '';
-    const badgeCls = hasil === 'Selesai' ? 'badge-success' : 'badge-warn';
+    const hasil = r['Hasil']||r.hasil||'';
+    const bc = hasil === 'Selesai' ? 'badge-success' : 'badge-warn';
     return `<tr>
       <td>${r['Tanggal']||r.tanggal||''}<br><span class="col-mono">${r['Jam']||r.jam||''}</span></td>
       <td><span class="col-mono">${r['Employee ID']||r.employeeId||'—'}</span></td>
       <td>${r['Nama Pekerja']||r.nama||''}</td>
-      <td><span class="col-mono">${r['Kode QR']||r.kodeQR||''}</span></td>
+      <td><span class="col-mono" style="font-size:10px">${r['Kode QR']||r.kodeQR||''}</span></td>
       <td>${r['Keperluan']||r.keperluan||''}</td>
-      <td><span class="badge ${badgeCls}">${hasil}</span></td>
+      <td><span class="badge ${bc}">${hasil}</span></td>
     </tr>`;
   }).join('');
 }
@@ -975,10 +784,8 @@ function resetFilter() {
 
 function exportCSV() {
   const data = allData.length ? allData : SAMPLE_DATA;
-  const cols = ['Tanggal','Jam','Employee ID','Nama Pekerja','Kode QR','GKP','Keperluan','Deskripsi Pekerjaan','Hasil','GPS Lokasi'];
-  const header = cols.join(',');
-  const rows = data.map(r => cols.map(c => '"' + (r[c] || '') + '"').join(','));
-  const csv = [header, ...rows].join('\n');
+  const cols = ['Tanggal','Jam','Employee ID','Nama Pekerja','Kode QR','GKP','Keperluan','Deskripsi','Hasil','GPS Lokasi'];
+  const csv = [cols.join(','), ...data.map(r => cols.map(c => '"'+(r[c]||'')+'"').join(','))].join('\n');
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv'}));
   a.download = 'laporan_kunjungan_' + new Date().toISOString().slice(0,10) + '.csv';
@@ -989,19 +796,26 @@ function exportCSV() {
 // ============================================================
 // QR LOCATIONS
 // ============================================================
+function getBase() {
+  return (CFG.baseUrl || window.location.href.split('?')[0]).replace(/\/$/, '');
+}
+
 function renderQRList() {
-  const base = CFG.baseUrl ? CFG.baseUrl.replace(/\/$/, '') : window.location.href.split('?')[0];
   const el = document.getElementById('qr-list');
+  if (!el) return;
+  const base = getBase();
   el.innerHTML = CFG.qrLocations.map((loc, i) => {
     const url = base + '?qr=' + encodeURIComponent(loc.code) + '&gkp=' + encodeURIComponent(loc.gkp);
+    const qrImg = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(url);
     return `<div class="qr-item">
+      <img src="${qrImg}" style="width:52px;height:52px;border-radius:6px;border:1px solid var(--border);flex-shrink:0" loading="lazy">
       <div class="qr-item-info">
-        <div class="qr-item-code">${loc.code} &nbsp;<span class="badge badge-info" style="font-size:10px">${loc.gkp}</span></div>
-        <div class="qr-item-url">${url}</div>
+        <div class="qr-item-code">${loc.label||loc.code} <span class="badge badge-info" style="font-size:10px">${loc.gkp}</span></div>
+        <div class="qr-item-url">${loc.code}</div>
       </div>
-      <div style="display:flex;flex-direction:column;gap:6px">
-        <button class="btn btn-sm" onclick="copyURL(${i})">Salin URL</button>
-        <button class="btn btn-sm" onclick="openQR(${i})">Buat QR</button>
+      <div class="qr-item-actions">
+        <button class="btn btn-sm btn-primary" onclick="openPrintModal(${i})">Cetak</button>
+        <button class="btn btn-sm" onclick="copyQRUrl(${i})">Salin URL</button>
         <button class="btn btn-sm" style="color:var(--danger)" onclick="removeQR(${i})">Hapus</button>
       </div>
     </div>`;
@@ -1012,8 +826,8 @@ function addQRLocation() {
   const code = document.getElementById('qr-new-code').value.trim().toUpperCase();
   const gkp  = document.getElementById('qr-new-gkp').value.trim().toUpperCase();
   if (!code) { toast('Kode lokasi wajib diisi', 'error'); return; }
-  CFG.qrLocations.push({code, gkp: gkp || 'GKP-000'});
-  localStorage.setItem('rkv_cfg', JSON.stringify(CFG));
+  CFG.qrLocations.push({ code, gkp: gkp||'GKP-000', label:'' });
+  localStorage.setItem('rkv_cfg3', JSON.stringify(CFG));
   document.getElementById('qr-new-code').value = '';
   document.getElementById('qr-new-gkp').value = '';
   renderQRList();
@@ -1022,64 +836,84 @@ function addQRLocation() {
 
 function removeQR(i) {
   CFG.qrLocations.splice(i, 1);
-  localStorage.setItem('rkv_cfg', JSON.stringify(CFG));
+  localStorage.setItem('rkv_cfg3', JSON.stringify(CFG));
   renderQRList();
+  toast('Lokasi dihapus', 'success');
 }
 
-function copyURL(i) {
-  const base = CFG.baseUrl ? CFG.baseUrl.replace(/\/$/, '') : window.location.href.split('?')[0];
-  const loc  = CFG.qrLocations[i];
-  const url  = base + '?qr=' + encodeURIComponent(loc.code) + '&gkp=' + encodeURIComponent(loc.gkp);
+function copyQRUrl(i) {
+  const loc = CFG.qrLocations[i];
+  const url = getBase() + '?qr=' + encodeURIComponent(loc.code) + '&gkp=' + encodeURIComponent(loc.gkp);
   navigator.clipboard.writeText(url).then(() => toast('URL disalin', 'success'));
 }
 
-function openQR(i) {
-  const base = CFG.baseUrl ? CFG.baseUrl.replace(/\/$/, '') : window.location.href.split('?')[0];
-  const loc  = CFG.qrLocations[i];
-  const url  = base + '?qr=' + encodeURIComponent(loc.code) + '&gkp=' + encodeURIComponent(loc.gkp);
+// ============================================================
+// PRINT QR
+// ============================================================
+function openPrintModal(i) {
+  currentPrintIdx = i;
+  const loc   = CFG.qrLocations[i];
+  const url   = getBase() + '?qr=' + encodeURIComponent(loc.code) + '&gkp=' + encodeURIComponent(loc.gkp);
   const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + encodeURIComponent(url);
-  window.open(qrUrl, '_blank');
+  document.getElementById('qr-preview-img').src = qrUrl;
+  document.getElementById('qr-preview-nama').textContent = loc.label || loc.code;
+  document.getElementById('qr-preview-gkp').textContent  = loc.code + ' | ' + loc.gkp;
+  document.getElementById('qr-print-label').value = loc.label || '';
+  document.getElementById('print-modal').classList.add('open');
+}
+
+function updatePrintLabel() {
+  const val = document.getElementById('qr-print-label').value;
+  document.getElementById('qr-preview-nama').textContent = val || (CFG.qrLocations[currentPrintIdx]?.code || '');
+  if (currentPrintIdx >= 0) {
+    CFG.qrLocations[currentPrintIdx].label = val;
+    localStorage.setItem('rkv_cfg3', JSON.stringify(CFG));
+  }
+}
+
+function closePrintModal() {
+  document.getElementById('print-modal').classList.remove('open');
+  renderQRList();
+}
+
+function doPrint() {
+  const loc   = CFG.qrLocations[currentPrintIdx];
+  const url   = getBase() + '?qr=' + encodeURIComponent(loc.code) + '&gkp=' + encodeURIComponent(loc.gkp);
+  const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=' + encodeURIComponent(url);
+  const label = loc.label || loc.code;
+  const pa = document.getElementById('print-area');
+  pa.style.display = 'flex';
+  pa.innerHTML = `<div class="print-card">
+    <img src="${qrUrl}" alt="QR">
+    <div class="print-card-nama">${label}</div>
+    <div class="print-card-gkp">${loc.code} | ${loc.gkp}</div>
+    <div class="print-card-logo">Scan untuk rekam kunjungan</div>
+  </div>`;
+  const img = pa.querySelector('img');
+  img.onload = () => { window.print(); pa.style.display = 'none'; closePrintModal(); };
+  img.onerror = () => { window.print(); pa.style.display = 'none'; closePrintModal(); };
 }
 
 // ============================================================
-// ADMIN ACCOUNTS UI
+// ADMIN ACCOUNTS
 // ============================================================
 function renderAdminAccounts() {
   const el = document.getElementById('admin-accounts');
+  if (!el) return;
   el.innerHTML = CFG.admins.map((a, i) => `
     <div style="display:flex;gap:8px;margin-bottom:8px;align-items:center">
       <input type="text" value="${a.user}" placeholder="Username" style="flex:1" onchange="CFG.admins[${i}].user=this.value">
       <input type="password" value="${a.pass}" placeholder="Password" style="flex:1" onchange="CFG.admins[${i}].pass=this.value">
-      <button class="btn btn-sm" style="color:var(--danger);padding:7px 10px" onclick="removeAdmin(${i})">✕</button>
-    </div>
-  `).join('');
+      <select style="width:90px;flex:none;font-size:12px" onchange="CFG.admins[${i}].role=this.value">
+        <option value="admin" ${a.role==='admin'?'selected':''}>Admin</option>
+        <option value="opr"   ${a.role==='opr'  ?'selected':''}>Operator</option>
+      </select>
+      <button class="btn btn-sm" style="color:var(--danger);padding:7px 10px;flex:none" onclick="removeAdmin(${i})">✕</button>
+    </div>`).join('');
 }
 
-function addAdminAccount() {
-  CFG.admins.push({user:'', pass:''});
-  renderAdminAccounts();
-}
-function removeAdmin(i) {
-  CFG.admins.splice(i, 1);
-  renderAdminAccounts();
-}
-
-// ============================================================
-// NAVIGATION
-// ============================================================
-function showPage(name, tabEl, noTabUpdate) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-' + name).classList.add('active');
-  if (!noTabUpdate && tabEl) {
-    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-    tabEl.classList.add('active');
-  }
-  if (name === 'login' && isAdmin) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById('page-admin').classList.add('active');
-    loadAdminData();
-  }
-}
+function addAdminAccount() { CFG.admins.push({user:'',pass:'',role:'opr'}); renderAdminAccounts(); }
+function removeAdmin(i)    { CFG.admins.splice(i,1); renderAdminAccounts(); }
 
 // ============================================================
 // TOAST
@@ -1088,7 +922,7 @@ let toastTimer;
 function toast(msg, type='') {
   const el = document.getElementById('toast');
   el.textContent = msg;
-  el.className = 'toast' + (type ? ' ' + type : '');
+  el.className = 'toast' + (type ? ' '+type : '');
   setTimeout(() => el.classList.add('show'), 10);
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => el.classList.remove('show'), 3000);
