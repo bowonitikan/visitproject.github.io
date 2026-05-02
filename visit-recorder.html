@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Rekam Kunjungan</title>
+<meta name="description" content="Log kunjungan maintenance V1.0">
+<title>Rekam Kunjungan V 1.0 by Era</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -1161,6 +1162,7 @@ function gpsError(msg) {
 // ─── WORKER DROPDOWN ──────────────────────────────────────
 // Daftar pekerja — admin bisa tambah/edit di pengaturan,
 // atau diambil dari Apps Script jika gasUrl tersedia.
+// Data fallback jika Sheets tidak tersedia
 const WORKERS_DEFAULT = [
   { id: 'EMP-001', nama: 'Budi Santoso' },
   { id: 'EMP-002', nama: 'Siti Rahayu'  },
@@ -1169,19 +1171,56 @@ const WORKERS_DEFAULT = [
   { id: 'EMP-005', nama: 'Rudi Hermawan'},
 ];
 
-function getWorkers() {
+function fillDropdown(workers) {
+  const sel = q('f-empid');
+  sel.innerHTML = '<option value="">— Pilih Employee ID —</option>' +
+    workers.map(w => `<option value="${esc(w.id)}" data-nama="${esc(w.nama)}">${esc(w.id)} — ${esc(w.nama)}</option>`).join('');
+}
+
+async function populateEmpDropdown() {
+  const sel = q('f-empid');
+  // Tampilkan status loading di dropdown
+  sel.innerHTML = '<option value="">Memuat data pekerja...</option>';
+  sel.disabled = true;
+
+  if (!CFG.gasUrl) {
+    // Tidak ada URL, pakai fallback
+    sel.disabled = false;
+    fillDropdown(WORKERS_DEFAULT);
+    return;
+  }
+
+  try {
+    const res  = await fetch(`${CFG.gasUrl}?action=list-pekerja`);
+    const data = await res.json();
+    if (data.workers && data.workers.length > 0) {
+      // Simpan cache di localStorage agar bisa dipakai offline
+      localStorage.setItem('rkv_workers', JSON.stringify(data.workers));
+      fillDropdown(data.workers);
+    } else {
+      // Sheets kosong — coba cache dulu, lalu fallback
+      const cached = getCachedWorkers();
+      fillDropdown(cached);
+      if (cached === WORKERS_DEFAULT) {
+        toast('Sheet Data Pekerja kosong, pakai data contoh', 'warn');
+      }
+    }
+  } catch {
+    // Gagal fetch — pakai cache atau fallback
+    const cached = getCachedWorkers();
+    fillDropdown(cached);
+    toast('Gagal memuat pekerja dari Sheets, pakai data lokal', 'warn');
+  }
+
+  sel.disabled = false;
+}
+
+function getCachedWorkers() {
   try {
     const raw = localStorage.getItem('rkv_workers');
     if (raw) return JSON.parse(raw);
   } catch {}
   return WORKERS_DEFAULT;
-}
-
-function populateEmpDropdown() {
-  const sel = q('f-empid');
-  const workers = getWorkers();
-  sel.innerHTML = '<option value="">— Pilih Employee ID —</option>' +
-    workers.map(w => `<option value="${esc(w.id)}" data-nama="${esc(w.nama)}">${esc(w.id)} — ${esc(w.nama)}</option>`).join('');
 }
 
 function onEmpSelect() {
