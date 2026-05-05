@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<meta name="description" content="Log kunjungan maintenance V1.0">
-<title>Rekam Kunjungan V 1.0 by Era</title>
+<meta name="description" content="Log kunjungan maintenance V1.0 (c) mei 2026">
+<title>Rekam Kunjungan V 1.0 </title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -544,6 +544,79 @@ tr:hover td { background: var(--surface2); }
 
 /* ──────────────── DIVIDER ──────────────── */
 .divider { height: 1px; background: var(--border); margin: 14px 0; }
+
+
+/* ──────────────── NEWS TICKER ──────────────── */
+.ticker-wrap {
+  position: fixed;
+  bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 100%; max-width: 480px;
+  background: #0a0a0a;
+  z-index: 200;
+  overflow: hidden;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  border-top: 1px solid #222;
+}
+.ticker-label {
+  flex-shrink: 0;
+  background: #1c5c3a;
+  color: white;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 0 12px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  z-index: 1;
+}
+.ticker-track {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  height: 100%;
+}
+.ticker-inner {
+  display: inline-flex;
+  align-items: center;
+  height: 100%;
+  white-space: nowrap;
+  animation: ticker-scroll 22s linear infinite;
+  will-change: transform;
+}
+.ticker-inner:hover { animation-play-state: paused; }
+.ticker-item {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: #f0f0f0;
+  letter-spacing: 0.2px;
+  padding: 0 48px 0 0;
+}
+.ticker-item a {
+  color: #6ee09e;
+  text-decoration: none;
+  font-weight: 500;
+}
+.ticker-item a:hover { text-decoration: underline; }
+.ticker-sep {
+  color: #444;
+  padding: 0 24px 0 0;
+  font-size: 14px;
+}
+@keyframes ticker-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+/* Push scroll-body up so ticker doesn't cover content */
+.scroll-body  { padding-bottom: 50px; }
+.apage        { padding-bottom: 50px; }
+.login-wrap   { padding-bottom: 50px; }
 
 /* ──────────────── SPACER ──────────────── */
 .spacer-24 { height: 24px; }
@@ -1589,5 +1662,28 @@ function esc(str)   { return (str||'').replace(/"/g,'&quot;'); }
 // ─── KICK OFF ─────────────────────────────────────────────
 init();
 </script>
+
+<!-- NEWS TICKER -->
+<div class="ticker-wrap" id="ticker-wrap">
+  <div class="ticker-label">INFO</div>
+  <div class="ticker-track">
+    <div class="ticker-inner" id="ticker-inner">
+      <span class="ticker-item">
+        Untuk info panduan klik link berikut&nbsp;:&nbsp;
+        <a href="https://bowonitikan.github.io/visitproject.github.io/index.html" target="_blank">
+          https://bowonitikan.github.io/visitproject.github.io/index.html
+        </a>
+      </span>
+      <span class="ticker-sep">◆</span>
+      <span class="ticker-item">
+        Untuk info panduan klik link berikut&nbsp;:&nbsp;
+        <a href="https://bowonitikan.github.io/visitproject.github.io/index.html" target="_blank">
+          https://bowonitikan.github.io/visitproject.github.io/index.html
+        </a>
+      </span>
+      <span class="ticker-sep">◆</span>
+    </div>
+  </div>
+</div>
 </body>
 </html>
