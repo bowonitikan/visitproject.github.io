@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dokumentasi — Rekam Kunjungan</title>
+ <meta name="description" content="Log kunjungan maintenance, perbaikan, instalasi baru">
+  <meta name="keywords" content="pencatat pekerjaan, work note, log book, log book online, qa snack, eranitikan">
+  <meta name="author" content="@erawibowo @mei2026">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green: #1c5c3a; --green2: #14472c; --green-bg: #edf5f0; --green-border: #b8d9c4;
+  --text: #18160f; --text2: #5a5750; --text3: #9e9890;
+  --bg: #f7f6f2; --surface: #ffffff; --border: #e4e1da;
+  --radius: 14px; --radius-sm: 8px;
+  --mono: 'JetBrains Mono', monospace;
+  --shadow: 0 2px 12px rgba(0,0,0,0.07);
+  --shadow-lg: 0 8px 40px rgba(0,0,0,0.1);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── LAYOUT ── */
+.container { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+@media (max-width: 640px) { .two-col, .three-col { grid-template-columns: 1fr; } }
+
+/* ── HERO ── */
+.hero {
+  background: linear-gradient(135deg, var(--green) 0%, #0d3d24 100%);
+  padding: 64px 24px 80px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.85);
+  padding: 5px 14px; border-radius: 40px;
+  font-size: 12px; font-weight: 500; letter-spacing: 0.4px;
+  margin-bottom: 24px;
+}
+.hero-icon {
+  width: 80px; height: 80px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 22px;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 20px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+.hero-icon svg { width: 40px; height: 40px; }
+.hero h1 { font-size: 36px; font-weight: 800; color: white; letter-spacing: -1px; margin-bottom: 12px; }
+.hero p { font-size: 16px; color: rgba(255,255,255,0.7); max-width: 480px; margin: 0 auto 32px; }
+.hero-tags { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.hero-tag {
+  background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.8); padding: 5px 13px;
+  border-radius: 40px; font-size: 12px; font-weight: 500;
+}
+
+/* ── NAV (sticky) ── */
+.nav {
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 100;
+  padding: 0 24px;
+}
+.nav-inner {
+  max-width: 860px; margin: 0 auto;
+  display: flex; gap: 0; overflow-x: auto;
+}
+.nav-inner::-webkit-scrollbar { display: none; }
+.nav-link {
+  display: flex; align-items: center; gap: 6px;
+  padding: 14px 16px;
+  color: var(--text2); font-size: 13px; font-weight: 500;
+  text-decoration: none; white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  transition: all .15s;
+}
+.nav-link:hover { color: var(--green); }
+.nav-link.active { color: var(--green); border-bottom-color: var(--green); }
+.nav-link svg { width: 14px; height: 14px; }
+
+/* ── SECTIONS ── */
+section { padding: 56px 0; }
+section + section { border-top: 1px solid var(--border); }
+.section-label {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: var(--green-bg); color: var(--green);
+  border: 1px solid var(--green-border);
+  padding: 4px 12px; border-radius: 40px;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.section-label svg { width: 12px; height: 12px; }
+h2 { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 8px; }
+h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+.section-desc { font-size: 15px; color: var(--text2); max-width: 580px; margin-bottom: 32px; line-height: 1.7; }
+
+/* ── CARDS ── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px;
+  box-shadow: var(--shadow);
+}
+.card-icon {
+  width: 44px; height: 44px;
+  border-radius: 11px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 14px;
+  flex-shrink: 0;
+}
+.card-icon svg { width: 22px; height: 22px; }
+.icon-green  { background: #edf5f0; }
+.icon-green svg  { color: var(--green); }
+.icon-blue   { background: #eff6ff; }
+.icon-blue svg   { color: #1d4ed8; }
+.icon-amber  { background: #fffbeb; }
+.icon-amber svg  { color: #b45309; }
+.icon-purple { background: #f5f3ff; }
+.icon-purple svg { color: #6d28d9; }
+.icon-red    { background: #fff1f1; }
+.icon-red svg    { color: #991b1b; }
+.icon-teal   { background: #f0fdfa; }
+.icon-teal svg   { color: #0f766e; }
+.card h3 { font-size: 15px; font-weight: 700; margin-bottom: 5px; }
+.card p  { font-size: 13px; color: var(--text2); line-height: 1.6; }
+
+/* ── PHONE MOCKUP ── */
+.phone-wrap {
+  display: flex; justify-content: center; padding: 20px 0;
+}
+.phone {
+  width: 280px;
+  background: #0f0f0f;
+  border-radius: 36px;
+  padding: 14px;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.06);
+  position: relative;
+}
+.phone::before {
+  content: '';
+  position: absolute; top: 14px; left: 50%; transform: translateX(-50%);
+  width: 70px; height: 5px;
+  background: #1a1a1a; border-radius: 3px;
+}
+.phone-screen {
+  background: #f7f6f2;
+  border-radius: 24px;
+  overflow: hidden;
+  margin-top: 18px;
+}
+
+/* ── SCREEN MOCKUP (inside phone) ── */
+.mock-topbar {
+  background: white;
+  padding: 10px 12px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid #e4e1da;
+}
+.mock-brand { display: flex; align-items: center; gap: 7px; }
+.mock-logo {
+  width: 28px; height: 28px;
+  background: #1c5c3a; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+}
+.mock-logo svg { width: 14px; height: 14px; color: white; }
+.mock-name { font-size: 12px; font-weight: 700; color: #18160f; }
+.mock-sub  { font-size: 9px; color: #9e9890; }
+.mock-btn  { padding: 4px 9px; border-radius: 5px; border: 1px solid #e4e1da; font-size: 10px; color: #5a5750; font-family: inherit; background: white; }
+
+.mock-body { padding: 10px; }
+.mock-banner {
+  background: linear-gradient(135deg, #1c5c3a, #0d3d24);
+  border-radius: 8px; padding: 10px 12px;
+  display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+}
+.mock-banner-icon {
+  width: 32px; height: 32px; background: rgba(255,255,255,0.15);
+  border-radius: 6px; display: flex; align-items: center; justify-content: center;
+}
+.mock-banner-icon svg { width: 16px; height: 16px; color: white; }
+.mock-banner-lbl { font-size: 8px; color: rgba(255,255,255,0.6); font-weight: 600; letter-spacing: 0.4px; text-transform: uppercase; }
+.mock-banner-val { font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 1px; }
+
+.mock-card {
+  background: white; border: 1px solid #e4e1da;
+  border-radius: 8px; padding: 10px; margin-bottom: 7px;
+}
+.mock-card-title {
+  font-size: 8px; font-weight: 700; color: #9e9890;
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;
+  display: flex; align-items: center; gap: 5px;
+}
+.mock-card-title-dot {
+  width: 18px; height: 18px; background: #edf5f0; border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+}
+.mock-card-title-dot svg { width: 10px; height: 10px; color: #1c5c3a; }
+.mock-field { margin-bottom: 6px; }
+.mock-label { font-size: 8px; color: #9e9890; font-weight: 600; margin-bottom: 2px; }
+.mock-input {
+  background: #f7f6f2; border: 1px solid #e4e1da;
+  border-radius: 4px; padding: 4px 7px;
+  font-size: 9px; color: #9e9890;
+  display: flex; align-items: center; justify-content: space-between;
+  width: 100%;
+}
+.mock-input-filled { color: #18160f; background: white; }
+.mock-row { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+.mock-gps {
+  background: #f7f6f2; border: 1px solid #e4e1da; border-radius: 4px;
+  padding: 4px 7px; font-size: 8px; color: #9e9890;
+  display: flex; align-items: center; gap: 5px; margin-bottom: 5px;
+}
+.mock-dot { width: 5px; height: 5px; border-radius: 50%; background: #22c55e; }
+.mock-submit {
+  background: #1c5c3a; border-radius: 6px; padding: 9px;
+  text-align: center; color: white; font-size: 10px; font-weight: 600;
+  margin-bottom: 0;
+}
+.mock-ticker {
+  background: #0a0a0a; padding: 5px 10px;
+  font-size: 8px; color: #6ee09e; display: flex; gap: 7px; align-items: center;
+}
+.mock-ticker-badge { background: #1c5c3a; color: white; font-size: 7px; font-weight: 700; padding: 1px 5px; border-radius: 3px; letter-spacing: 0.5px; }
+.mock-ticker-text { color: #e0e0e0; }
+
+/* ── ADMIN MOCKUP ── */
+.mock-admin-topbar {
+  background: white; padding: 8px 10px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid #e4e1da;
+}
+.mock-hamburger { display: flex; flex-direction: column; gap: 3px; }
+.mock-hamburger span { width: 12px; height: 1.5px; background: #5a5750; display: block; border-radius: 2px; }
+.mock-role { background: #f5f3ff; color: #6d28d9; border: 1px solid #ddd6fe; font-size: 8px; padding: 2px 6px; border-radius: 40px; font-weight: 600; }
+.mock-admin-body { display: flex; }
+.mock-sidebar { width: 56px; background: white; border-right: 1px solid #e4e1da; padding: 8px 5px; }
+.mock-nav-item {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 6px; border-radius: 5px; margin-bottom: 3px;
+  font-size: 7px; color: #9e9890;
+}
+.mock-nav-item.active { background: #edf5f0; color: #1c5c3a; }
+.mock-nav-item svg { width: 12px; height: 12px; }
+.mock-admin-content { flex: 1; padding: 8px; }
+.mock-stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-bottom: 8px; }
+.mock-stat { background: #f7f6f2; border-radius: 6px; padding: 7px; text-align: center; }
+.mock-stat-num { font-size: 16px; font-weight: 800; color: #18160f; }
+.mock-stat-lbl { font-size: 7px; color: #9e9890; margin-top: 1px; }
+.mock-table-head { display: grid; grid-template-columns: 1.2fr 1fr 1fr 1fr; gap: 4px; padding: 4px 6px; background: #f7f6f2; border-radius: 4px 4px 0 0; }
+.mock-table-head span { font-size: 7px; font-weight: 700; color: #9e9890; text-transform: uppercase; }
+.mock-table-row { display: grid; grid-template-columns: 1.2fr 1fr 1fr 1fr; gap: 4px; padding: 5px 6px; border-bottom: 1px solid #e4e1da; }
+.mock-table-row span { font-size: 8px; color: #5a5750; }
+.mock-badge-green { background: #edf5f0; color: #1c5c3a; font-size: 7px; padding: 1px 5px; border-radius: 40px; font-weight: 600; display: inline-block; }
+.mock-badge-yellow { background: #fffbeb; color: #92400e; font-size: 7px; padding: 1px 5px; border-radius: 40px; font-weight: 600; display: inline-block; }
+
+/* ── STEP FLOW ── */
+.steps { display: flex; flex-direction: column; gap: 0; }
+.step {
+  display: flex; gap: 20px; align-items: flex-start;
+  position: relative; padding-bottom: 32px;
+}
+.step:last-child { padding-bottom: 0; }
+.step:not(:last-child)::after {
+  content: '';
+  position: absolute; left: 19px; top: 44px; bottom: 0;
+  width: 2px; background: var(--border);
+}
+.step-num {
+  width: 40px; height: 40px;
+  background: var(--green); color: white;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 800; flex-shrink: 0; z-index: 1;
+  box-shadow: 0 0 0 4px var(--green-bg);
+}
+.step-body { padding-top: 6px; flex: 1; }
+.step-body h3 { font-size: 16px; font-weight: 700; margin-bottom: 5px; }
+.step-body p { font-size: 14px; color: var(--text2); }
+.step-tip {
+  background: var(--green-bg); border: 1px solid var(--green-border);
+  border-radius: var(--radius-sm); padding: 8px 12px;
+  font-size: 12px; color: var(--green); margin-top: 8px;
+  display: flex; align-items: flex-start; gap: 6px;
+}
+.step-tip svg { width: 13px; height: 13px; flex-shrink: 0; margin-top: 1px; }
+
+/* ── QR FLOW ── */
+.qr-flow {
+  display: flex; align-items: center; gap: 12px;
+  flex-wrap: wrap; justify-content: center;
+}
+.qr-box {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 16px 18px;
+  text-align: center; min-width: 100px;
+  box-shadow: var(--shadow);
+}
+.qr-box-icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 8px;
+}
+.qr-box-icon svg { width: 20px; height: 20px; }
+.qr-box p { font-size: 11px; font-weight: 600; color: var(--text2); }
+.qr-arrow { font-size: 20px; color: var(--text3); }
+
+/* ── DATA FLOW ── */
+.data-flow {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 24px;
+  display: flex; align-items: center; gap: 12px;
+  flex-wrap: wrap; justify-content: center;
+  box-shadow: var(--shadow);
+}
+.data-node {
+  text-align: center;
+}
+.data-node-icon {
+  width: 52px; height: 52px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 8px;
+}
+.data-node-icon svg { width: 26px; height: 26px; }
+.data-node p { font-size: 12px; font-weight: 600; color: var(--text); }
+.data-node span { font-size: 10px; color: var(--text2); display: block; }
+.data-arrow { font-size: 22px; color: var(--text3); flex-shrink: 0; }
+
+/* ── INFO BOX ── */
+.info-box {
+  border-radius: var(--radius-sm); padding: 14px 16px;
+  border: 1px solid; display: flex; gap: 10px;
+  font-size: 13px; line-height: 1.6; margin-top: 12px;
+}
+.info-box svg { width: 16px; height: 16px; flex-shrink: 0; margin-top: 1px; }
+.info-green { background: var(--green-bg); border-color: var(--green-border); color: var(--green); }
+.info-amber { background: #fffbeb; border-color: #fcd34d; color: #92400e; }
+.info-blue  { background: #eff6ff; border-color: #bfdbfe; color: #1e40af; }
+
+/* ── CODE ── */
+code {
+  font-family: var(--mono); font-size: 12px;
+  background: #f0ede8; color: #1c5c3a;
+  padding: 2px 6px; border-radius: 4px;
+}
+.code-block {
+  background: #1a1a1a; border-radius: var(--radius-sm);
+  padding: 16px 18px; margin: 12px 0;
+  overflow-x: auto;
+}
+.code-block pre { font-family: var(--mono); font-size: 12px; color: #e0e0e0; line-height: 1.7; }
+.code-block .kw  { color: #7dd3a8; }
+.code-block .str { color: #f9a875; }
+.code-block .cmt { color: #6b7280; font-style: italic; }
+.code-block .key { color: #93c5fd; }
+
+/* ── TABLE ── */
+.doc-table {
+  width: 100%; border-collapse: collapse;
+  background: var(--surface); border-radius: var(--radius-sm);
+  overflow: hidden; box-shadow: var(--shadow);
+}
+.doc-table th {
+  background: #f7f6f2; padding: 11px 14px;
+  font-size: 11px; font-weight: 700; color: var(--text2);
+  text-align: left; text-transform: uppercase; letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--border);
+}
+.doc-table td {
+  padding: 11px 14px; font-size: 13px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.doc-table tr:last-child td { border-bottom: none; }
+.doc-table tr:hover td { background: #fafaf8; }
+
+/* ── FOOTER ── */
+footer {
+  background: #0f0f0f; color: rgba(255,255,255,0.5);
+  text-align: center; padding: 40px 24px;
+  font-size: 13px;
+}
+footer a { color: #6ee09e; text-decoration: none; }
+footer strong { color: rgba(255,255,255,0.8); }
+
+/* ── DIVIDER ── */
+.divider { height: 1px; background: var(--border); margin: 24px 0; }
+
+/* ── UTIL ── */
+.mt-16 { margin-top: 16px; }
+.mt-24 { margin-top: 24px; }
+.mb-8  { margin-bottom: 8px; }
+.text-center { text-align: center; }
+.tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: var(--green-bg); color: var(--green);
+  border: 1px solid var(--green-border);
+  padding: 3px 9px; border-radius: 40px;
+  font-size: 11px; font-weight: 600;
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<div class="hero">
+  <div class="hero-badge">
+    <svg width="10" height="10" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+    Dokumentasi Pengguna — v1.0
+  </div>
+  <div class="hero-icon">
+    <svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+    </svg>
+  </div>
+  <h1>Rekam Kunjungan</h1>
+  <p>Sistem pencatatan kunjungan pekerja lapangan berbasis QR Code. Cepat, mudah, dan langsung tersimpan ke Google Sheets.</p>
+  <div class="hero-tags">
+    <span class="hero-tag">📱 Mobile-Friendly</span>
+    <span class="hero-tag">📷 QR Code</span>
+    <span class="hero-tag">📊 Google Sheets</span>
+    <span class="hero-tag">📍 GPS Lokasi</span>
+    <span class="hero-tag">🔐 Panel Admin</span>
+  </div>
+</div>
+
+<!-- ═══════════════ NAV ═══════════════ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-link active" href="#cara-kerja">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+      Cara Kerja
+    </a>
+    <a class="nav-link" href="#tampilan">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><path stroke-linecap="round" d="M8 21h8M12 17v4"/></svg>
+      Tampilan
+    </a>
+    <a class="nav-link" href="#panduan-pekerja">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+      Panduan Pekerja
+    </a>
+    <a class="nav-link" href="#panduan-admin">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+      Panel Admin
+    </a>
+    <a class="nav-link" href="#qr-lokasi">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
+      QR Lokasi
+    </a>
+    <a class="nav-link" href="#data">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path stroke-linecap="round" d="M21 12c0 1.66-4.03 3-9 3S3 13.66 3 12"/><path stroke-linecap="round" d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/></svg>
+      Data
+    </a>
+  </div>
+</nav>
+
+
+<!-- ═══════════════ CARA KERJA ═══════════════ -->
+<section id="cara-kerja">
+  <div class="container">
+    <div class="section-label">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+      Gambaran Umum
+    </div>
+    <h2>Bagaimana Sistemnya Bekerja?</h2>
+    <p class="section-desc">Cukup scan QR di lokasi, isi form singkat, dan data langsung masuk ke Google Sheets. Semudah itu!</p>
+
+    <!-- Data Flow -->
+    <div class="data-flow mt-24">
+      <div class="data-node">
+        <div class="data-node-icon icon-amber">
+          <svg fill="none" stroke="#b45309" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
+        </div>
+        <p>QR Code</p>
+        <span>di lokasi kerja</span>
+      </div>
+      <div class="data-arrow">→</div>
+      <div class="data-node">
+        <div class="data-node-icon icon-blue">
+          <svg fill="none" stroke="#1d4ed8" stroke-width="2" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+        </div>
+        <p>Scan & Isi Form</p>
+        <span>lewat smartphone</span>
+      </div>
+      <div class="data-arrow">→</div>
+      <div class="data-node">
+        <div class="data-node-icon icon-purple">
+          <svg fill="none" stroke="#6d28d9" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg>
+        </div>
+        <p>Apps Script</p>
+        <span>proses & simpan</span>
+      </div>
+      <div class="data-arrow">→</div>
+      <div class="data-node">
+        <div class="data-node-icon icon-green">
+          <svg fill="none" stroke="#1c5c3a" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        </div>
+        <p>Google Sheets</p>
+        <span>data tersimpan</span>
+      </div>
+      <div class="data-arrow">→</div>
+      <div class="data-node">
+        <div class="data-node-icon icon-teal">
+          <svg fill="none" stroke="#0f766e" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+        </div>
+        <p>Admin Monitor</p>
+        <span>pantau real-time</span>
+      </div>
+    </div>
+
+    <div class="two-col mt-24">
+      <div class="card">
+        <div class="card-icon icon-green">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+        </div>
+        <h3>Keunggulan Sistem</h3>
+        <p>Tidak perlu tanda tangan manual. Data langsung masuk ke cloud, bisa diakses kapan saja dan di mana saja oleh admin.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon icon-blue">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+        </div>
+        <h3>Dua Level Akses</h3>
+        <p>Pekerja hanya bisa mengisi form. Admin & Operator bisa melihat laporan, kelola QR, dan mengatur konfigurasi sistem.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════ TAMPILAN ═══════════════ -->
+<section id="tampilan">
+  <div class="container">
+    <div class="section-label">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><path stroke-linecap="round" d="M8 21h8M12 17v4"/></svg>
+      Preview Antarmuka
+    </div>
+    <h2>Tampilan Aplikasi</h2>
+    <p class="section-desc">Dirancang untuk mudah digunakan di smartphone. Bersih, cepat, dan intuitif.</p>
+
+    <div class="two-col mt-24" style="align-items:start">
+
+      <!-- Phone 1: Form Pekerja -->
+      <div>
+        <p style="text-align:center;font-size:13px;font-weight:600;color:var(--text2);margin-bottom:14px">📱 Form Pekerja (Publik)</p>
+        <div class="phone-wrap">
+          <div class="phone">
+            <div class="phone-screen">
+              <!-- Topbar -->
+              <div class="mock-topbar">
+                <div class="mock-brand">
+                  <div class="mock-logo">
+                    <svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2"/></svg>
+                  </div>
+                  <div>
+                    <div class="mock-name">Rekam Kunjungan</div>
+                    <div class="mock-sub">Form Pekerja</div>
+                  </div>
+                </div>
+                <div class="mock-btn">Admin</div>
+              </div>
+              <div class="mock-body">
+                <!-- Banner -->
+                <div class="mock-banner">
+                  <div class="mock-banner-icon">
+                    <svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4"/></svg>
+                  </div>
+                  <div>
+                    <div class="mock-banner-lbl">Lokasi QR</div>
+                    <div class="mock-banner-val">LOK-GUDANG-01</div>
+                  </div>
+                </div>
+                <!-- Card Auto -->
+                <div class="mock-card">
+                  <div class="mock-card-title">
+                    <div class="mock-card-title-dot">
+                      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    </div>
+                    Data Otomatis
+                  </div>
+                  <div class="mock-row">
+                    <div class="mock-field">
+                      <div class="mock-label">Kode QR</div>
+                      <div class="mock-input mock-input-filled">LOK-GUDANG-01</div>
+                    </div>
+                    <div class="mock-field">
+                      <div class="mock-label">GKP</div>
+                      <div class="mock-input mock-input-filled">GKP-001</div>
+                    </div>
+                  </div>
+                  <div class="mock-row">
+                    <div class="mock-field">
+                      <div class="mock-label">Tanggal</div>
+                      <div class="mock-input mock-input-filled">2025-05-05</div>
+                    </div>
+                    <div class="mock-field">
+                      <div class="mock-label">Jam</div>
+                      <div class="mock-input mock-input-filled">08:30</div>
+                    </div>
+                  </div>
+                  <div class="mock-label" style="margin-top:5px">GPS Lokasi</div>
+                  <div class="mock-gps">
+                    <div class="mock-dot"></div>
+                    -7.401412, 109.231602
+                  </div>
+                </div>
+                <!-- Card Pekerja -->
+                <div class="mock-card">
+                  <div class="mock-card-title">
+                    <div class="mock-card-title-dot">
+                      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                    </div>
+                    Data Pekerja
+                  </div>
+                  <div class="mock-field">
+                    <div class="mock-label">Employee ID *</div>
+                    <div class="mock-input mock-input-filled" style="justify-content:space-between">
+                      EMP-001 — Budi Santoso
+                      <svg width="8" height="8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                    </div>
+                  </div>
+                  <div class="mock-field">
+                    <div class="mock-label">Nama Pekerja *</div>
+                    <div class="mock-input" style="background:#f7f6f2;color:#5a5750">Budi Santoso</div>
+                  </div>
+                  <div class="mock-field">
+                    <div class="mock-label">Keperluan *</div>
+                    <div class="mock-input mock-input-filled" style="justify-content:space-between">
+                      Maintenance
+                      <svg width="8" height="8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                    </div>
+                  </div>
+                </div>
+                <div class="mock-submit">✓ Kirim Laporan</div>
+              </div>
+              <!-- Ticker -->
+              <div class="mock-ticker">
+                <div class="mock-ticker-badge">INFO</div>
+                <div class="mock-ticker-text">Panduan: bowonitikan.github.io/...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phone 2: Admin Panel -->
+      <div>
+        <p style="text-align:center;font-size:13px;font-weight:600;color:var(--text2);margin-bottom:14px">🔐 Panel Admin (Laporan)</p>
+        <div class="phone-wrap">
+          <div class="phone">
+            <div class="phone-screen">
+              <!-- Admin topbar -->
+              <div class="mock-admin-topbar">
+                <div style="display:flex;align-items:center;gap:7px">
+                  <div class="mock-hamburger"><span></span><span></span><span></span></div>
+                  <div>
+                    <div class="mock-name" style="font-size:11px">Admin Panel</div>
+                    <div class="mock-sub">admin</div>
+                  </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:5px">
+                  <div class="mock-role">Admin</div>
+                  <div class="mock-btn" style="color:#991b1b;border-color:#fca5a5;background:#fff1f1">Keluar</div>
+                </div>
+              </div>
+              <!-- Admin body -->
+              <div class="mock-admin-body">
+                <!-- Sidebar -->
+                <div class="mock-sidebar">
+                  <div class="mock-nav-item active">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586l5.414 5.414V19a2 2 0 01-2 2z"/></svg>
+                    Laporan
+                  </div>
+                  <div class="mock-nav-item">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3"/></svg>
+                    QR
+                  </div>
+                  <div class="mock-nav-item">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path stroke-linecap="round" d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0"/></svg>
+                    Setting
+                  </div>
+                </div>
+                <!-- Content -->
+                <div class="mock-admin-content">
+                  <div class="mock-stat-grid">
+                    <div class="mock-stat"><div class="mock-stat-num">24</div><div class="mock-stat-lbl">Total</div></div>
+                    <div class="mock-stat"><div class="mock-stat-num">18</div><div class="mock-stat-lbl">Selesai</div></div>
+                    <div class="mock-stat"><div class="mock-stat-num">6</div><div class="mock-stat-lbl">Belum</div></div>
+                    <div class="mock-stat"><div class="mock-stat-num">5</div><div class="mock-stat-lbl">Pekerja</div></div>
+                  </div>
+                  <div style="background:white;border:1px solid #e4e1da;border-radius:6px;overflow:hidden">
+                    <div class="mock-table-head">
+                      <span>Tanggal</span><span>Nama</span><span>Keperluan</span><span>Hasil</span>
+                    </div>
+                    <div class="mock-table-row">
+                      <span>29/04</span><span>Budi S.</span><span>Maint.</span><span><div class="mock-badge-green">Selesai</div></span>
+                    </div>
+                    <div class="mock-table-row">
+                      <span>28/04</span><span>Siti R.</span><span>Perbaikan</span><span><div class="mock-badge-green">Selesai</div></span>
+                    </div>
+                    <div class="mock-table-row">
+                      <span>27/04</span><span>Agus W.</span><span>Instalasi</span><span><div class="mock-badge-yellow">Belum</div></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="mock-ticker">
+                <div class="mock-ticker-badge">INFO</div>
+                <div class="mock-ticker-text">Panduan: bowonitikan.github.io/...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════ PANDUAN PEKERJA ═══════════════ -->
+<section id="panduan-pekerja">
+  <div class="container">
+    <div class="section-label">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+      Untuk Pekerja Lapangan
+    </div>
+    <h2>Cara Mengisi Laporan</h2>
+    <p class="section-desc">Ikuti langkah-langkah berikut setiap kali Anda tiba atau selesai bekerja di suatu lokasi.</p>
+
+    <div class="steps mt-24">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3>📷 Scan QR Code di Lokasi</h3>
+          <p>Arahkan kamera smartphone ke QR code yang tertempel di lokasi kerja (gudang, kantor, panel listrik, dll). Gunakan kamera bawaan HP — tidak perlu aplikasi tambahan.</p>
+          <div class="step-tip">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Setelah scan, browser otomatis terbuka dan Kode QR serta GKP sudah terisi. Tidak perlu ketik manual!
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3>📍 Ambil Lokasi GPS (Opsional)</h3>
+          <p>Ketuk tombol <strong>"Ambil GPS"</strong> agar sistem mengetahui posisi Anda saat ini. Izinkan akses lokasi jika muncul permintaan dari browser.</p>
+          <div class="step-tip">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Titik hijau berkedip artinya GPS berhasil diambil. Jika gagal, laporan tetap bisa dikirim tanpa GPS.
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3>👤 Pilih Employee ID</h3>
+          <p>Pilih ID karyawan Anda dari dropdown. Nama akan terisi otomatis. Tanggal dan jam juga sudah terisi otomatis dengan waktu saat ini.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h3>📝 Isi Detail Pekerjaan</h3>
+          <p>Pilih <strong>Keperluan</strong> (Maintenance / Perbaikan / Instalasi baru), tulis <strong>Deskripsi</strong> pekerjaan secara singkat dan jelas, lalu pilih <strong>Hasil</strong>.</p>
+          <div class="step-tip">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+            Jika memilih <strong>"Belum selesai"</strong>, kotak <em>Alasan</em> akan muncul dan wajib diisi.
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <h3>✅ Kirim Laporan</h3>
+          <p>Ketuk tombol hijau <strong>"Kirim Laporan"</strong>. Tunggu sebentar hingga muncul notifikasi <em>"Laporan berhasil dikirim"</em>. Selesai!</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-box info-amber mt-24">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+      <div><strong>Perhatian!</strong> Semua field bertanda bintang (<strong>*</strong>) wajib diisi sebelum laporan bisa dikirim. Pastikan koneksi internet aktif saat menekan tombol kirim.</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════ PANDUAN ADMIN ═══════════════ -->
+<section id="panduan-admin">
+  <div class="container">
+    <div class="section-label">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+      Untuk Admin &amp; Operator
+    </div>
+    <h2>Panel Administrasi</h2>
+    <p class="section-desc">Admin memiliki akses penuh ke laporan, manajemen QR, dan pengaturan sistem. Operator hanya bisa melihat laporan dan QR.</p>
+
+    <div class="two-col mt-24">
+      <div class="card">
+        <div class="card-icon icon-green">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        </div>
+        <h3>Menu Laporan</h3>
+        <p>Lihat semua data kunjungan. Filter berdasarkan tanggal, nama pekerja, atau keperluan. Unduh laporan dalam format CSV.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon icon-amber">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3"/></svg>
+        </div>
+        <h3>Menu QR Lokasi</h3>
+        <p>Tambah atau hapus lokasi QR. Setiap lokasi memiliki kode unik dan GKP. QR bisa dicetak langsung dari panel ini.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon icon-purple">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35"/><circle cx="12" cy="12" r="3"/></svg>
+        </div>
+        <h3>Pengaturan (Admin Only)</h3>
+        <p>Isi URL Apps Script dan URL hosting. Kelola akun admin dan operator. Hanya bisa diakses oleh pengguna dengan role Admin.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon icon-teal">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+        </div>
+        <h3>Unduh CSV</h3>
+        <p>Ekspor semua data kunjungan ke file CSV yang bisa dibuka di Excel atau Google Sheets untuk analisis lebih lanjut.</p>
+      </div>
+    </div>
+
+    <h3 class="mt-24" style="margin-bottom:12px">🔑 Cara Masuk ke Panel Admin</h3>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num" style="background:#6d28d9">1</div>
+        <div class="step-body">
+          <h3>Ketuk Tombol "Admin"</h3>
+          <p>Di pojok kanan atas form pekerja, ketuk tombol <strong>Admin</strong>. Anda akan diarahkan ke halaman login.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num" style="background:#6d28d9">2</div>
+        <div class="step-body">
+          <h3>Masukkan Username &amp; Password</h3>
+          <p>Gunakan kredensial yang telah diberikan oleh administrator sistem. Tekan Enter atau tombol <strong>Masuk</strong>.</p>
+          <div class="info-box info-blue" style="margin-top:10px">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <div>Role <strong>Admin</strong> bisa akses semua menu termasuk Pengaturan. Role <strong>Operator</strong> hanya bisa akses Laporan dan QR Lokasi.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabel role -->
+    <h3 class="mt-24" style="margin-bottom:12px">Perbandingan Hak Akses</h3>
+    <table class="doc-table">
+      <thead>
+        <tr>
+          <th>Fitur</th>
+          <th>Pekerja</th>
+          <th>Operator</th>
+          <th>Admin</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Isi Form Kunjungan</td><td>✅</td><td>✅</td><td>✅</td></tr>
+        <tr><td>Lihat Laporan</td><td>❌</td><td>✅</td><td>✅</td></tr>
+        <tr><td>Filter &amp; Unduh CSV</td><td>❌</td><td>✅</td><td>✅</td></tr>
+        <tr><td>Kelola QR Lokasi</td><td>❌</td><td>✅</td><td>✅</td></tr>
+        <tr><td>Cetak QR</td><td>❌</td><td>✅</td><td>✅</td></tr>
+        <tr><td>Pengaturan Sistem</td><td>❌</td><td>❌</td><td>✅</td></tr>
+        <tr><td>Kelola Akun</td><td>❌</td><td>❌</td><td>✅</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
+<!-- ═══════════════ QR LOKASI ═══════════════ -->
+<section id="qr-lokasi">
+  <div class="container">
+    <div class="section-label">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3"/></svg>
+      Manajemen QR
+    </div>
+    <h2>QR Code Lokasi</h2>
+    <p class="section-desc">Setiap lokasi kerja memiliki QR code unik. Saat di-scan, form otomatis terisi dengan kode lokasi yang benar.</p>
+
+    <div class="qr-flow mt-24">
+      <div class="qr-box">
+        <div class="qr-box-icon icon-purple">
+          <svg fill="none" stroke="#6d28d9" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+        </div>
+        <p>Tambah Lokasi</p>
+      </div>
+      <div class="qr-arrow">→</div>
+      <div class="qr-box">
+        <div class="qr-box-icon icon-blue">
+          <svg fill="none" stroke="#1d4ed8" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7"/></svg>
+        </div>
+        <p>Preview QR</p>
+      </div>
+      <div class="qr-arrow">→</div>
+      <div class="qr-box">
+        <div class="qr-box-icon icon-green">
+          <svg fill="none" stroke="#1c5c3a" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+        </div>
+        <p>Cetak QR</p>
+      </div>
+      <div class="qr-arrow">→</div>
+      <div class="qr-box">
+        <div class="qr-box-icon icon-amber">
+          <svg fill="none" stroke="#b45309" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        </div>
+        <p>Pasang di Lokasi</p>
+      </div>
+    </div>
+
+    <h3 class="mt-24" style="margin-bottom:10px">Format Kode Lokasi yang Disarankan</h3>
+    <table class="doc-table">
+      <thead><tr><th>Contoh Kode</th><th>GKP</th><th>Keterangan</th></tr></thead>
+      <tbody>
+        <tr><td><code>LOK-GUDANG-01</code></td><td><code>GKP-001</code></td><td>Gudang Utama</td></tr>
+        <tr><td><code>LOK-KANTOR-02</code></td><td><code>GKP-002</code></td><td>Kantor Pusat</td></tr>
+        <tr><td><code>LOK-PANEL-03</code></td><td><code>GKP-003</code></td><td>Panel Listrik</td></tr>
+      </tbody>
+    </table>
+
+    <div class="info-box info-green mt-24">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+      <div>Saat mencetak QR, Anda bisa menambahkan <strong>nama label</strong> yang lebih ramah seperti "Gudang Utama" agar lebih mudah dikenali pekerja lapangan.</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════ DATA & SHEETS ═══════════════ -->
+<section id="data">
+  <div class="container">
+    <div class="section-label">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path stroke-linecap="round" d="M21 12c0 1.66-4.03 3-9 3S3 13.66 3 12M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/></svg>
+      Penyimpanan Data
+    </div>
+    <h2>Google Sheets &amp; Apps Script</h2>
+    <p class="section-desc">Semua data laporan tersimpan otomatis ke Google Sheets melalui Google Apps Script. Tidak ada server yang perlu dikelola.</p>
+
+    <div class="two-col mt-24">
+      <div class="card">
+        <div class="card-icon icon-green">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M3 14h18M10 10v8M14 10v8M5 6h14a1 1 0 011 1v10a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1z"/></svg>
+        </div>
+        <h3>Sheet: Log Kunjungan</h3>
+        <p>Setiap laporan yang dikirim masuk ke sheet ini. Kolom: Timestamp, Tanggal, Jam, Employee ID, Nama, Kode QR, GKP, Keperluan, Deskripsi, Hasil, Alasan, GPS.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon icon-blue">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        </div>
+        <h3>Sheet: Data Pekerja</h3>
+        <p>Daftar semua pekerja dengan Employee ID dan Nama. Sheet ini menjadi sumber data untuk dropdown di form. Cukup tambah baris baru untuk pekerja baru.</p>
+      </div>
+    </div>
+
+    <h3 class="mt-24" style="margin-bottom:10px">Struktur Kolom Log Kunjungan</h3>
+    <table class="doc-table">
+      <thead><tr><th>Kolom</th><th>Isi</th><th>Keterangan</th></tr></thead>
+      <tbody>
+        <tr><td><code>Timestamp</code></td><td>Otomatis</td><td>Waktu server saat data diterima</td></tr>
+        <tr><td><code>Tanggal</code></td><td>Dari form</td><td>Tanggal kunjungan (YYYY-MM-DD)</td></tr>
+        <tr><td><code>Jam</code></td><td>Dari form</td><td>Jam kunjungan (HH:MM)</td></tr>
+        <tr><td><code>Employee ID</code></td><td>Dari form</td><td>ID unik pekerja</td></tr>
+        <tr><td><code>Nama Pekerja</code></td><td>Dari form</td><td>Nama lengkap pekerja</td></tr>
+        <tr><td><code>Kode QR</code></td><td>Dari QR</td><td>Kode lokasi yang di-scan</td></tr>
+        <tr><td><code>GKP</code></td><td>Dari QR</td><td>Kode GKP lokasi</td></tr>
+        <tr><td><code>Keperluan</code></td><td>Dari form</td><td>Maintenance / Perbaikan / Instalasi</td></tr>
+        <tr><td><code>Deskripsi</code></td><td>Dari form</td><td>Detail pekerjaan yang dilakukan</td></tr>
+        <tr><td><code>Hasil</code></td><td>Dari form</td><td>Selesai / Belum selesai</td></tr>
+        <tr><td><code>Alasan Belum Selesai</code></td><td>Dari form</td><td>Diisi jika Hasil = Belum selesai</td></tr>
+        <tr><td><code>GPS Lokasi</code></td><td>Dari GPS</td><td>Koordinat lat, long pekerja</td></tr>
+      </tbody>
+    </table>
+
+    <div class="info-box info-blue mt-24">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      <div>Kedua sheet (<code>Log Kunjungan</code> dan <code>Data Pekerja</code>) dibuat <strong>otomatis</strong> oleh Apps Script saat pertama kali dijalankan, lengkap dengan header berwarna. Anda hanya perlu mengisi data pekerja di sheet Data Pekerja.</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer>
+  <div style="margin-bottom:12px">
+    <div style="width:44px;height:44px;background:#1c5c3a;border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px">
+      <svg width="22" height="22" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+    </div>
+    <strong>Rekam Kunjungan</strong>
+  </div>
+  <p style="margin-bottom:8px">Untuk info dan panduan lebih lanjut kunjungi</p>
+  <a href="https://bowonitikan.github.io/visitproject.github.io/index.html">bowonitikan.github.io/visitproject.github.io/index.html</a>
+  <div style="margin-top:20px;font-size:11px;opacity:0.4">Dokumentasi v1.0 · Rekam Kunjungan System</div>
+</footer>
+
+<script>
+const links = document.querySelectorAll('.nav-link');
+const sections = document.querySelectorAll('section[id]');
+
+function updateNav() {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 80) current = s.id;
+  });
+  links.forEach(l => {
+    l.classList.toggle('active', l.getAttribute('href') === '#' + current);
+  });
+}
+window.addEventListener('scroll', updateNav, { passive: true });
+updateNav();
+</script>
+</body>
+</html>
