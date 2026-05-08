@@ -1172,7 +1172,7 @@ function saveConfig() {
 function persist() {
   localStorage.setItem('rkv_v4', JSON.stringify(CFG));
 }
-
+ 
 function checkGasWarning() {
   const el = q('gas-alert');
   if (el) el.style.display = CFG.gasUrl ? 'none' : 'flex';
