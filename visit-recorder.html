@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Rekam Kunjungan V 1.6</title>
+<title>Rekam Kunjungan v 1.7</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -1427,21 +1427,30 @@ function fillDropdown(workers) {
     workers.map(w => `<option value="${esc(w.id)}" data-nama="${esc(w.nama)}">${esc(w.id)} — ${esc(w.nama)}</option>`).join('');
 }
 
-// ── JSONP helper — bypass CORS untuk GET ke Apps Script ──────
-function fetchGAS(params) {
+// ── GET ke Apps Script: coba fetch dulu, fallback ke JSONP ──
+async function fetchGAS(params) {
+  const qs = new URLSearchParams(params).toString();
+
+  // Cara 1: fetch biasa (bekerja jika CORS OK)
+  try {
+    const res  = await Promise.race([
+      fetch(CFG.gasUrl + '?' + qs, { redirect: 'follow' }),
+      new Promise((_, rej) => setTimeout(() => rej('timeout'), 8000))
+    ]);
+    if (res.ok) {
+      const data = await res.json();
+      return data;
+    }
+  } catch {}
+
+  // Cara 2: JSONP (bypass CORS, butuh Apps Script support callback)
   return new Promise((resolve, reject) => {
     const cbName = '_gas_cb_' + Date.now();
-    const url    = CFG.gasUrl + '?' + new URLSearchParams(params) + '&callback=' + cbName;
+    const url    = CFG.gasUrl + '?' + qs + '&callback=' + cbName;
     const script = document.createElement('script');
-    const timer  = setTimeout(() => {
-      cleanup();
-      reject(new Error('timeout'));
-    }, 10000);
+    const timer  = setTimeout(() => { cleanup(); reject(new Error('timeout')); }, 10000);
 
-    window[cbName] = (data) => {
-      cleanup();
-      resolve(data);
-    };
+    window[cbName] = (data) => { cleanup(); resolve(data); };
 
     function cleanup() {
       clearTimeout(timer);
@@ -1466,18 +1475,26 @@ async function populateEmpDropdown() {
     return;
   }
 
-  try {
-    const data = await fetchGAS({ action: 'list-pekerja' });
-    if (data.workers && data.workers.length > 0) {
-      localStorage.setItem('rkv_workers', JSON.stringify(data.workers));
-      fillDropdown(data.workers);
-    } else {
-      fillDropdown(getCachedWorkers());
+  // Coba hingga 2x jika gagal (pertama bisa timeout karena cold start GAS)
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    try {
+      const data = await fetchGAS({ action: 'list-pekerja' });
+      if (data.workers && data.workers.length > 0) {
+        localStorage.setItem('rkv_workers', JSON.stringify(data.workers));
+        fillDropdown(data.workers);
+        sel.disabled = false;
+        return;
+      }
+    } catch {
+      if (attempt === 1) {
+        // tunggu 1.5 detik sebelum retry
+        await sleep(1500);
+      }
     }
-  } catch {
-    fillDropdown(getCachedWorkers());
   }
 
+  // Kedua percobaan gagal — pakai cache
+  fillDropdown(getCachedWorkers());
   sel.disabled = false;
 }
 
