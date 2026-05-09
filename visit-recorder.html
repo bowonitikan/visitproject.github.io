@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="id">
-<head> 
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<meta name="description" content="Log kunjungan maintenance V1.0 (c) mei 2026">
-<title>Rekam Kunjungan V 1.0 </title>
+<title>Rekam Kunjungan V 1.5</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -618,6 +617,85 @@ tr:hover td { background: var(--surface2); }
 .apage        { padding-bottom: 50px; }
 .login-wrap   { padding-bottom: 50px; }
 
+
+/* ──────────────── ABOUT BLINK ──────────────── */
+@keyframes blink-text {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+.about-blink {
+  animation: blink-text 1s step-start infinite;
+  font-size: 15px; font-weight: 600;
+  color: var(--accent);
+  text-align: center;
+  padding: 32px 16px;
+  line-height: 1.8;
+}
+.about-wrap {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  min-height: 200px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  margin-top: 8px;
+}
+.about-icon {
+  width: 56px; height: 56px;
+  background: var(--accent-bg);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 16px;
+}
+.about-icon svg { width: 28px; height: 28px; color: var(--accent); }
+
+/* ──────────────── PEKERJA LIST ──────────────── */
+.pekerja-row {
+  display: flex; align-items: center; gap: 8px;
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.pekerja-row:last-child { border-bottom: none; }
+.pekerja-id  { font-family: var(--mono); font-size: 11px; color: var(--text2); min-width: 90px; }
+.pekerja-nama { flex: 1; font-weight: 500; }
+.pekerja-del { background: none; border: none; color: var(--text3); cursor: pointer; font-size: 14px; padding: 2px 6px; border-radius: 4px; }
+.pekerja-del:hover { color: var(--danger); background: var(--danger-bg); }
+
+
+/* ──────────────── CONNECTION STATUS ──────────────── */
+.conn-status {
+  display: flex; align-items: center; gap: 6px;
+  padding: 4px 10px;
+  border-radius: 40px;
+  font-size: 11px; font-weight: 600;
+  border: 1.5px solid;
+  transition: all .4s ease;
+  white-space: nowrap;
+  cursor: default;
+  user-select: none;
+}
+.conn-status.online {
+  background: #edf5f0; border-color: #b8d9c4; color: #1c5c3a;
+}
+.conn-status.offline {
+  background: #fff1f1; border-color: #fca5a5; color: #991b1b;
+}
+.conn-status.checking {
+  background: #fffbeb; border-color: #fcd34d; color: #92400e;
+}
+.conn-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  flex-shrink: 0; transition: background .4s;
+}
+.conn-status.online  .conn-dot { background: #22c55e; animation: conn-pulse 2s ease-in-out infinite; }
+.conn-status.offline .conn-dot { background: #ef4444; }
+.conn-status.checking .conn-dot { background: #f59e0b; animation: conn-blink .6s step-start infinite; }
+@keyframes conn-pulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.4); }
+  50%      { box-shadow: 0 0 0 4px rgba(34,197,94,0); }
+}
+@keyframes conn-blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
 /* ──────────────── SPACER ──────────────── */
 .spacer-24 { height: 24px; }
 </style>
@@ -643,12 +721,18 @@ tr:hover td { background: var(--surface2); }
         <div class="brand-sub">Form Pekerja</div>
       </div>
     </div>
-    <button class="btn btn-sm" onclick="goAdmin()">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M5.121 17.804A9 9 0 0112 15a9 9 0 016.879 2.804M15 10a3 3 0 11-6 0 3 3 0 016 0z"/>
-      </svg>
-      Admin
-    </button>
+    <div style="display:flex;align-items:center;gap:7px">
+      <div class="conn-status checking" id="conn-badge" title="Status koneksi ke server">
+        <div class="conn-dot"></div>
+        <span id="conn-label">Memeriksa...</span>
+      </div>
+      <button class="btn btn-sm" onclick="goAdmin()">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5.121 17.804A9 9 0 0112 15a9 9 0 016.879 2.804M15 10a3 3 0 11-6 0 3 3 0 016 0z"/>
+        </svg>
+        Admin
+      </button>
+    </div>
   </div>
 
   <div class="scroll-body">
@@ -883,6 +967,19 @@ tr:hover td { background: var(--surface2); }
           Pengaturan
         </button>
 
+        <button class="nav-item" id="nav-pekerja" onclick="goPage('pekerja')">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+          Data Pekerja
+        </button>
+        <button class="nav-item" id="nav-about" onclick="goPage('about')">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          About
+        </button>
+
         <div class="sidebar-section">Lainnya</div>
         <button class="nav-item" onclick="showScreen('form');closeSidebar()">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -1053,6 +1150,85 @@ tr:hover td { background: var(--surface2); }
         <div class="spacer-24"></div>
       </div>
 
+      <!-- ── PAGE: DATA PEKERJA ── -->
+      <div class="apage" id="apage-pekerja">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+              </svg>
+            </div>
+            <span class="card-title">Tambah Pekerja Baru</span>
+          </div>
+          <div class="field">
+            <label>Employee ID</label>
+            <div style="display:flex;gap:8px;align-items:center">
+              <input type="text" id="pk-id" placeholder="Klik Generate atau isi manual" style="flex:1">
+              <button class="btn btn-sm" onclick="generateEmpId()">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width:13px;height:13px">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                </svg>
+                Generate
+              </button>
+            </div>
+          </div>
+          <div class="field">
+            <label>Nama Lengkap <span class="req">*</span></label>
+            <input type="text" id="pk-nama" placeholder="Contoh: Budi Santoso">
+          </div>
+          <div class="btn-group" style="margin-top:4px">
+            <button class="btn btn-primary" onclick="savePekerja()">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+              </svg>
+              Simpan Pekerja
+            </button>
+            <button class="btn btn-sm" onclick="loadPekerjaList()">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+              </svg>
+              Refresh
+            </button>
+          </div>
+        </div>
+
+        <div class="card" style="padding:0;overflow:hidden">
+          <div style="padding:12px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
+            <div class="card-icon" style="margin:0">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+            </div>
+            <span class="card-title">Daftar Pekerja</span>
+          </div>
+          <div id="pk-list">
+            <div class="empty">
+              <div class="empty-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              </div>
+              <p>Belum ada data pekerja</p>
+            </div>
+          </div>
+        </div>
+        <div class="spacer-24"></div>
+      </div>
+
+      <!-- ── PAGE: ABOUT ── -->
+      <div class="apage" id="apage-about">
+        <div class="about-wrap">
+          <div class="about-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+            </svg>
+          </div>
+          <div class="about-blink">
+            Aplikasi record kunjungan<br>Project by Era<br>Mei 2026
+          </div>
+        </div>
+        <div class="spacer-24"></div>
+      </div>
+
     </div>
   </div>
 </div>
@@ -1132,6 +1308,7 @@ function init() {
     stampDateTime();
     checkGasWarning();
     populateEmpDropdown();
+    startConnMonitor();
   }
 }
 
@@ -1237,15 +1414,11 @@ function gpsError(msg) {
 // atau diambil dari Apps Script jika gasUrl tersedia.
 // Data fallback jika Sheets tidak tersedia
 const WORKERS_DEFAULT = [
-  { id: 'GKP-005', nama: 'Kaswanto' },
-  { id: 'GKP-223', nama: 'Monmon'  },
-  { id: 'GKP-123', nama: 'Febri'  },
-  { id: 'GKP-234', nama: 'Ryan' },
-  { id: 'GKP-235', nama: 'Purwanto'},
-   { id: 'GKP-456', nama: 'Fendy'},
-  { id: 'GKP-099', nama: 'Era'},
-  { id: 'GKP-088', nama: 'Iis'},
-  { id: 'GKP-056', nama: 'Ali'},
+  { id: 'EMP-001', nama: 'Budi Santoso' },
+  { id: 'EMP-002', nama: 'Siti Rahayu'  },
+  { id: 'EMP-003', nama: 'Agus Wijaya'  },
+  { id: 'EMP-004', nama: 'Dewi Lestari' },
+  { id: 'EMP-005', nama: 'Rudi Hermawan'},
 ];
 
 function fillDropdown(workers) {
@@ -1254,39 +1427,55 @@ function fillDropdown(workers) {
     workers.map(w => `<option value="${esc(w.id)}" data-nama="${esc(w.nama)}">${esc(w.id)} — ${esc(w.nama)}</option>`).join('');
 }
 
+// ── JSONP helper — bypass CORS untuk GET ke Apps Script ──────
+function fetchGAS(params) {
+  return new Promise((resolve, reject) => {
+    const cbName = '_gas_cb_' + Date.now();
+    const url    = CFG.gasUrl + '?' + new URLSearchParams(params) + '&callback=' + cbName;
+    const script = document.createElement('script');
+    const timer  = setTimeout(() => {
+      cleanup();
+      reject(new Error('timeout'));
+    }, 10000);
+
+    window[cbName] = (data) => {
+      cleanup();
+      resolve(data);
+    };
+
+    function cleanup() {
+      clearTimeout(timer);
+      delete window[cbName];
+      if (script.parentNode) script.parentNode.removeChild(script);
+    }
+
+    script.onerror = () => { cleanup(); reject(new Error('script error')); };
+    script.src = url;
+    document.head.appendChild(script);
+  });
+}
+
 async function populateEmpDropdown() {
   const sel = q('f-empid');
-  // Tampilkan status loading di dropdown
   sel.innerHTML = '<option value="">Memuat data pekerja...</option>';
-  sel.disabled = true;
+  sel.disabled  = true;
 
   if (!CFG.gasUrl) {
-    // Tidak ada URL, pakai fallback
     sel.disabled = false;
-    fillDropdown(WORKERS_DEFAULT);
+    fillDropdown(getCachedWorkers());
     return;
   }
 
   try {
-    const res  = await fetch(`${CFG.gasUrl}?action=list-pekerja`);
-    const data = await res.json();
+    const data = await fetchGAS({ action: 'list-pekerja' });
     if (data.workers && data.workers.length > 0) {
-      // Simpan cache di localStorage agar bisa dipakai offline
       localStorage.setItem('rkv_workers', JSON.stringify(data.workers));
       fillDropdown(data.workers);
     } else {
-      // Sheets kosong — coba cache dulu, lalu fallback
-      const cached = getCachedWorkers();
-      fillDropdown(cached);
-      if (cached === WORKERS_DEFAULT) {
-        toast('Sheet Data Pekerja kosong, pakai data contoh', 'warn');
-      }
+      fillDropdown(getCachedWorkers());
     }
   } catch {
-    // Gagal fetch — pakai cache atau fallback
-    const cached = getCachedWorkers();
-    fillDropdown(cached);
-    toast('Gagal memuat pekerja dari Sheets, pakai data lokal', 'warn');
+    fillDropdown(getCachedWorkers());
   }
 
   sel.disabled = false;
@@ -1412,6 +1601,8 @@ function enterAdmin() {
   rb.textContent = isAdmin ? 'Admin' : 'Operator';
   rb.className = 'badge ' + (isAdmin ? 'badge-purple' : 'badge-green');
   q('nav-setting').style.display = isAdmin ? 'flex' : 'none';
+  q('nav-pekerja').style.display = 'flex';
+  q('nav-about').style.display   = 'flex';
 
   showScreen('admin');
   fillConfigForm();
@@ -1440,6 +1631,7 @@ function goPage(name) {
   const navEl = q('nav-' + name);
   if (navEl) navEl.classList.add('active');
   closeSidebar();
+  if (name === 'pekerja') loadPekerjaList();
 }
 
 // ─── DATA / TABLE ─────────────────────────────────────────
@@ -1456,8 +1648,7 @@ async function loadData() {
     if (cari)   params.set('nama', cari);
     if (kep)    params.set('keperluan', kep);
 
-    const res  = await fetch(`${CFG.gasUrl}?${params}`);
-    const data = await res.json();
+    const data = await fetchGAS(Object.fromEntries(params.entries()));
     tableData  = data.rows || [];
     renderTable(tableData);
   } catch {
@@ -1662,6 +1853,121 @@ function toast(msg, type = '') {
 function q(id)      { return document.getElementById(id); }
 function sleep(ms)  { return new Promise(r => setTimeout(r, ms)); }
 function esc(str)   { return (str||'').replace(/"/g,'&quot;'); }
+
+
+// ─── DATA PEKERJA PAGE ────────────────────────────────────
+function generateEmpId() {
+  const num  = String(Math.floor(10000 + Math.random() * 90000));
+  q('pk-id').value = 'GKP-' + num;
+}
+
+async function savePekerja() {
+  const empId = q('pk-id').value.trim();
+  const nama  = q('pk-nama').value.trim();
+  if (!empId) { toast('Employee ID wajib diisi atau di-generate', 'error'); return; }
+  if (!nama)  { toast('Nama pekerja wajib diisi', 'error'); return; }
+
+  if (!CFG.gasUrl) { toast('URL Apps Script belum dikonfigurasi', 'warn'); return; }
+
+  const btn = document.querySelector('#apage-pekerja .btn-primary');
+  btn.disabled = true;
+  try {
+    const fd = new FormData();
+    fd.append('payload', JSON.stringify({ action: 'add-pekerja', empId, nama }));
+    await fetch(CFG.gasUrl, { method: 'POST', mode: 'no-cors', body: fd });
+    toast('Pekerja berhasil disimpan ✓', 'success');
+    q('pk-id').value   = '';
+    q('pk-nama').value = '';
+    await loadPekerjaList();
+    // Refresh dropdown form utama juga
+    populateEmpDropdown();
+  } catch {
+    toast('Gagal menyimpan ke Sheets', 'error');
+  }
+  btn.disabled = false;
+}
+
+async function loadPekerjaList() {
+  const el = q('pk-list');
+  el.innerHTML = '<div class="empty"><p>Memuat data...</p></div>';
+  if (!CFG.gasUrl) {
+    renderPekerjaList(getCachedWorkers());
+    return;
+  }
+  try {
+    const data    = await fetchGAS({ action: 'list-pekerja' });
+    const workers = data.workers || [];
+    if (workers.length) {
+      localStorage.setItem('rkv_workers', JSON.stringify(workers));
+      renderPekerjaList(workers);
+    } else {
+      renderPekerjaList([]);
+    }
+  } catch {
+    renderPekerjaList(getCachedWorkers());
+    toast('Gagal memuat dari Sheets, pakai data lokal', 'warn');
+  }
+}
+
+function renderPekerjaList(workers) {
+  const el = q('pk-list');
+  if (!workers.length) {
+    el.innerHTML = '<div class="empty"><div class="empty-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div><p>Belum ada data pekerja</p></div>';
+    return;
+  }
+  el.innerHTML = workers.map((w, i) => `
+    <div class="pekerja-row">
+      <span class="pekerja-id">${esc(w.id)}</span>
+      <span class="pekerja-nama">${esc(w.nama)}</span>
+    </div>`).join('');
+}
+
+
+// ─── CONNECTION STATUS ────────────────────────────────────
+let connCheckTimer = null;
+
+function setConnStatus(state) {
+  // state: 'online' | 'offline' | 'checking'
+  const badge = q('conn-badge');
+  const label = q('conn-label');
+  if (!badge) return;
+  badge.className = 'conn-status ' + state;
+  if (state === 'online')   label.textContent = 'Online';
+  if (state === 'offline')  label.textContent = 'Offline';
+  if (state === 'checking') label.textContent = 'Memeriksa...';
+}
+
+async function checkConnection() {
+  setConnStatus('checking');
+
+  // Jika tidak ada gasUrl, cek navigator.onLine saja
+  if (!CFG.gasUrl) {
+    setConnStatus(navigator.onLine ? 'online' : 'offline');
+    return;
+  }
+
+  // Ping Apps Script via JSONP dengan timeout 6 detik
+  try {
+    await Promise.race([
+      fetchGAS({ action: 'ping' }),
+      new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 6000))
+    ]);
+    setConnStatus('online');
+  } catch {
+    // Fallback: cek navigator.onLine
+    setConnStatus(navigator.onLine ? 'online' : 'offline');
+  }
+}
+
+function startConnMonitor() {
+  checkConnection();
+  // Cek ulang setiap 30 detik
+  connCheckTimer = setInterval(checkConnection, 30000);
+
+  // Langsung update saat browser detect perubahan jaringan
+  window.addEventListener('online',  () => checkConnection());
+  window.addEventListener('offline', () => setConnStatus('offline'));
+}
 
 // ─── KICK OFF ─────────────────────────────────────────────
 init();
