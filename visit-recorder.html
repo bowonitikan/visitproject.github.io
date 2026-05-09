@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <meta name="description" content="Log kunjungan maintenance V1.1 (c) mei 2026">
-<title>Rekam Kunjungan</title>
+<title>Rekam Kunjungan V1.2</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -1386,38 +1386,55 @@ function fillDropdown(workers) {
     workers.map(w => `<option value="${esc(w.id)}" data-nama="${esc(w.nama)}">${esc(w.id)} — ${esc(w.nama)}</option>`).join('');
 }
 
+// ── JSONP helper — bypass CORS untuk GET ke Apps Script ──────
+function fetchGAS(params) {
+  return new Promise((resolve, reject) => {
+    const cbName = '_gas_cb_' + Date.now();
+    const url    = CFG.gasUrl + '?' + new URLSearchParams(params) + '&callback=' + cbName;
+    const script = document.createElement('script');
+    const timer  = setTimeout(() => {
+      cleanup();
+      reject(new Error('timeout'));
+    }, 10000);
+
+    window[cbName] = (data) => {
+      cleanup();
+      resolve(data);
+    };
+
+    function cleanup() {
+      clearTimeout(timer);
+      delete window[cbName];
+      if (script.parentNode) script.parentNode.removeChild(script);
+    }
+
+    script.onerror = () => { cleanup(); reject(new Error('script error')); };
+    script.src = url;
+    document.head.appendChild(script);
+  });
+}
+
 async function populateEmpDropdown() {
   const sel = q('f-empid');
-  // Tampilkan status loading di dropdown
   sel.innerHTML = '<option value="">Memuat data pekerja...</option>';
-  sel.disabled = true;
+  sel.disabled  = true;
 
   if (!CFG.gasUrl) {
-    // Tidak ada URL, pakai fallback
     sel.disabled = false;
-    fillDropdown(WORKERS_DEFAULT);
+    fillDropdown(getCachedWorkers());
     return;
   }
 
   try {
-    const res  = await fetch(`${CFG.gasUrl}?action=list-pekerja`, { cache: 'no-cache' });
-    const data = await res.json();
+    const data = await fetchGAS({ action: 'list-pekerja' });
     if (data.workers && data.workers.length > 0) {
-      // Simpan cache di localStorage agar bisa dipakai offline
       localStorage.setItem('rkv_workers', JSON.stringify(data.workers));
       fillDropdown(data.workers);
     } else {
-      // Sheets kosong — coba cache dulu, lalu fallback
-      const cached = getCachedWorkers();
-      fillDropdown(cached);
-      if (cached === WORKERS_DEFAULT) {
-        toast('Sheet Data Pekerja kosong, pakai data contoh', 'warn');
-      }
+      fillDropdown(getCachedWorkers());
     }
   } catch {
-    // Gagal fetch — pakai cache dulu tanpa tampilkan toast error
-    const cached = getCachedWorkers();
-    fillDropdown(cached);
+    fillDropdown(getCachedWorkers());
   }
 
   sel.disabled = false;
@@ -1590,8 +1607,7 @@ async function loadData() {
     if (cari)   params.set('nama', cari);
     if (kep)    params.set('keperluan', kep);
 
-    const res  = await fetch(`${CFG.gasUrl}?${params}`);
-    const data = await res.json();
+    const data = await fetchGAS(Object.fromEntries(params.entries()));
     tableData  = data.rows || [];
     renderTable(tableData);
   } catch {
@@ -1838,8 +1854,7 @@ async function loadPekerjaList() {
     return;
   }
   try {
-    const res  = await fetch(`${CFG.gasUrl}?action=list-pekerja`, { cache: 'no-cache' });
-    const data = await res.json();
+    const data    = await fetchGAS({ action: 'list-pekerja' });
     const workers = data.workers || [];
     if (workers.length) {
       localStorage.setItem('rkv_workers', JSON.stringify(workers));
@@ -1894,5 +1909,6 @@ init();
 </div>
 </body>
 </html>
+
 
 
