@@ -1229,9 +1229,8 @@ tr:hover td { background: var(--surface2); }
 'use strict';
 
 // ─── STATE ───────────────────────────────────────────────
-// PERBAIKAN: Pastikan URL diakhiri dengan /exec
 let CFG = {
-  gasUrl: 'https://script.google.com/macros/s/AKfycbx7yhi4XHOht/exec',
+  gasUrl: 'https://script.google.com/macros/s/AKfycbx7yhi4XHOht',
   baseUrl: 'https://bowonitikan.github.io/visitproject.github.io/visit-recorder.html',
   admins: [
     { user: 'admin', pass: 'erawibowo', role: 'admin' },
@@ -1370,6 +1369,9 @@ function gpsError(msg) {
 }
 
 // ─── WORKER DROPDOWN ──────────────────────────────────────
+// Daftar pekerja — admin bisa tambah/edit di pengaturan,
+// atau diambil dari Apps Script jika gasUrl tersedia.
+// Data fallback jika Sheets tidak tersedia
 const WORKERS_DEFAULT = [
   { id: 'EMP-001', nama: 'Budi Santoso' },
   { id: 'EMP-002', nama: 'Siti Rahayu'  },
@@ -1388,7 +1390,7 @@ function fillDropdown(workers) {
 function fetchGAS(params) {
   return new Promise((resolve, reject) => {
     const cbName = '_gas_cb_' + Date.now();
-    const url    = CFG.gasUrl + (CFG.gasUrl.includes('?') ? '&' : '?') + new URLSearchParams(params) + '&callback=' + cbName;
+    const url    = CFG.gasUrl + '?' + new URLSearchParams(params) + '&callback=' + cbName;
     const script = document.createElement('script');
     const timer  = setTimeout(() => {
       cleanup();
@@ -1656,8 +1658,7 @@ function exportCSV() {
   const data = tableData.length ? tableData : SAMPLE;
   const cols = ['Tanggal','Jam','Employee ID','Nama Pekerja','Kode QR','GKP','Keperluan','Hasil','GPS'];
   const rows = data.map(r => cols.map(c => `"${(r[c]||'').replace(/"/g,'""')}"`).join(','));
-  const csv  = [cols.join(','), ...rows].join('
-');
+  const csv  = [cols.join(','), ...rows].join('\n');
   const a    = document.createElement('a');
   a.href     = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' }));
   a.download = `laporan_kunjungan_${new Date().toISOString().slice(0,10)}.csv`;
@@ -1789,6 +1790,7 @@ function removeAccount(i){ CFG.admins.splice(i,1); renderAccounts(); }
 function openModal(id)  { q(id).classList.add('open'); }
 function closeModal(id) { q(id).classList.remove('open'); }
 
+// Click overlay to close
 document.addEventListener('click', e => {
   if (e.target.classList.contains('modal-overlay')) {
     e.target.classList.remove('open');
@@ -1836,6 +1838,7 @@ async function savePekerja() {
     q('pk-id').value   = '';
     q('pk-nama').value = '';
     await loadPekerjaList();
+    // Refresh dropdown form utama juga
     populateEmpDropdown();
   } catch {
     toast('Gagal menyimpan ke Sheets', 'error');
@@ -1906,6 +1909,5 @@ init();
 </div>
 </body>
 </html>
-
 
 
