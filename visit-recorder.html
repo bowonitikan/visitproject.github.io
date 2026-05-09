@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <meta name="description" content="Log kunjungan maintenance V1.1 (c) mei 2026">
-<title>Rekam Kunjungan V 1.1</title>
+<title>Rekam Kunjungan</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -1400,7 +1400,7 @@ async function populateEmpDropdown() {
   }
 
   try {
-    const res  = await fetch(`${CFG.gasUrl}?action=list-pekerja`);
+    const res  = await fetch(`${CFG.gasUrl}?action=list-pekerja`, { cache: 'no-cache' });
     const data = await res.json();
     if (data.workers && data.workers.length > 0) {
       // Simpan cache di localStorage agar bisa dipakai offline
@@ -1415,10 +1415,9 @@ async function populateEmpDropdown() {
       }
     }
   } catch {
-    // Gagal fetch — pakai cache atau fallback
+    // Gagal fetch — pakai cache dulu tanpa tampilkan toast error
     const cached = getCachedWorkers();
     fillDropdown(cached);
-    toast('Gagal memuat pekerja dari Sheets, pakai data lokal', 'warn');
   }
 
   sel.disabled = false;
@@ -1839,7 +1838,7 @@ async function loadPekerjaList() {
     return;
   }
   try {
-    const res  = await fetch(`${CFG.gasUrl}?action=list-pekerja`);
+    const res  = await fetch(`${CFG.gasUrl}?action=list-pekerja`, { cache: 'no-cache' });
     const data = await res.json();
     const workers = data.workers || [];
     if (workers.length) {
@@ -1850,7 +1849,7 @@ async function loadPekerjaList() {
     }
   } catch {
     renderPekerjaList(getCachedWorkers());
-    toast('Gagal memuat dari Sheets, tampil data lokal', 'warn');
+    toast('Gagal memuat dari Sheets, pakai data lokal', 'warn');
   }
 }
 
@@ -1895,3 +1894,5 @@ init();
 </div>
 </body>
 </html>
+
+
