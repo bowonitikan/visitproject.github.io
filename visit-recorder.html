@@ -27,8 +27,7 @@
 (c) @eranitikan mei 2026">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-
- <style>
+<style>
 :root {
   /* Glassmorphism palette */
   --teal:  #0d9488;
@@ -2083,6 +2082,20 @@ function startConnMonitor() {
   window.addEventListener('online',  () => checkConnection());
   window.addEventListener('offline', () => setConnStatus('offline'));
 }
+
+// ─── LIVE CLOCK ───────────────────────────────────────────
+function updateClock() {
+  const now  = new Date();
+  const days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+  const hh   = String(now.getHours()).padStart(2, '0');
+  const mm   = String(now.getMinutes()).padStart(2, '0');
+  const dayEl  = document.getElementById('clock-day');
+  const timeEl = document.getElementById('clock-time');
+  if (dayEl)  dayEl.textContent  = days[now.getDay()];
+  if (timeEl) timeEl.textContent = hh + ':' + mm;
+}
+updateClock();
+setInterval(updateClock, 1000);
 
 // ─── KICK OFF ─────────────────────────────────────────────
 init();
