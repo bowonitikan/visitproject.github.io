@@ -3,23 +3,57 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Rekam Kunjungan v 1.7</title>
+
+<meta name="title" content="Rekam Kunjungan v 1.7 by eRaGKP">
+<meta name="description" content="Tools untuk melakukan perekaman kunjungan teknis ke lokasi.
+
+(c) @eranitikan mei 2026">
+<meta name="keywords" content="log kunjungan, rekam kunjungan maintenance, ">
+<meta name="author" content="QASoft | @eranitikan">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Rekam Kunjungan v 1.7 by eRaGKP">
+<meta property="og:description" content="Tools untuk melakukan perekaman kunjungan teknis ke lokasi.
+
+(c) @eranitikan mei 2026">
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:title" content="Rekam Kunjungan v 1.7 by eRaGKP">
+<meta property="twitter:description" content="Tools untuk melakukan perekaman kunjungan teknis ke lokasi.
+
+(c) @eranitikan mei 2026">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
+
+  
+ <style>
 :root {
-  --bg: #f5f4f0;
-  --surface: #ffffff;
-  --surface2: #f5f4f0;
-  --surface3: #ebe9e3;
-  --border: #e0ddd6;
-  --border2: #d0cdc5;
-  --text: #18160f;
-  --text2: #6b6656;
-  --text3: #a09d93;
-  --accent: #1c5c3a;
-  --accent2: #14472c;
-  --accent-bg: #edf5f0;
-  --accent-border: #b8d9c4;
+  /* Glassmorphism palette */
+  --teal:  #0d9488;
+  --teal2: #0f766e;
+  --teal3: #134e4a;
+  --teal-light: #ccfbf1;
+  --teal-border: #5eead4;
+
+  --bg: #e0f2f1;
+  --surface: rgba(255,255,255,0.65);
+  --surface2: rgba(255,255,255,0.4);
+  --surface3: rgba(255,255,255,0.25);
+  --border: rgba(255,255,255,0.45);
+  --border2: rgba(13,148,136,0.2);
+
+  --text: #0f2027;
+  --text2: #2d6060;
+  --text3: #5f9ea0;
+
+  /* keep accent mapped to teal */
+  --accent: #0d9488;
+  --accent2: #0f766e;
+  --accent-bg: rgba(13,148,136,0.1);
+  --accent-border: rgba(13,148,136,0.3);
+
   --warn: #92400e;
   --warn-bg: #fffbeb;
   --warn-border: #fcd34d;
@@ -29,19 +63,23 @@
   --info: #1e3a8a;
   --info-bg: #eff6ff;
   --info-border: #bfdbfe;
-  --r: 12px;
-  --r-sm: 8px;
-  --r-xs: 5px;
+
+  --r: 16px;
+  --r-sm: 10px;
+  --r-xs: 6px;
   --mono: 'JetBrains Mono', monospace;
-  --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.05);
-  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06);
+  --shadow: 0 4px 24px rgba(13,148,136,0.12);
+  --shadow-lg: 0 8px 40px rgba(13,148,136,0.15);
+  --glass: rgba(255,255,255,0.55);
+  --glass-border: rgba(255,255,255,0.6);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
   font-family: 'Plus Jakarta Sans', sans-serif;
-  background: var(--bg);
+  background: linear-gradient(160deg, #0d9488 0%, #0f766e 30%, #134e4a 60%, #0e7490 100%);
+  background-attachment: fixed;
   color: var(--text);
   min-height: 100vh;
   font-size: 14px;
@@ -54,11 +92,15 @@ body {
   max-width: 480px;
   margin: 0 auto;
   min-height: 100vh;
-  background: var(--surface);
-  box-shadow: var(--shadow-lg);
+  background: rgba(236,254,251,0.55);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 8px 60px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.6);
   display: flex;
   flex-direction: column;
   position: relative;
+  border-left: 1px solid rgba(255,255,255,0.3);
+  border-right: 1px solid rgba(255,255,255,0.3);
 }
 
 /* ──────────────── SCREENS ──────────────── */
@@ -67,21 +109,32 @@ body {
 
 /* ──────────────── TOPBAR ──────────────── */
 .topbar {
-  padding: 12px 16px;
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
+  padding: 10px 16px;
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.5);
   position: sticky; top: 0; z-index: 100;
   display: flex; align-items: center; justify-content: space-between; gap: 8px;
   flex-shrink: 0;
+  box-shadow: 0 2px 12px rgba(13,148,136,0.08);
+}
+/* Hotel name in topbar */
+.hotel-name {
+  font-size: 10px; font-weight: 700;
+  color: var(--teal2);
+  letter-spacing: 0.8px; text-transform: uppercase;
+  text-align: right; line-height: 1.3;
 }
 
 .brand { display: flex; align-items: center; gap: 10px; }
 .brand-mark {
   width: 36px; height: 36px;
-  background: var(--accent);
+  background: linear-gradient(135deg, var(--teal) 0%, var(--teal3) 100%);
   border-radius: var(--r-sm);
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(13,148,136,0.3);
 }
 .brand-mark svg { width: 18px; height: 18px; color: white; }
 .brand-name { font-size: 14px; font-weight: 700; letter-spacing: -0.3px; }
@@ -93,6 +146,7 @@ body {
   overflow-y: auto;
   padding: 16px;
   padding-bottom: 32px;
+  background: transparent;
 }
 .scroll-body::-webkit-scrollbar { width: 3px; }
 .scroll-body::-webkit-scrollbar-track { background: transparent; }
@@ -100,12 +154,14 @@ body {
 
 /* ──────────────── CARDS ──────────────── */
 .card {
-  background: var(--surface);
-  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.65);
   border-radius: var(--r);
   padding: 16px;
   margin-bottom: 12px;
-  box-shadow: var(--shadow);
+  box-shadow: 0 4px 20px rgba(13,148,136,0.1), inset 0 1px 0 rgba(255,255,255,0.8);
 }
 .card-header {
   display: flex; align-items: center; gap: 8px;
@@ -123,25 +179,39 @@ body {
 
 /* ──────────────── LOCATION BANNER ──────────────── */
 .loc-banner {
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+  background: linear-gradient(135deg, rgba(13,148,136,0.85) 0%, rgba(15,118,110,0.9) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border-radius: var(--r);
   padding: 14px 16px;
   margin-bottom: 12px;
   display: flex; align-items: center; gap: 12px;
-  box-shadow: 0 4px 12px rgba(28,92,58,0.25);
+  box-shadow: 0 8px 32px rgba(13,148,136,0.35), inset 0 1px 0 rgba(255,255,255,0.25);
+  border: 1px solid rgba(255,255,255,0.25);
+  position: relative; overflow: hidden;
+}
+.loc-banner::before {
+  content:''; position:absolute; top:-30px; right:-30px;
+  width:100px; height:100px; border-radius:50%;
+  background: rgba(255,255,255,0.06);
 }
 .loc-icon {
   width: 44px; height: 44px;
-  background: rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.18);
   border-radius: var(--r-sm);
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
   backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.3);
 }
 .loc-icon svg { width: 22px; height: 22px; color: white; }
-.loc-lbl { font-size: 10px; color: rgba(255,255,255,0.65); font-weight: 600; letter-spacing: 0.6px; text-transform: uppercase; }
+.loc-lbl { font-size: 10px; color: rgba(255,255,255,0.7); font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; }
 .loc-val { font-size: 16px; font-weight: 700; color: white; margin-top: 2px; font-family: var(--mono); letter-spacing: -0.3px; }
-.loc-empty { font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 2px; }
+.loc-empty { font-size: 13px; color: rgba(255,255,255,0.65); margin-top: 2px; }
+/* Clock in banner */
+.loc-clock { margin-left: auto; text-align: right; flex-shrink: 0; }
+.loc-clock-day { font-size: 9px; color: rgba(255,255,255,0.7); font-weight: 600; letter-spacing: 0.6px; text-transform: uppercase; }
+.loc-clock-time { font-size: 22px; font-weight: 800; color: white; letter-spacing: -0.5px; font-family: var(--mono); line-height: 1.1; }
 
 /* ──────────────── FORM FIELDS ──────────────── */
 .field { margin-bottom: 12px; }
@@ -160,20 +230,23 @@ label {
 input, select, textarea {
   width: 100%;
   padding: 9px 12px;
-  border: 1.5px solid var(--border);
+  border: 1.5px solid rgba(255,255,255,0.5);
   border-radius: var(--r-sm);
-  background: var(--surface);
+  background: rgba(255,255,255,0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   color: var(--text);
   font-size: 14px;
   font-family: inherit;
-  transition: border-color .15s, box-shadow .15s;
+  transition: border-color .15s, box-shadow .15s, background .15s;
   -webkit-appearance: none;
   appearance: none;
 }
 input:focus, select:focus, textarea:focus {
   outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(28,92,58,0.1);
+  border-color: var(--teal);
+  background: rgba(255,255,255,0.75);
+  box-shadow: 0 0 0 3px rgba(13,148,136,0.15);
 }
 input::placeholder, textarea::placeholder { color: var(--text3); }
 input[readonly], input[disabled] {
@@ -194,8 +267,10 @@ select {
 
 /* ──────────────── GPS ROW ──────────────── */
 .gps-box {
-  background: var(--surface2);
-  border: 1.5px solid var(--border);
+  background: rgba(255,255,255,0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1.5px solid rgba(255,255,255,0.55);
   border-radius: var(--r-sm);
   padding: 9px 12px;
   display: flex; align-items: center; gap: 8px;
@@ -224,25 +299,29 @@ select {
   display: inline-flex; align-items: center; justify-content: center; gap: 6px;
   padding: 9px 14px;
   border-radius: var(--r-sm);
-  border: 1.5px solid var(--border);
-  background: var(--surface);
-  color: var(--text);
+  border: 1.5px solid rgba(255,255,255,0.5);
+  background: rgba(255,255,255,0.55);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--text2);
   font-size: 13px; font-weight: 600;
   font-family: inherit;
   cursor: pointer;
   transition: all .15s;
   white-space: nowrap;
   user-select: none;
+  box-shadow: 0 2px 8px rgba(13,148,136,0.08);
 }
-.btn:hover { background: var(--surface2); border-color: var(--border2); }
+.btn:hover { background: rgba(255,255,255,0.75); }
 .btn:active { transform: scale(0.97); }
 .btn svg { width: 14px; height: 14px; flex-shrink: 0; }
 
 .btn-primary {
-  background: var(--accent); border-color: var(--accent); color: white;
-  box-shadow: 0 2px 8px rgba(28,92,58,0.2);
+  background: linear-gradient(135deg, var(--teal) 0%, var(--teal2) 100%);
+  border-color: rgba(255,255,255,0.2); color: white;
+  box-shadow: 0 4px 16px rgba(13,148,136,0.35);
 }
-.btn-primary:hover { background: var(--accent2); border-color: var(--accent2); box-shadow: 0 4px 12px rgba(28,92,58,0.3); }
+.btn-primary:hover { background: linear-gradient(135deg, var(--teal2) 0%, var(--teal3) 100%); box-shadow: 0 6px 20px rgba(13,148,136,0.45); }
 
 .btn-danger { background: var(--danger-bg); border-color: var(--danger-border); color: var(--danger); }
 .btn-danger:hover { background: #ffe4e4; }
@@ -296,11 +375,14 @@ select {
 /* ──────────────── STATS ──────────────── */
 .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
 .stat-card {
-  background: var(--surface2);
-  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.6);
   border-radius: var(--r);
   padding: 14px;
   text-align: center;
+  box-shadow: 0 4px 16px rgba(13,148,136,0.08), inset 0 1px 0 rgba(255,255,255,0.8);
 }
 .stat-num { font-size: 30px; font-weight: 800; letter-spacing: -1.5px; color: var(--text); }
 .stat-lbl { font-size: 11px; color: var(--text2); margin-top: 2px; font-weight: 500; }
@@ -324,8 +406,10 @@ tr:hover td { background: var(--surface2); }
 
 /* ──────────────── QR ITEMS ──────────────── */
 .qr-item {
-  background: var(--surface2);
-  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.6);
   border-radius: var(--r);
   padding: 12px;
   display: flex; align-items: center; gap: 12px;
@@ -350,8 +434,10 @@ tr:hover td { background: var(--surface2); }
 .admin-layout { display: flex; flex: 1; overflow: hidden; }
 .sidebar {
   width: 0; overflow: hidden;
-  background: var(--surface);
-  border-right: 1px solid var(--border);
+  background: rgba(236,254,251,0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-right: 1px solid rgba(255,255,255,0.4);
   transition: width .22s cubic-bezier(0.4,0,0.2,1);
   flex-shrink: 0;
 }
@@ -375,8 +461,8 @@ tr:hover td { background: var(--surface2); }
   font-family: inherit; width: 100%; text-align: left;
 }
 .nav-item svg { width: 15px; height: 15px; flex-shrink: 0; }
-.nav-item:hover { background: var(--surface2); color: var(--text); }
-.nav-item.active { background: var(--accent-bg); color: var(--accent); font-weight: 600; }
+.nav-item:hover { background: rgba(13,148,136,0.08); color: var(--teal); }
+.nav-item.active { background: rgba(13,148,136,0.12); color: var(--teal); font-weight: 600; }
 
 .admin-body { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
 .admin-body::-webkit-scrollbar { width: 3px; }
@@ -409,20 +495,22 @@ tr:hover td { background: var(--surface2); }
 .login-wrap {
   flex: 1; display: flex;
   align-items: center; justify-content: center;
-  background: var(--bg);
+  background: transparent;
   padding: 24px 20px;
 }
 .login-box {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 16px;
+  background: rgba(255,255,255,0.65);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255,255,255,0.7);
+  border-radius: 20px;
   padding: 32px 28px;
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.9);
   width: 100%;
 }
 .login-logo {
   width: 56px; height: 56px;
-  background: var(--accent);
+  background: linear-gradient(135deg, var(--teal), var(--teal3));
   border-radius: 14px;
   display: flex; align-items: center; justify-content: center;
   margin: 0 auto 16px;
@@ -675,13 +763,16 @@ tr:hover td { background: var(--surface2); }
   user-select: none;
 }
 .conn-status.online {
-  background: #edf5f0; border-color: #b8d9c4; color: #1c5c3a;
+  background: rgba(220,252,231,0.7); border-color: rgba(134,239,172,0.8); color: #166534;
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
 }
 .conn-status.offline {
-  background: #fff1f1; border-color: #fca5a5; color: #991b1b;
+  background: rgba(254,226,226,0.7); border-color: rgba(252,165,165,0.8); color: #991b1b;
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
 }
 .conn-status.checking {
-  background: #fffbeb; border-color: #fcd34d; color: #92400e;
+  background: rgba(254,249,195,0.7); border-color: rgba(253,224,71,0.8); color: #854d0e;
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
 }
 .conn-dot {
   width: 8px; height: 8px; border-radius: 50%;
@@ -721,17 +812,20 @@ tr:hover td { background: var(--surface2); }
         <div class="brand-sub">Form Pekerja</div>
       </div>
     </div>
-    <div style="display:flex;align-items:center;gap:7px">
-      <div class="conn-status checking" id="conn-badge" title="Status koneksi ke server">
-        <div class="conn-dot"></div>
-        <span id="conn-label">Memeriksa...</span>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+      <div class="hotel-name">Grand Karlita Hotel Purwokerto</div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <div class="conn-status checking" id="conn-badge" title="Status koneksi ke server">
+          <div class="conn-dot"></div>
+          <span id="conn-label">Memeriksa...</span>
+        </div>
+        <button class="btn btn-sm" onclick="goAdmin()">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5.121 17.804A9 9 0 0112 15a9 9 0 016.879 2.804M15 10a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+          Admin
+        </button>
       </div>
-      <button class="btn btn-sm" onclick="goAdmin()">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M5.121 17.804A9 9 0 0112 15a9 9 0 016.879 2.804M15 10a3 3 0 11-6 0 3 3 0 016 0z"/>
-        </svg>
-        Admin
-      </button>
     </div>
   </div>
 
@@ -751,10 +845,14 @@ tr:hover td { background: var(--surface2); }
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
         </svg>
       </div>
-      <div>
+      <div style="flex:1">
         <div class="loc-lbl">Lokasi QR</div>
         <div class="loc-val" id="banner-qr" style="display:none"></div>
         <div class="loc-empty" id="banner-empty">Belum ada QR discan</div>
+      </div>
+      <div class="loc-clock">
+        <div class="loc-clock-day" id="clock-day">—</div>
+        <div class="loc-clock-time" id="clock-time">--:--</div>
       </div>
     </div>
 
@@ -833,10 +931,9 @@ tr:hover td { background: var(--surface2); }
         <label>Keperluan <span class="req">*</span></label>
         <select id="f-keperluan">
           <option value="">— Pilih keperluan —</option>
-          <option>Pengecekan</option>
+          <option>Maintenance</option>
           <option>Perbaikan</option>
-          <option>Instalasi</option>
-           <option>Perawatan</option>
+          <option>Instalasi baru</option>
         </select>
       </div>
 
@@ -920,7 +1017,7 @@ tr:hover td { background: var(--surface2); }
 ═══════════════════════════════════════════════════ -->
 <div id="screen-admin" class="screen">
 
-  <div class="topbar">
+  <div class="topbar" style="background:rgba(255,255,255,0.7);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)">
     <div style="display:flex;align-items:center;gap:8px">
       <button class="hamburger" id="hamburger" onclick="toggleSidebar()">
         <span></span><span></span><span></span>
@@ -2004,14 +2101,23 @@ init();
       </span>
       <span class="ticker-sep">◆</span>
       <span class="ticker-item">
+        Created by&nbsp;<a href="mailto:eranitikan@gmail.com" style="color:#f9c74f;font-weight:600">eRa</a>
+      </span>
+      <span class="ticker-sep">◆</span>
+      <span class="ticker-item">
         Untuk info panduan klik link berikut&nbsp;:&nbsp;
         <a href="https://bowonitikan.github.io/visitproject.github.io/index.html" target="_blank">
           https://bowonitikan.github.io/visitproject.github.io/index.html
         </a>
       </span>
       <span class="ticker-sep">◆</span>
+      <span class="ticker-item">
+        Created by&nbsp;<a href="mailto:eranitikan@gmail.com" style="color:#f9c74f;font-weight:600">eRa</a>
+      </span>
+      <span class="ticker-sep">◆</span>
     </div>
   </div>
 </div>
 </body>
-</html>
+</html> 
+ 
