@@ -2218,11 +2218,26 @@ function showPhotoModal(fotoUrl, nama) {
   loading.style.display = 'block';
   
   // Extract file ID dari Google Drive URL
-  const match = fotoUrl.match(/\/(file|uc).*?(?:id=)?([a-zA-Z0-9-_]+)/);
-  if (match && match[2]) {
-    const fileId = match[2];
-    // Gunakan embed URL untuk iframe (support preview langsung)
+  let fileId = '';
+  
+  // Format 1: https://drive.google.com/file/d/FILE_ID/view
+  let match = fotoUrl.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9-_]+)/);
+  if (match && match[1]) {
+    fileId = match[1];
+  }
+  
+  // Format 2: https://drive.google.com/uc?id=FILE_ID
+  if (!fileId) {
+    match = fotoUrl.match(/id=([a-zA-Z0-9-_]+)/);
+    if (match && match[1]) {
+      fileId = match[1];
+    }
+  }
+  
+  if (fileId && fileId.length > 20) {
+    // Gunakan embed URL untuk iframe
     const embedUrl = 'https://drive.google.com/file/d/' + fileId + '/preview';
+    console.log('Loading foto:', embedUrl);
     iframe.src = embedUrl;
     
     // Tampilkan iframe setelah delay kecil
@@ -2231,10 +2246,10 @@ function showPhotoModal(fotoUrl, nama) {
       iframe.style.display = 'block';
     }, 500);
   } else {
-    // Fallback: tampilkan error
+    // Fallback: tampilkan error dengan debug info
     loading.style.display = 'none';
     errEl.style.display = 'block';
-    console.log('Invalid Drive URL:', fotoUrl);
+    console.log('Invalid Drive URL - fileId:', fileId, 'URL:', fotoUrl);
   }
 }
 
