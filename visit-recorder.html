@@ -1702,32 +1702,17 @@ async function uploadFoto(file) {
 
 async function submitForm() {
   const get = id => q(id).value.trim();
-  const payload = {
-    employeeId: get('f-empid'),
-    nama:       get('f-nama'),
-    keperluan:  get('f-keperluan'),
-    deskripsi:  get('f-deskripsi'),
-    hasil:      get('f-hasil'),
-    alasan:     get('f-alasan'),
-    tanggal:    get('f-tanggal'),
-    jam:        get('f-jam'),
-    kodeQR:     get('f-qr'),
-    gkp:        get('f-gkp'),
-    gps:        gpsValue || 'Tidak diambil'
-  };
-
+  
   // Validation
   const required = [
-    ['employeeId', 'Employee ID'],
-    ['nama',       'Nama pekerja'],
-    ['keperluan',  'Keperluan'],
-    ['deskripsi',  'Deskripsi pekerjaan'],
-    ['hasil',      'Hasil']
+    ['f-empid', 'Employee ID'],
+    ['f-keperluan',  'Keperluan'],
+    ['f-hasil',      'Hasil']
   ];
-  for (const [k, lbl] of required) {
-    if (!payload[k]) { toast(`${lbl} wajib diisi`, 'error'); return; }
+  for (const [id, lbl] of required) {
+    if (!get(id)) { toast(`${lbl} wajib diisi`, 'error'); return; }
   }
-  if (payload.hasil === 'Belum selesai' && !payload.alasan) {
+  if (get('f-hasil') === 'Belum selesai' && !get('f-alasan')) {
     toast('Alasan belum selesai wajib diisi', 'error'); return;
   }
 
@@ -1740,7 +1725,31 @@ async function submitForm() {
     return;
   }
 
+  // Upload foto terlebih dahulu jika ada
+  let fotoUrl = '';
+  const fotoInput = q('f-foto');
+  if (fotoInput.files && fotoInput.files[0]) {
+    q('submit-lbl').textContent = 'Upload foto...';
+    fotoUrl = await uploadFoto(fotoInput.files[0]) || '';
+  }
+
+  const payload = {
+    employeeId: get('f-empid'),
+    nama:       get('f-nama'),
+    keperluan:  get('f-keperluan'),
+    deskripsi:  get('f-deskripsi'),
+    hasil:      get('f-hasil'),
+    alasan:     get('f-alasan'),
+    tanggal:    get('f-tanggal'),
+    jam:        get('f-jam'),
+    kodeQR:     get('f-qr'),
+    gkp:        get('f-gkp'),
+    gps:        gpsValue || 'Tidak diambil',
+    fotoUrl:    fotoUrl
+  };
+
   try {
+    q('submit-lbl').textContent = 'Mengirim...';
     const fd = new FormData();
     fd.append('payload', JSON.stringify(payload));
     await fetch(CFG.gasUrl, { method: 'POST', mode: 'no-cors', body: fd });
