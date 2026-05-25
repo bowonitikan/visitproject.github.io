@@ -2288,7 +2288,32 @@ init();
     </div>
   </div>
 </div>
+
+<!-- MODAL FOTO -->
+<div id="photo-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:1000;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)">
+  <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:20px" onclick="closePhotoModal(event)">
+    <div style="background:white;border-radius:16px;padding:0;max-width:90%;max-height:90%;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.3)" onclick="event.stopPropagation()">
+      <div style="background:linear-gradient(135deg, #0d9488 0%, #0f766e 100%);padding:12px 16px;display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.7);font-weight:600">FOTO OBYEK PEKERJAAN</div>
+          <div id="photo-name" style="font-size:14px;color:white;font-weight:600;margin-top:2px">—</div>
+        </div>
+        <button onclick="closePhotoModal()" style="background:rgba(255,255,255,0.2);border:none;color:white;font-size:20px;width:32px;height:32px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>
+      </div>
+      <div style="padding:16px;text-align:center;background:white;max-height:70vh;overflow-y:auto">
+        <img id="photo-img" src="" style="max-width:100%;max-height:100%;border-radius:8px">
+        <div id="photo-error" style="display:none;color:#991b1b;padding:16px;text-align:center">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width:40px;height:40px;margin:0 auto 8px;color:#991b1b">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <p>Tidak dapat membuka foto</p>
+          <a id="photo-link" href="#" target="_blank" style="color:#0d9488;text-decoration:underline;font-size:12px">Buka di Google Drive</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
-
 
