@@ -2211,14 +2211,21 @@ function showPhotoModal(fotoUrl, nama) {
   nameEl.textContent = nama || 'Foto';
   linkEl.href = fotoUrl;
   
-  // Coba load gambar dari Google Drive
-  img.src = fotoUrl.includes('/file/d/') 
-    ? fotoUrl.replace('/view', '/preview')  // Google Drive: ubah /view ke /preview untuk preview langsung
-    : fotoUrl;
+  // Extract file ID dari Google Drive URL
+  let imageUrl = fotoUrl;
+  const match = fotoUrl.match(/\/file\/d\/([a-zA-Z0-9-_]+)/);
+  if (match && match[1]) {
+    const fileId = match[1];
+    // Gunakan URL format /uc?export=view untuk direct download/preview
+    imageUrl = 'https://drive.google.com/uc?export=view&id=' + fileId;
+  }
+  
+  img.src = imageUrl;
   
   img.onerror = () => {
     img.style.display = 'none';
     errEl.style.display = 'block';
+    console.log('Failed to load image from:', imageUrl);
   };
   
   img.onload = () => {
@@ -2283,6 +2290,5 @@ init();
 </div>
 </body>
 </html>
-
 
 
