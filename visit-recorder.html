@@ -1897,13 +1897,17 @@ function renderTable(data) {
   tbody.innerHTML = data.map(r => {
     const hasil = val(r, 'Hasil');
     const bc = hasil === 'Selesai' ? 'badge-green' : 'badge-yellow';
+    const fotoUrl = val(r, 'Foto Obyek Pekerjaan') || val(r, 'fotoUrl') || '';
+    const fotoIcon = fotoUrl ? '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;color:#0d9488;margin-left:4px"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>' : '';
+    const kodeQr = val(r,'Kode QR') || val(r,'kodeQR') || '';
+    const clickFoto = fotoUrl ? `onclick="showPhotoModal('${fotoUrl}', '${kodeQr}')"` : '';
     return `<tr>
       <td>${val(r,'Tanggal')}<br><span class="mono-cell">${val(r,'Jam')}</span></td>
       <td><span class="mono-cell">${val(r,'Employee ID') || val(r,'employeeId') || '—'}</span></td>
       <td style="font-weight:500">${val(r,'Nama Pekerja') || val(r,'nama') || ''}</td>
-      <td><span class="mono-cell" style="font-size:10px">${val(r,'Kode QR') || val(r,'kodeQR') || ''}</span></td>
+      <td><span class="mono-cell" style="font-size:10px">${kodeQr}</span></td>
       <td>${val(r,'Keperluan') || val(r,'keperluan') || ''}</td>
-      <td><span class="badge ${bc}">${hasil}</span></td>
+      <td style="cursor:${fotoUrl ? 'pointer' : 'default'};user-select:none" ${clickFoto}><span class="badge ${bc}">${hasil}${fotoIcon}</span></td>
     </tr>`;
   }).join('');
 }
@@ -2192,7 +2196,40 @@ function startConnMonitor() {
   window.addEventListener('offline', () => setConnStatus('offline'));
 }
 
-// ─── LIVE CLOCK ───────────────────────────────────────────
+// ─── PHOTO MODAL ──────────────────────────────────────────
+function showPhotoModal(fotoUrl, nama) {
+  const modal = q('photo-modal');
+  const img = q('photo-img');
+  const nameEl = q('photo-name');
+  const errEl = q('photo-error');
+  const linkEl = q('photo-link');
+  
+  modal.style.display = 'flex';
+  nameEl.textContent = nama || 'Foto';
+  linkEl.href = fotoUrl;
+  
+  // Coba load gambar dari Google Drive
+  img.src = fotoUrl.includes('/file/d/') 
+    ? fotoUrl.replace('/view', '/preview')  // Google Drive: ubah /view ke /preview untuk preview langsung
+    : fotoUrl;
+  
+  img.onerror = () => {
+    img.style.display = 'none';
+    errEl.style.display = 'block';
+  };
+  
+  img.onload = () => {
+    img.style.display = 'block';
+    errEl.style.display = 'none';
+  };
+}
+
+function closePhotoModal(e) {
+  if (e && e.target.id !== 'photo-modal') return;
+  q('photo-modal').style.display = 'none';
+}
+
+// ─── LIVE CLOCK// ─── LIVE CLOCK ───────────────────────────────────────────
 function updateClock() {
   const now  = new Date();
   const days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
@@ -2243,4 +2280,5 @@ init();
 </div>
 </body>
 </html>
+
 
