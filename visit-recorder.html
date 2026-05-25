@@ -1722,12 +1722,15 @@ async function submitForm() {
     return;
   }
 
-  // Upload foto terlebih dahulu jika ada
-  let fotoUrl = '';
+  // Baca foto sebagai base64 jika ada
+  let fotoBase64 = '';
+  let fotoFileName = '';
   const fotoInput = q('f-foto');
   if (fotoInput.files && fotoInput.files[0]) {
-    q('submit-lbl').textContent = 'Upload foto...';
-    fotoUrl = await uploadFoto(fotoInput.files[0]) || '';
+    const file = fotoInput.files[0];
+    fotoFileName = file.name;
+    q('submit-lbl').textContent = 'Membaca foto...';
+    fotoBase64 = await readFileAsBase64(file);
   }
 
   const payload = {
@@ -1742,7 +1745,8 @@ async function submitForm() {
     kodeQR:     get('f-qr'),
     gkp:        get('f-gkp'),
     gps:        gpsValue || 'Tidak diambil',
-    fotoUrl:    fotoUrl
+    fotoFileName: fotoFileName,
+    fotoBase64: fotoBase64
   };
 
   try {
@@ -1756,6 +1760,19 @@ async function submitForm() {
     toast('Koneksi gagal. Periksa URL Apps Script.', 'error');
   }
   setSubmitLoading(false);
+}
+
+// Helper: baca file menjadi base64
+function readFileAsBase64(file) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const base64 = e.target.result.split(',')[1];
+      resolve(base64);
+    };
+    reader.onerror = () => resolve('');
+    reader.readAsDataURL(file);
+  });
 }
 
 function setSubmitLoading(on) {
@@ -2226,3 +2243,4 @@ init();
 </div>
 </body>
 </html>
+
