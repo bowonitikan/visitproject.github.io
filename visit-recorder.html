@@ -2202,7 +2202,8 @@ function startConnMonitor() {
 // ─── PHOTO MODAL ──────────────────────────────────────────
 function showPhotoModal(fotoUrl, nama) {
   const modal = q('photo-modal');
-  const img = q('photo-img');
+  const iframe = q('photo-iframe');
+  const loading = q('photo-loading');
   const nameEl = q('photo-name');
   const errEl = q('photo-error');
   const linkEl = q('photo-link');
@@ -2211,27 +2212,30 @@ function showPhotoModal(fotoUrl, nama) {
   nameEl.textContent = nama || 'Foto';
   linkEl.href = fotoUrl;
   
+  // Sembunyikan semua elemen
+  iframe.style.display = 'none';
+  errEl.style.display = 'none';
+  loading.style.display = 'block';
+  
   // Extract file ID dari Google Drive URL
-  let imageUrl = fotoUrl;
-  const match = fotoUrl.match(/\/file\/d\/([a-zA-Z0-9-_]+)/);
-  if (match && match[1]) {
-    const fileId = match[1];
-    // Gunakan URL format /uc?export=view untuk direct download/preview
-    imageUrl = 'https://drive.google.com/uc?export=view&id=' + fileId;
-  }
-  
-  img.src = imageUrl;
-  
-  img.onerror = () => {
-    img.style.display = 'none';
+  const match = fotoUrl.match(/\/(file|uc).*?(?:id=)?([a-zA-Z0-9-_]+)/);
+  if (match && match[2]) {
+    const fileId = match[2];
+    // Gunakan embed URL untuk iframe (support preview langsung)
+    const embedUrl = 'https://drive.google.com/file/d/' + fileId + '/preview';
+    iframe.src = embedUrl;
+    
+    // Tampilkan iframe setelah delay kecil
+    setTimeout(() => {
+      loading.style.display = 'none';
+      iframe.style.display = 'block';
+    }, 500);
+  } else {
+    // Fallback: tampilkan error
+    loading.style.display = 'none';
     errEl.style.display = 'block';
-    console.log('Failed to load image from:', imageUrl);
-  };
-  
-  img.onload = () => {
-    img.style.display = 'block';
-    errEl.style.display = 'none';
-  };
+    console.log('Invalid Drive URL:', fotoUrl);
+  }
 }
 
 function closePhotoModal(e) {
@@ -2300,14 +2304,17 @@ init();
         </div>
         <button onclick="closePhotoModal()" style="background:rgba(255,255,255,0.2);border:none;color:white;font-size:20px;width:32px;height:32px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>
       </div>
-      <div style="padding:16px;text-align:center;background:white;max-height:70vh;overflow-y:auto">
-        <img id="photo-img" src="" style="max-width:100%;max-height:100%;border-radius:8px">
+      <div style="padding:16px;text-align:center;background:white;max-height:70vh;overflow-y:auto;position:relative">
+        <div id="photo-loading" style="display:none;color:#5a5750;padding:40px 20px">
+          <div style="font-size:13px">Memuat foto...</div>
+        </div>
+        <iframe id="photo-iframe" style="width:100%;max-height:65vh;border:none;border-radius:8px;display:none" allow="autoplay"></iframe>
         <div id="photo-error" style="display:none;color:#991b1b;padding:16px;text-align:center">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width:40px;height:40px;margin:0 auto 8px;color:#991b1b">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
           </svg>
           <p>Tidak dapat membuka foto</p>
-          <a id="photo-link" href="#" target="_blank" style="color:#0d9488;text-decoration:underline;font-size:12px">Buka di Google Drive</a>
+          <a id="photo-link" href="#" target="_blank" style="color:#0d9488;text-decoration:underline;font-size:12px;display:block;margin-top:8px">Buka di Google Drive →</a>
         </div>
       </div>
     </div>
