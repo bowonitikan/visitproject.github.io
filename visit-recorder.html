@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-<meta name="title" content="📅 Rekam Kunjungan v 1.7 by eRaGKP ">
+<meta name="title" content="📅 Rekam Kunjungan v 1.8 by eRaGKP ">
 <meta name="description" content="Tools untuk melakukan perekaman kunjungan teknis ke lokasi.
 
 (c) @eranitikan mei 2026 🙂">
@@ -1651,34 +1651,53 @@ function checkFotoSize() {
   }
   
   errEl.style.display = 'none';
-  // Upload foto ke Google Drive via Apps Script
-  uploadFoto(file);
+  // Jangan upload di sini — akan diupload saat form dikirim
 }
 
 async function uploadFoto(file) {
-  if (!CFG.gasUrl) { toast('URL Apps Script belum dikonfigurasi', 'warn'); return; }
+  if (!CFG.gasUrl) { 
+    toast('URL Apps Script belum dikonfigurasi', 'warn'); 
+    return null; 
+  }
   
-  const reader = new FileReader();
-  reader.onload = async (e) => {
-    try {
-      const base64 = e.target.result.split(',')[1];
-      const fd = new FormData();
-      fd.append('payload', JSON.stringify({
-        action: 'upload-foto',
-        fileName: file.name,
-        base64: base64
-      }));
-      
-      const res = await fetch(CFG.gasUrl, { method: 'POST', mode: 'no-cors', body: fd });
-      // no-cors tidak return response, assume success
-      toast('Foto berhasil diupload ✓', 'success');
-      window.fotoUrl = file.name; // simpan nama file untuk dipakili di payload
-    } catch {
-      toast('Gagal upload foto', 'error');
-      window.fotoUrl = '';
-    }
-  };
-  reader.readAsDataURL(file);
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      try {
+        const base64 = e.target.result.split(',')[1];
+        
+        // Gunakan fetch dengan timeout untuk mendapat response URL
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 15000);
+        
+        const res = await fetch(CFG.gasUrl, {
+          method: 'POST',
+          body: JSON.stringify({
+            action: 'upload-foto',
+            fileName: file.name,
+            base64: base64
+          }),
+          headers: { 'Content-Type': 'application/json' },
+          signal: controller.signal
+        });
+        
+        clearTimeout(timeout);
+        const data = await res.json();
+        
+        if (data.success && data.fotoUrl) {
+          toast('Foto berhasil diupload ✓', 'success');
+          resolve(data.fotoUrl);
+        } else {
+          toast('Gagal upload foto: ' + (data.error || 'Unknown error'), 'error');
+          resolve('');
+        }
+      } catch (err) {
+        toast('Gagal upload foto: ' + err.message, 'error');
+        resolve('');
+      }
+    };
+    reader.readAsDataURL(file);
+  });
 }
 
 async function submitForm() {
