@@ -210,7 +210,7 @@ body {
 /* Clock in banner */
 .loc-clock { margin-left: auto; text-align: right; flex-shrink: 0; }
 .loc-clock-day { font-size: 9px; color: rgba(255,255,255,0.7); font-weight: 600; letter-spacing: 0.6px; text-transform: uppercase; }
-.loc-clock-time { font-size: 22px; font-weight: 800; color: white; letter-spacing: -0.5px; font-family: var(--mono); line-height: 1.1; }
+.loc-clock-time { font-size: 18px; font-weight: 800; color: white; letter-spacing: -0.5px; font-family: var(--mono); line-height: 1.1; }
 
 /* ──────────────── FORM FIELDS ──────────────── */
 .field { margin-bottom: 12px; }
@@ -930,7 +930,7 @@ tr:hover td { background: var(--surface2); }
         <label>Keperluan <span class="req">*</span></label>
         <select id="f-keperluan">
           <option value="">— Pilih keperluan —</option>
-          <option>Pengecekan</option>
+          <option>Maintenance</option>
           <option>Perbaikan</option>
           <option>Instalasi baru</option>
         </select>
@@ -939,6 +939,15 @@ tr:hover td { background: var(--surface2); }
       <div class="field">
         <label>Deskripsi Pekerjaan <span class="req">*</span></label>
         <textarea id="f-deskripsi" placeholder="Jelaskan pekerjaan yang dilakukan..."></textarea>
+      </div>
+
+      <div class="field">
+        <label>Foto Obyek Pekerjaan</label>
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:6px">
+          <input type="file" id="f-foto" accept="image/*" style="flex:1;padding:8px 12px;border:1.5px solid rgba(255,255,255,0.5);border-radius:var(--r-sm);background:rgba(255,255,255,0.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);font-size:13px" onchange="checkFotoSize()">
+          <span id="foto-size" style="font-size:11px;color:var(--text2);white-space:nowrap">—</span>
+        </div>
+        <div id="foto-error" style="display:none;background:var(--danger-bg);border:1px solid var(--danger-border);color:var(--danger);padding:8px 12px;border-radius:var(--r-sm);font-size:12px;margin-bottom:8px">File tidak boleh lebih dari 2 MB</div>
       </div>
 
       <div class="field">
@@ -1618,6 +1627,60 @@ function onHasilChange() {
 }
 
 // ─── SUBMIT FORM ──────────────────────────────────────────
+// ─── FOTO UPLOAD ──────────────────────────────────────
+function checkFotoSize() {
+  const input = q('f-foto');
+  const file = input.files[0];
+  const sizeEl = q('foto-size');
+  const errEl  = q('foto-error');
+  
+  if (!file) {
+    sizeEl.textContent = '—';
+    errEl.style.display = 'none';
+    window.fotoUrl = '';
+    return;
+  }
+  
+  const sizeMB = (file.size / (1024*1024)).toFixed(2);
+  sizeEl.textContent = sizeMB + ' MB';
+  
+  if (file.size > 2 * 1024 * 1024) {
+    errEl.style.display = 'block';
+    window.fotoUrl = '';
+    return;
+  }
+  
+  errEl.style.display = 'none';
+  // Upload foto ke Google Drive via Apps Script
+  uploadFoto(file);
+}
+
+async function uploadFoto(file) {
+  if (!CFG.gasUrl) { toast('URL Apps Script belum dikonfigurasi', 'warn'); return; }
+  
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    try {
+      const base64 = e.target.result.split(',')[1];
+      const fd = new FormData();
+      fd.append('payload', JSON.stringify({
+        action: 'upload-foto',
+        fileName: file.name,
+        base64: base64
+      }));
+      
+      const res = await fetch(CFG.gasUrl, { method: 'POST', mode: 'no-cors', body: fd });
+      // no-cors tidak return response, assume success
+      toast('Foto berhasil diupload ✓', 'success');
+      window.fotoUrl = file.name; // simpan nama file untuk dipakili di payload
+    } catch {
+      toast('Gagal upload foto', 'error');
+      window.fotoUrl = '';
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
 async function submitForm() {
   const get = id => q(id).value.trim();
   const payload = {
@@ -1681,7 +1744,11 @@ function resetForm() {
   q('f-nama').value  = '';
   q('f-deskripsi').value = '';
   q('f-alasan').value = '';
+  q('f-foto').value  = '';
+  q('foto-size').textContent = '—';
+  q('foto-error').style.display = 'none';
   q('field-alasan').style.display = 'none';
+  window.fotoUrl = '';
   ['f-keperluan','f-hasil'].forEach(id => q(id).value = '');
   gpsValue = '';
   q('gps-text').textContent = 'Belum diambil';
@@ -2089,10 +2156,11 @@ function updateClock() {
   const days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
   const hh   = String(now.getHours()).padStart(2, '0');
   const mm   = String(now.getMinutes()).padStart(2, '0');
+  const ss   = String(now.getSeconds()).padStart(2, '0');
   const dayEl  = document.getElementById('clock-day');
   const timeEl = document.getElementById('clock-time');
   if (dayEl)  dayEl.textContent  = days[now.getDay()];
-  if (timeEl) timeEl.textContent = hh + ':' + mm;
+  if (timeEl) timeEl.textContent = hh + ':' + mm + ':' + ss;
 }
 updateClock();
 setInterval(updateClock, 1000);
@@ -2133,4 +2201,3 @@ init();
 </div>
 </body>
 </html>
-
