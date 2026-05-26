@@ -47,7 +47,6 @@
   --text2: #2d6060;
   --text3: #5f9ea0;
 
-  /* keep accent mapped to teal */
   --accent: #0d9488;
   --accent2: #0f766e;
   --accent-bg: rgba(13,148,136,0.1);
@@ -69,8 +68,6 @@
   --mono: 'JetBrains Mono', monospace;
   --shadow: 0 4px 24px rgba(13,148,136,0.12);
   --shadow-lg: 0 8px 40px rgba(13,148,136,0.15);
-  --glass: rgba(255,255,255,0.55);
-  --glass-border: rgba(255,255,255,0.6);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -102,7 +99,6 @@ body {
   border-right: 1px solid rgba(255,255,255,0.3);
 }
 
-/* ──────────────── SCREENS ──────────────── */
 .screen { display: none; flex: 1; flex-direction: column; }
 .screen.active { display: flex; }
 
@@ -118,14 +114,12 @@ body {
   flex-shrink: 0;
   box-shadow: 0 2px 12px rgba(13,148,136,0.08);
 }
-/* Hotel name in topbar */
 .hotel-name {
   font-size: 10px; font-weight: 700;
   color: var(--teal2);
   letter-spacing: 0.8px; text-transform: uppercase;
   text-align: right; line-height: 1.3;
 }
-
 .brand { display: flex; align-items: center; gap: 10px; }
 .brand-mark {
   width: 36px; height: 36px;
@@ -139,153 +133,91 @@ body {
 .brand-name { font-size: 14px; font-weight: 700; letter-spacing: -0.3px; }
 .brand-sub { font-size: 11px; color: var(--text2); margin-top: 1px; font-weight: 400; }
 
-/* ──────────────── SCROLLABLE BODY ──────────────── */
 .scroll-body {
-  flex: 1;
-  overflow-y: auto;
-  padding: 16px;
-  padding-bottom: 32px;
-  background: transparent;
+  flex: 1; overflow-y: auto; padding: 16px; padding-bottom: 32px; background: transparent;
 }
 .scroll-body::-webkit-scrollbar { width: 3px; }
 .scroll-body::-webkit-scrollbar-track { background: transparent; }
 .scroll-body::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
 
-/* ──────────────── CARDS ──────────────── */
+/* ──────────────── CARDS & BANNER ──────────────── */
 .card {
   background: rgba(255,255,255,0.6);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255,255,255,0.65);
   border-radius: var(--r);
-  padding: 16px;
-  margin-bottom: 12px;
+  padding: 16px; margin-bottom: 12px;
   box-shadow: 0 4px 20px rgba(13,148,136,0.1), inset 0 1px 0 rgba(255,255,255,0.8);
 }
-.card-header {
-  display: flex; align-items: center; gap: 8px;
-  margin-bottom: 14px;
-}
+.card-header { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
 .card-icon {
-  width: 28px; height: 28px;
-  background: var(--accent-bg);
-  border-radius: var(--r-xs);
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
+  width: 28px; height: 28px; background: var(--accent-bg); border-radius: var(--r-xs);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
 }
 .card-icon svg { width: 14px; height: 14px; color: var(--accent); }
 .card-title { font-size: 11px; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: 0.8px; }
 
-/* ──────────────── LOCATION BANNER ──────────────── */
 .loc-banner {
   background: linear-gradient(135deg, rgba(13,148,136,0.85) 0%, rgba(15,118,110,0.9) 100%);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-radius: var(--r);
-  padding: 14px 16px;
-  margin-bottom: 12px;
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-radius: var(--r); padding: 14px 16px; margin-bottom: 12px;
   display: flex; align-items: center; gap: 12px;
   box-shadow: 0 8px 32px rgba(13,148,136,0.35), inset 0 1px 0 rgba(255,255,255,0.25);
-  border: 1px solid rgba(255,255,255,0.25);
-  position: relative; overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.25); position: relative; overflow: hidden;
 }
 .loc-banner::before {
   content:''; position:absolute; top:-30px; right:-30px;
-  width:100px; height:100px; border-radius:50%;
-  background: rgba(255,255,255,0.06);
+  width:100px; height:100px; border-radius:50%; background: rgba(255,255,255,0.06);
 }
 .loc-icon {
-  width: 44px; height: 44px;
-  background: rgba(255,255,255,0.18);
-  border-radius: var(--r-sm);
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255,255,255,0.3);
+  width: 44px; height: 44px; background: rgba(255,255,255,0.18); border-radius: var(--r-sm);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.3);
 }
 .loc-icon svg { width: 22px; height: 22px; color: white; }
 .loc-lbl { font-size: 10px; color: rgba(255,255,255,0.7); font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; }
 .loc-val { font-size: 16px; font-weight: 700; color: white; margin-top: 2px; font-family: var(--mono); letter-spacing: -0.3px; }
 .loc-empty { font-size: 13px; color: rgba(255,255,255,0.65); margin-top: 2px; }
-/* Clock in banner */
 .loc-clock { margin-left: auto; text-align: right; flex-shrink: 0; }
 .loc-clock-day { font-size: 9px; color: rgba(255,255,255,0.7); font-weight: 600; letter-spacing: 0.6px; text-transform: uppercase; }
 .loc-clock-time { font-size: 18px; font-weight: 800; color: white; letter-spacing: -0.5px; font-family: var(--mono); line-height: 1.1; }
 
-/* ──────────────── FORM FIELDS ──────────────── */
+/* ──────────────── FORMS ──────────────── */
 .field { margin-bottom: 12px; }
 .field:last-child { margin-bottom: 0; }
 .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
-label {
-  display: block;
-  font-size: 11px; font-weight: 600;
-  color: var(--text2);
-  margin-bottom: 5px;
-  letter-spacing: 0.2px;
-}
+label { display: block; font-size: 11px; font-weight: 600; color: var(--text2); margin-bottom: 5px; letter-spacing: 0.2px; }
 .req { color: var(--danger); margin-left: 2px; }
 
 input, select, textarea {
-  width: 100%;
-  padding: 9px 12px;
-  border: 1.5px solid rgba(255,255,255,0.5);
-  border-radius: var(--r-sm);
-  background: rgba(255,255,255,0.5);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  color: var(--text);
-  font-size: 14px;
-  font-family: inherit;
+  width: 100%; padding: 9px 12px;
+  border: 1.5px solid rgba(255,255,255,0.5); border-radius: var(--r-sm);
+  background: rgba(255,255,255,0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  color: var(--text); font-size: 14px; font-family: inherit;
   transition: border-color .15s, box-shadow .15s, background .15s;
-  -webkit-appearance: none;
-  appearance: none;
+  -webkit-appearance: none; appearance: none;
 }
 input:focus, select:focus, textarea:focus {
-  outline: none;
-  border-color: var(--teal);
-  background: rgba(255,255,255,0.75);
+  outline: none; border-color: var(--teal); background: rgba(255,255,255,0.75);
   box-shadow: 0 0 0 3px rgba(13,148,136,0.15);
 }
 input::placeholder, textarea::placeholder { color: var(--text3); }
-input[readonly], input[disabled] {
-  background: var(--surface2);
-  color: var(--text2);
-  cursor: default;
-  font-family: var(--mono);
-  font-size: 12px;
-}
+input[readonly], input[disabled] { background: var(--surface2); color: var(--text2); cursor: default; font-family: var(--mono); font-size: 12px; }
 textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
 select {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%236b6656' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  padding-right: 36px;
-  cursor: pointer;
+  background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; cursor: pointer;
 }
 
-/* ──────────────── GPS ROW ──────────────── */
 .gps-box {
-  background: rgba(255,255,255,0.4);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1.5px solid rgba(255,255,255,0.55);
-  border-radius: var(--r-sm);
-  padding: 9px 12px;
-  display: flex; align-items: center; gap: 8px;
-  font-family: var(--mono);
-  font-size: 12px;
-  color: var(--text2);
-  min-height: 40px;
-  margin-bottom: 8px;
+  background: rgba(255,255,255,0.4); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  border: 1.5px solid rgba(255,255,255,0.55); border-radius: var(--r-sm);
+  padding: 9px 12px; display: flex; align-items: center; gap: 8px;
+  font-family: var(--mono); font-size: 12px; color: var(--text2); min-height: 40px; margin-bottom: 8px;
 }
-.gps-dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: var(--text3);
-  flex-shrink: 0;
-  transition: background .3s;
-}
+.gps-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--text3); flex-shrink: 0; transition: background .3s; }
 .gps-dot.active { background: #22c55e; animation: gps-pulse 1.4s ease-in-out infinite; }
 .gps-dot.error  { background: var(--danger); }
 @keyframes gps-pulse {
@@ -296,134 +228,70 @@ select {
 /* ──────────────── BUTTONS ──────────────── */
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-  padding: 9px 14px;
-  border-radius: var(--r-sm);
-  border: 1.5px solid rgba(255,255,255,0.5);
-  background: rgba(255,255,255,0.55);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  color: var(--text2);
-  font-size: 13px; font-weight: 600;
-  font-family: inherit;
-  cursor: pointer;
-  transition: all .15s;
-  white-space: nowrap;
-  user-select: none;
+  padding: 9px 14px; border-radius: var(--r-sm); border: 1.5px solid rgba(255,255,255,0.5);
+  background: rgba(255,255,255,0.55); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  color: var(--text2); font-size: 13px; font-weight: 600; font-family: inherit;
+  cursor: pointer; transition: all .15s; white-space: nowrap; user-select: none;
   box-shadow: 0 2px 8px rgba(13,148,136,0.08);
 }
 .btn:hover { background: rgba(255,255,255,0.75); }
 .btn:active { transform: scale(0.97); }
 .btn svg { width: 14px; height: 14px; flex-shrink: 0; }
-
 .btn-primary {
   background: linear-gradient(135deg, var(--teal) 0%, var(--teal2) 100%);
-  border-color: rgba(255,255,255,0.2); color: white;
-  box-shadow: 0 4px 16px rgba(13,148,136,0.35);
+  border-color: rgba(255,255,255,0.2); color: white; box-shadow: 0 4px 16px rgba(13,148,136,0.35);
 }
 .btn-primary:hover { background: linear-gradient(135deg, var(--teal2) 0%, var(--teal3) 100%); box-shadow: 0 6px 20px rgba(13,148,136,0.45); }
-
 .btn-danger { background: var(--danger-bg); border-color: var(--danger-border); color: var(--danger); }
 .btn-danger:hover { background: #ffe4e4; }
-
 .btn-block { width: 100%; padding: 11px 16px; font-size: 14px; }
 .btn-sm { padding: 6px 11px; font-size: 12px; }
 .btn-xs { padding: 4px 9px; font-size: 11px; }
 .btn-group { display: flex; gap: 7px; flex-wrap: wrap; align-items: center; }
 
-/* Submit spinner */
 .btn .spinner {
-  width: 15px; height: 15px;
-  border: 2px solid rgba(255,255,255,0.35);
-  border-top-color: white;
-  border-radius: 50%;
-  animation: spin .6s linear infinite;
-  display: none;
+  width: 15px; height: 15px; border: 2px solid rgba(255,255,255,0.35);
+  border-top-color: white; border-radius: 50%; animation: spin .6s linear infinite; display: none;
 }
 .btn .spinner.on { display: inline-block; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* ──────────────── BADGES ──────────────── */
-.badge {
-  display: inline-flex; align-items: center;
-  padding: 2px 8px;
-  border-radius: 20px;
-  font-size: 11px; font-weight: 600;
-  white-space: nowrap;
-}
+/* ──────────────── BADGES & ALERTS ──────────────── */
+.badge { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; white-space: nowrap; }
 .badge-green  { background: var(--accent-bg); color: var(--accent); border: 1px solid var(--accent-border); }
 .badge-yellow { background: var(--warn-bg); color: var(--warn); border: 1px solid var(--warn-border); }
 .badge-blue   { background: var(--info-bg); color: var(--info); border: 1px solid var(--info-border); }
 .badge-purple { background: #f5f3ff; color: #6d28d9; border: 1px solid #ddd6fe; }
-.badge-gray   { background: var(--surface2); color: var(--text2); border: 1px solid var(--border); }
 
-/* ──────────────── ALERTS ──────────────── */
-.alert {
-  display: flex; gap: 10px; align-items: flex-start;
-  padding: 11px 14px;
-  border-radius: var(--r-sm);
-  border: 1px solid;
-  margin-bottom: 12px;
-  font-size: 13px;
-  line-height: 1.5;
-}
+.alert { display: flex; gap: 10px; align-items: flex-start; padding: 11px 14px; border-radius: var(--r-sm); border: 1px solid; margin-bottom: 12px; font-size: 13px; line-height: 1.5; }
 .alert svg { width: 15px; height: 15px; flex-shrink: 0; margin-top: 1px; }
 .alert-warn { background: var(--warn-bg); border-color: var(--warn-border); color: var(--warn); }
 .alert-danger { background: var(--danger-bg); border-color: var(--danger-border); color: var(--danger); }
-.alert-info  { background: var(--info-bg); border-color: var(--info-border); color: var(--info); }
 
-/* ──────────────── STATS ──────────────── */
+/* ──────────────── ADMIN & TABLE ──────────────── */
 .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
 .stat-card {
-  background: rgba(255,255,255,0.5);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255,255,255,0.6);
-  border-radius: var(--r);
-  padding: 14px;
-  text-align: center;
+  background: rgba(255,255,255,0.5); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.6); border-radius: var(--r); padding: 14px; text-align: center;
   box-shadow: 0 4px 16px rgba(13,148,136,0.08), inset 0 1px 0 rgba(255,255,255,0.8);
 }
 .stat-num { font-size: 30px; font-weight: 800; letter-spacing: -1.5px; color: var(--text); }
 .stat-lbl { font-size: 11px; color: var(--text2); margin-top: 2px; font-weight: 500; }
 
-/* ──────────────── TABLE ──────────────── */
 .table-wrap { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 500px; }
-th {
-  text-align: left;
-  font-size: 10px; font-weight: 700;
-  color: var(--text2);
-  letter-spacing: 0.5px; text-transform: uppercase;
-  padding: 8px 12px;
-  background: var(--surface2);
-  border-bottom: 1px solid var(--border);
-}
+th { text-align: left; font-size: 10px; font-weight: 700; color: var(--text2); letter-spacing: 0.5px; text-transform: uppercase; padding: 8px 12px; background: var(--surface2); border-bottom: 1px solid var(--border); }
 td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
 tr:last-child td { border-bottom: none; }
 tr:hover td { background: var(--surface2); }
 .mono-cell { font-family: var(--mono); font-size: 11px; color: var(--text2); }
 
-/* ──────────────── QR ITEMS ──────────────── */
 .qr-item {
-  background: rgba(255,255,255,0.5);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255,255,255,0.6);
-  border-radius: var(--r);
-  padding: 12px;
-  display: flex; align-items: center; gap: 12px;
-  margin-bottom: 8px;
-  transition: box-shadow .15s;
+  background: rgba(255,255,255,0.5); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.6); border-radius: var(--r); padding: 12px; display: flex; align-items: center; gap: 12px; margin-bottom: 8px; transition: box-shadow .15s;
 }
 .qr-item:hover { box-shadow: var(--shadow); }
-.qr-thumb {
-  width: 52px; height: 52px;
-  border-radius: var(--r-sm);
-  border: 1px solid var(--border);
-  object-fit: cover;
-  flex-shrink: 0;
-  background: white;
-}
+.qr-thumb { width: 52px; height: 52px; border-radius: var(--r-sm); border: 1px solid var(--border); object-fit: cover; flex-shrink: 0; background: white; }
 .qr-info { flex: 1; min-width: 0; }
 .qr-name { font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 .qr-code { font-family: var(--mono); font-size: 10px; color: var(--text2); margin-top: 3px; word-break: break-all; }
@@ -432,32 +300,15 @@ tr:hover td { background: var(--surface2); }
 /* ──────────────── ADMIN LAYOUT ──────────────── */
 .admin-layout { display: flex; flex: 1; overflow: hidden; }
 .sidebar {
-  width: 0; overflow: hidden;
-  background: rgba(236,254,251,0.8);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-right: 1px solid rgba(255,255,255,0.4);
-  transition: width .22s cubic-bezier(0.4,0,0.2,1);
-  flex-shrink: 0;
+  width: 0; overflow: hidden; background: rgba(236,254,251,0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-right: 1px solid rgba(255,255,255,0.4); transition: width .22s cubic-bezier(0.4,0,0.2,1); flex-shrink: 0;
 }
 .sidebar.open { width: 210px; }
 .sidebar-inner { width: 210px; padding: 14px 10px; }
-.sidebar-section {
-  font-size: 9px; font-weight: 700;
-  color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px;
-  padding: 0 8px; margin: 14px 0 5px;
-}
+.sidebar-section { font-size: 9px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; padding: 0 8px; margin: 14px 0 5px; }
 .sidebar-section:first-child { margin-top: 0; }
 .nav-item {
-  display: flex; align-items: center; gap: 9px;
-  padding: 9px 10px;
-  border-radius: var(--r-sm);
-  color: var(--text2);
-  font-size: 13px; font-weight: 500;
-  cursor: pointer;
-  transition: all .15s;
-  border: none; background: none;
-  font-family: inherit; width: 100%; text-align: left;
+  display: flex; align-items: center; gap: 9px; padding: 9px 10px; border-radius: var(--r-sm); color: var(--text2); font-size: 13px; font-weight: 500; cursor: pointer; transition: all .15s; border: none; background: none; font-family: inherit; width: 100%; text-align: left;
 }
 .nav-item svg { width: 15px; height: 15px; flex-shrink: 0; }
 .nav-item:hover { background: rgba(13,148,136,0.08); color: var(--teal); }
@@ -466,134 +317,62 @@ tr:hover td { background: var(--surface2); }
 .admin-body { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
 .admin-body::-webkit-scrollbar { width: 3px; }
 .admin-body::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
-
 .apage { display: none; padding: 16px; flex: 1; }
 .apage.active { display: block; }
 
-/* ──────────────── HAMBURGER ──────────────── */
 .hamburger {
-  width: 34px; height: 34px;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  gap: 4px; cursor: pointer;
-  border: 1.5px solid var(--border);
-  border-radius: var(--r-sm);
-  background: none; padding: 0; flex-shrink: 0;
+  width: 34px; height: 34px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; border: 1.5px solid var(--border); border-radius: var(--r-sm); background: none; padding: 0; flex-shrink: 0;
 }
-.hamburger span {
-  display: block; width: 15px; height: 1.5px;
-  background: var(--text);
-  border-radius: 2px;
-  transition: all .2s;
-}
+.hamburger span { display: block; width: 15px; height: 1.5px; background: var(--text); border-radius: 2px; transition: all .2s; }
 .hamburger.open span:nth-child(1) { transform: translateY(5.5px) rotate(45deg); }
 .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
 .hamburger.open span:nth-child(3) { transform: translateY(-5.5px) rotate(-45deg); }
 
 /* ──────────────── LOGIN ──────────────── */
-.login-wrap {
-  flex: 1; display: flex;
-  align-items: center; justify-content: center;
-  background: transparent;
-  padding: 24px 20px;
-}
+.login-wrap { flex: 1; display: flex; align-items: center; justify-content: center; background: transparent; padding: 24px 20px; }
 .login-box {
-  background: rgba(255,255,255,0.65);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255,255,255,0.7);
-  border-radius: 20px;
-  padding: 32px 28px;
-  box-shadow: 0 16px 48px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.9);
-  width: 100%;
+  background: rgba(255,255,255,0.65); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255,255,255,0.7); border-radius: 20px; padding: 32px 28px;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.9); width: 100%;
 }
 .login-logo {
-  width: 56px; height: 56px;
-  background: linear-gradient(135deg, var(--teal), var(--teal3));
-  border-radius: 14px;
-  display: flex; align-items: center; justify-content: center;
-  margin: 0 auto 16px;
-  box-shadow: 0 4px 14px rgba(28,92,58,0.3);
+  width: 56px; height: 56px; background: linear-gradient(135deg, var(--teal), var(--teal3)); border-radius: 14px;
+  display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; box-shadow: 0 4px 14px rgba(28,92,58,0.3);
 }
 .login-logo svg { width: 28px; height: 28px; color: white; }
 .login-title { font-size: 22px; font-weight: 800; text-align: center; letter-spacing: -0.5px; }
 .login-sub { font-size: 13px; color: var(--text2); text-align: center; margin-top: 4px; }
 
-/* ──────────────── FILTER ──────────────── */
-.filter-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-
-/* ──────────────── MODAL ──────────────── */
-.modal-overlay {
-  display: none; position: fixed; inset: 0;
-  background: rgba(0,0,0,0.45);
-  z-index: 9998;
-  align-items: flex-end; justify-content: center;
-  backdrop-filter: blur(2px);
-}
+/* ──────────────── MODALS & TOAST ──────────────── */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 9998; align-items: flex-end; justify-content: center; backdrop-filter: blur(2px); }
 .modal-overlay.open { display: flex; }
-.modal-sheet {
-  background: var(--surface);
-  border-radius: 20px 20px 0 0;
-  padding: 24px 20px 32px;
-  width: 100%; max-width: 480px;
-  box-shadow: 0 -8px 40px rgba(0,0,0,0.15);
-  animation: slide-up .25s cubic-bezier(0.4,0,0.2,1);
-}
+.modal-sheet { background: var(--surface); border-radius: 20px 20px 0 0; padding: 24px 20px 32px; width: 100%; max-width: 480px; box-shadow: 0 -8px 40px rgba(0,0,0,0.15); animation: slide-up .25s cubic-bezier(0.4,0,0.2,1); }
 @keyframes slide-up { from { transform: translateY(40px); opacity: 0; } to { transform: none; opacity: 1; } }
 .modal-handle { width: 36px; height: 3px; background: var(--border2); border-radius: 3px; margin: 0 auto 20px; }
 .modal-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; }
 
-.qr-preview {
-  background: white;
-  border: 2px solid var(--border);
-  border-radius: var(--r);
-  padding: 20px;
-  text-align: center;
-  margin-bottom: 16px;
-}
+.qr-preview { background: white; border: 2px solid var(--border); border-radius: var(--r); padding: 20px; text-align: center; margin-bottom: 16px; }
 .qr-preview img { width: 160px; height: 160px; display: block; margin: 0 auto 12px; }
 .qr-preview-name { font-size: 15px; font-weight: 700; }
 .qr-preview-code { font-family: var(--mono); font-size: 11px; color: var(--text2); margin-top: 4px; }
 .qr-preview-hint { font-size: 11px; color: var(--text3); margin-top: 6px; }
 
-/* ──────────────── TOAST ──────────────── */
 .toast {
-  position: fixed; bottom: 20px; left: 50%;
-  transform: translateX(-50%) translateY(80px);
-  background: var(--text); color: white;
-  padding: 10px 18px;
-  border-radius: 40px;
-  font-size: 13px; font-weight: 500;
-  z-index: 9999;
-  transition: transform .3s cubic-bezier(0.34,1.4,0.64,1);
-  white-space: nowrap;
-  pointer-events: none;
-  max-width: 92vw;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(80px);
+  background: var(--text); color: white; padding: 10px 18px; border-radius: 40px; font-size: 13px; font-weight: 500;
+  z-index: 9999; transition: transform .3s cubic-bezier(0.34,1.4,0.64,1); white-space: nowrap; pointer-events: none; max-width: 92vw; box-shadow: 0 4px 20px rgba(0,0,0,0.2);
 }
 .toast.show { transform: translateX(-50%) translateY(0); }
 .toast.success { background: var(--accent); }
 .toast.error   { background: var(--danger); }
 .toast.warn    { background: #b45309; }
 
-/* ──────────────── EMPTY STATE ──────────────── */
 .empty { text-align: center; padding: 48px 20px; color: var(--text2); }
-.empty-icon {
-  width: 56px; height: 56px;
-  background: var(--surface2);
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  margin: 0 auto 14px;
-}
+.empty-icon { width: 56px; height: 56px; background: var(--surface2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; }
 .empty-icon svg { width: 26px; height: 26px; opacity: 0.4; }
 .empty p { font-size: 13px; }
 
-/* ──────────────── SETTINGS ──────────────── */
-.setting-row {
-  display: flex; gap: 6px; align-items: center;
-  padding: 8px 0;
-  border-bottom: 1px solid var(--border);
-}
+.setting-row { display: flex; gap: 6px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
 .setting-row:last-child { border-bottom: none; }
 
 /* ──────────────── PRINT ──────────────── */
@@ -601,204 +380,70 @@ tr:hover td { background: var(--surface2); }
 @media print {
   body * { visibility: hidden; }
   .print-area, .print-area * { visibility: visible; }
-  .print-area {
-    position: fixed; inset: 0;
-    display: flex; flex-wrap: wrap;
-    gap: 16px; padding: 20px;
-    align-content: flex-start;
-    background: white;
-  }
-  .print-card {
-    width: 200px;
-    border: 3px solid #1c5c3a;
-    border-radius: 12px;
-    padding: 18px 14px;
-    text-align: center;
-    page-break-inside: avoid;
-    background: white;
-  }
+  .print-area { position: fixed; inset: 0; display: flex; flex-wrap: wrap; gap: 16px; padding: 20px; align-content: flex-start; background: white; }
+  .print-card { width: 200px; border: 3px solid #1c5c3a; border-radius: 12px; padding: 18px 14px; text-align: center; page-break-inside: avoid; background: white; }
   .print-card img { width: 160px; height: 160px; }
   .pc-name { font-size: 14px; font-weight: 700; margin-top: 10px; color: #18160f; font-family: 'Plus Jakarta Sans', sans-serif; }
   .pc-code { font-size: 10px; color: #6b6656; margin-top: 3px; font-family: monospace; }
   .pc-hint { font-size: 10px; color: #a09d93; margin-top: 6px; }
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-6px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* ──────────────── DIVIDER ──────────────── */
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
 .divider { height: 1px; background: var(--border); margin: 14px 0; }
-
 
 /* ──────────────── NEWS TICKER ──────────────── */
 .ticker-wrap {
-  position: fixed;
-  bottom: 0; left: 50%;
-  transform: translateX(-50%);
-  width: 100%; max-width: 480px;
-  background: #0a0a0a;
-  z-index: 200;
-  overflow: hidden;
-  height: 34px;
-  display: flex;
-  align-items: center;
-  border-top: 1px solid #222;
+  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px;
+  background: #0a0a0a; z-index: 200; overflow: hidden; height: 34px; display: flex; align-items: center; border-top: 1px solid #222;
 }
-.ticker-label {
-  flex-shrink: 0;
-  background: #1c5c3a;
-  color: white;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  padding: 0 12px;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  white-space: nowrap;
-  z-index: 1;
-}
-.ticker-track {
-  flex: 1;
-  overflow: hidden;
-  position: relative;
-  height: 100%;
-}
-.ticker-inner {
-  display: inline-flex;
-  align-items: center;
-  height: 100%;
-  white-space: nowrap;
-  animation: ticker-scroll 22s linear infinite;
-  will-change: transform;
-}
+.ticker-label { flex-shrink: 0; background: #1c5c3a; color: white; font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; padding: 0 12px; height: 100%; display: flex; align-items: center; white-space: nowrap; z-index: 1; }
+.ticker-track { flex: 1; overflow: hidden; position: relative; height: 100%; }
+.ticker-inner { display: inline-flex; align-items: center; height: 100%; white-space: nowrap; animation: ticker-scroll 22s linear infinite; will-change: transform; }
 .ticker-inner:hover { animation-play-state: paused; }
-.ticker-item {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 12px;
-  font-weight: 400;
-  color: #f0f0f0;
-  letter-spacing: 0.2px;
-  padding: 0 48px 0 0;
-}
-.ticker-item a {
-  color: #6ee09e;
-  text-decoration: none;
-  font-weight: 500;
-}
+.ticker-item { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12px; font-weight: 400; color: #f0f0f0; letter-spacing: 0.2px; padding: 0 48px 0 0; }
+.ticker-item a { color: #6ee09e; text-decoration: none; font-weight: 500; }
 .ticker-item a:hover { text-decoration: underline; }
-.ticker-sep {
-  color: #444;
-  padding: 0 24px 0 0;
-  font-size: 14px;
-}
-@keyframes ticker-scroll {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-/* Push scroll-body up so ticker doesn't cover content */
+.ticker-sep { color: #444; padding: 0 24px 0 0; font-size: 14px; }
+@keyframes ticker-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 .scroll-body  { padding-bottom: 50px; }
 .apage        { padding-bottom: 50px; }
 .login-wrap   { padding-bottom: 50px; }
 
-
-/* ──────────────── ABOUT BLINK ──────────────── */
-@keyframes blink-text {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0; }
-}
-.about-blink {
-  animation: blink-text 1s step-start infinite;
-  font-size: 15px; font-weight: 600;
-  color: var(--accent);
-  text-align: center;
-  padding: 32px 16px;
-  line-height: 1.8;
-}
-.about-wrap {
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  min-height: 200px;
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  margin-top: 8px;
-}
-.about-icon {
-  width: 56px; height: 56px;
-  background: var(--accent-bg);
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  margin-bottom: 16px;
-}
+/* ──────────────── ABOUT & PEKERJA ──────────────── */
+@keyframes blink-text { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+.about-blink { animation: blink-text 1s step-start infinite; font-size: 15px; font-weight: 600; color: var(--accent); text-align: center; padding: 32px 16px; line-height: 1.8; }
+.about-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 200px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--r); margin-top: 8px; }
+.about-icon { width: 56px; height: 56px; background: var(--accent-bg); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
 .about-icon svg { width: 28px; height: 28px; color: var(--accent); }
 
-/* ──────────────── PEKERJA LIST ──────────────── */
-.pekerja-row {
-  display: flex; align-items: center; gap: 8px;
-  padding: 9px 12px;
-  border-bottom: 1px solid var(--border);
-  font-size: 13px;
-}
+.pekerja-row { display: flex; align-items: center; gap: 8px; padding: 9px 12px; border-bottom: 1px solid var(--border); font-size: 13px; }
 .pekerja-row:last-child { border-bottom: none; }
 .pekerja-id  { font-family: var(--mono); font-size: 11px; color: var(--text2); min-width: 90px; }
 .pekerja-nama { flex: 1; font-weight: 500; }
-.pekerja-del { background: none; border: none; color: var(--text3); cursor: pointer; font-size: 14px; padding: 2px 6px; border-radius: 4px; }
-.pekerja-del:hover { color: var(--danger); background: var(--danger-bg); }
-
 
 /* ──────────────── CONNECTION STATUS ──────────────── */
 .conn-status {
-  display: flex; align-items: center; gap: 6px;
-  padding: 4px 10px;
-  border-radius: 40px;
-  font-size: 11px; font-weight: 600;
-  border: 1.5px solid;
-  transition: all .4s ease;
-  white-space: nowrap;
-  cursor: default;
-  user-select: none;
+  display: flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 40px;
+  font-size: 11px; font-weight: 600; border: 1.5px solid; transition: all .4s ease; white-space: nowrap; cursor: default; user-select: none;
 }
-.conn-status.online {
-  background: rgba(220,252,231,0.7); border-color: rgba(134,239,172,0.8); color: #166534;
-  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-}
-.conn-status.offline {
-  background: rgba(254,226,226,0.7); border-color: rgba(252,165,165,0.8); color: #991b1b;
-  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-}
-.conn-status.checking {
-  background: rgba(254,249,195,0.7); border-color: rgba(253,224,71,0.8); color: #854d0e;
-  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-}
-.conn-dot {
-  width: 8px; height: 8px; border-radius: 50%;
-  flex-shrink: 0; transition: background .4s;
-}
+.conn-status.online { background: rgba(220,252,231,0.7); border-color: rgba(134,239,172,0.8); color: #166534; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+.conn-status.offline { background: rgba(254,226,226,0.7); border-color: rgba(252,165,165,0.8); color: #991b1b; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+.conn-status.checking { background: rgba(254,249,195,0.7); border-color: rgba(253,224,71,0.8); color: #854d0e; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+.conn-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; transition: background .4s; }
 .conn-status.online  .conn-dot { background: #22c55e; animation: conn-pulse 2s ease-in-out infinite; }
 .conn-status.offline .conn-dot { background: #ef4444; }
 .conn-status.checking .conn-dot { background: #f59e0b; animation: conn-blink .6s step-start infinite; }
-@keyframes conn-pulse {
-  0%,100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.4); }
-  50%      { box-shadow: 0 0 0 4px rgba(34,197,94,0); }
-}
+@keyframes conn-pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.4); } 50% { box-shadow: 0 0 0 4px rgba(34,197,94,0); } }
 @keyframes conn-blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
-
-/* ──────────────── SPACER ──────────────── */
 .spacer-24 { height: 24px; }
+.filter-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 </style>
 </head>
 <body>
 
 <div class="shell">
-
-<!-- ═══════════════════════════════════════════════════
-     SCREEN: FORM PEKERJA
-═══════════════════════════════════════════════════ -->
+<!-- SCREEN: FORM PEKERJA -->
 <div id="screen-form" class="screen active">
-
   <div class="topbar">
     <div class="brand">
       <div class="brand-mark">
@@ -829,7 +474,6 @@ tr:hover td { background: var(--surface2); }
   </div>
 
   <div class="scroll-body">
-
     <div id="gas-alert" class="alert alert-warn" style="display:none">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
         <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
@@ -865,29 +509,14 @@ tr:hover td { background: var(--surface2); }
         </div>
         <span class="card-title">Data Otomatis</span>
       </div>
-
       <div class="field-row">
-        <div class="field">
-          <label>Kode QR</label>
-          <input type="text" id="f-qr" readonly placeholder="Dari scan QR">
-        </div>
-        <div class="field">
-          <label>GKP</label>
-          <input type="text" id="f-gkp" readonly placeholder="Dari scan QR">
-        </div>
+        <div class="field"><label>Kode QR</label><input type="text" id="f-qr" readonly placeholder="Dari scan QR"></div>
+        <div class="field"><label>GKP</label><input type="text" id="f-gkp" readonly placeholder="Dari scan QR"></div>
       </div>
-
       <div class="field-row">
-        <div class="field">
-          <label>Tanggal</label>
-          <input type="date" id="f-tanggal">
-        </div>
-        <div class="field">
-          <label>Jam</label>
-          <input type="time" id="f-jam">
-        </div>
+        <div class="field"><label>Tanggal</label><input type="date" id="f-tanggal"></div>
+        <div class="field"><label>Jam</label><input type="time" id="f-jam"></div>
       </div>
-
       <div class="field">
         <label>Lokasi GPS</label>
         <div class="gps-box">
@@ -913,19 +542,14 @@ tr:hover td { background: var(--surface2); }
         </div>
         <span class="card-title">Data Pekerja</span>
       </div>
-
       <div class="field">
         <label>Employee ID <span class="req">*</span></label>
-        <select id="f-empid" onchange="onEmpSelect()">
-          <option value="">— Pilih Employee ID —</option>
-        </select>
+        <select id="f-empid" onchange="onEmpSelect()"><option value="">— Pilih Employee ID —</option></select>
       </div>
-
       <div class="field">
         <label>Nama Pekerja <span class="req">*</span></label>
         <input type="text" id="f-nama" placeholder="Terisi otomatis saat memilih ID" style="background:var(--surface2);color:var(--text2);font-family:inherit;font-size:14px" readonly>
       </div>
-
       <div class="field">
         <label>Keperluan <span class="req">*</span></label>
         <select id="f-keperluan">
@@ -935,21 +559,18 @@ tr:hover td { background: var(--surface2); }
           <option>Instalasi baru</option>
         </select>
       </div>
-
       <div class="field">
         <label>Deskripsi Pekerjaan <span class="req">*</span></label>
         <textarea id="f-deskripsi" placeholder="Jelaskan pekerjaan yang dilakukan..."></textarea>
       </div>
-
+      
+      <!-- FOTO INPUT -->
       <div class="field">
         <label>Foto Obyek Pekerjaan</label>
         <div style="display:flex;gap:8px;align-items:center;margin-bottom:6px">
-          <!-- Input tersembunyi untuk kamera -->
           <input type="file" id="f-foto-camera" accept="image/*" capture="environment" style="display:none" onchange="onFotoSelected(this)">
-          <!-- Input tersembunyi untuk galeri -->
           <input type="file" id="f-foto-gallery" accept="image/*" style="display:none" onchange="onFotoSelected(this)">
-          <!-- Input aktif (dipakai untuk submit) -->
-          <input type="file" id="f-foto" accept="image/*" style="display:none" onchange="checkFotoSize()">
+          <input type="file" id="f-foto" accept="image/*" style="display:none">
           
           <div style="display:flex;gap:8px;width:100%">
             <button type="button" class="btn" style="flex:1;gap:8px;background:rgba(255,255,255,0.5)" onclick="q('f-foto-camera').click()">
@@ -967,7 +588,6 @@ tr:hover td { background: var(--surface2); }
             </button>
           </div>
           
-          <!-- Preview & info foto terpilih -->
           <div id="foto-preview-wrap" style="display:none;margin-top:8px;background:rgba(255,255,255,0.6);border:1.5px solid rgba(13,148,136,0.3);border-radius:var(--r-sm);padding:10px;display:none;align-items:center;gap:10px">
             <img id="foto-preview-img" style="width:56px;height:56px;object-fit:cover;border-radius:6px;border:1px solid rgba(255,255,255,0.6)">
             <div style="flex:1;min-width:0">
@@ -988,7 +608,6 @@ tr:hover td { background: var(--surface2); }
           <option>Belum selesai</option>
         </select>
       </div>
-
       <div class="field" id="field-alasan" style="display:none;animation:fadeIn .2s ease">
         <label>Alasan Belum Selesai <span class="req">*</span></label>
         <textarea id="f-alasan" placeholder="Jelaskan alasan pekerjaan belum dapat diselesaikan..."></textarea>
@@ -1002,15 +621,11 @@ tr:hover td { background: var(--surface2); }
       <span id="submit-lbl">Kirim Laporan</span>
       <div class="spinner" id="submit-spin"></div>
     </button>
-
     <div class="spacer-24"></div>
   </div>
 </div>
 
-
-<!-- ═══════════════════════════════════════════════════
-     SCREEN: LOGIN
-═══════════════════════════════════════════════════ -->
+<!-- SCREEN: LOGIN -->
 <div id="screen-login" class="screen">
   <div class="login-wrap">
     <div class="login-box">
@@ -1021,14 +636,12 @@ tr:hover td { background: var(--surface2); }
       </div>
       <div class="login-title">Portal Admin</div>
       <div class="login-sub">Rekam Kunjungan</div>
-
       <div id="login-err" class="alert alert-danger" style="display:none;margin-top:16px">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
         </svg>
         Username atau password salah.
       </div>
-
       <div class="field" style="margin-top:18px">
         <label>Username</label>
         <input type="text" id="l-user" placeholder="Masukkan username" autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()">
@@ -1037,9 +650,7 @@ tr:hover td { background: var(--surface2); }
         <label>Password</label>
         <input type="password" id="l-pass" placeholder="Masukkan password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
       </div>
-      <button class="btn btn-primary btn-block" style="margin-top:4px;padding:12px" onclick="doLogin()">
-        Masuk
-      </button>
+      <button class="btn btn-primary btn-block" style="margin-top:4px;padding:12px" onclick="doLogin()">Masuk</button>
       <div style="text-align:center;margin-top:18px">
         <button class="btn btn-sm" style="background:none;border:none;color:var(--text3);font-size:12px" onclick="showScreen('form')">
           ← Kembali ke Form Pekerja
@@ -1049,17 +660,11 @@ tr:hover td { background: var(--surface2); }
   </div>
 </div>
 
-
-<!-- ═══════════════════════════════════════════════════
-     SCREEN: ADMIN
-═══════════════════════════════════════════════════ -->
+<!-- SCREEN: ADMIN -->
 <div id="screen-admin" class="screen">
-
   <div class="topbar" style="background:rgba(255,255,255,0.7);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)">
     <div style="display:flex;align-items:center;gap:8px">
-      <button class="hamburger" id="hamburger" onclick="toggleSidebar()">
-        <span></span><span></span><span></span>
-      </button>
+      <button class="hamburger" id="hamburger" onclick="toggleSidebar()"><span></span><span></span><span></span></button>
       <div class="brand">
         <div class="brand-mark">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -1077,58 +682,34 @@ tr:hover td { background: var(--surface2); }
       <button class="btn btn-sm btn-danger" onclick="doLogout()">Keluar</button>
     </div>
   </div>
-
   <div class="admin-layout">
-
-    <!-- Sidebar -->
     <nav class="sidebar" id="sidebar">
       <div class="sidebar-inner">
         <div class="sidebar-section">Menu</div>
         <button class="nav-item active" id="nav-laporan" onclick="goPage('laporan')">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-          </svg>
-          Laporan
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>Laporan
         </button>
         <button class="nav-item" id="nav-qr" onclick="goPage('qr')">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
-          </svg>
-          QR Lokasi
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>QR Lokasi
         </button>
         <button class="nav-item" id="nav-setting" style="display:none" onclick="goPage('setting')">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/>
-          </svg>
-          Pengaturan
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg>Pengaturan
         </button>
-
         <button class="nav-item" id="nav-pekerja" onclick="goPage('pekerja')">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
-          </svg>
-          Data Pekerja
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Data Pekerja
         </button>
         <button class="nav-item" id="nav-about" onclick="goPage('about')">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-          </svg>
-          About
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>About
         </button>
-
         <div class="sidebar-section">Lainnya</div>
         <button class="nav-item" onclick="showScreen('form');closeSidebar()">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-          </svg>
-          Form Pekerja
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>Form Pekerja
         </button>
       </div>
     </nav>
 
     <div class="admin-body">
-
-      <!-- ── PAGE: LAPORAN ── -->
+      <!-- PAGE: LAPORAN -->
       <div class="apage active" id="apage-laporan">
         <div class="stat-grid">
           <div class="stat-card"><div class="stat-num" id="s-total">0</div><div class="stat-lbl">Total Kunjungan</div></div>
@@ -1136,17 +717,11 @@ tr:hover td { background: var(--surface2); }
           <div class="stat-card"><div class="stat-num" id="s-belum">0</div><div class="stat-lbl">Belum Selesai</div></div>
           <div class="stat-card"><div class="stat-num" id="s-pekerja">0</div><div class="stat-lbl">Pekerja Aktif</div></div>
         </div>
-
         <div class="card">
           <div class="card-header">
-            <div class="card-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L13 13.414V19a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-7.586L3.293 6.707A1 1 0 013 6V4z"/>
-              </svg>
-            </div>
+            <div class="card-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L13 13.414V19a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-7.586L3.293 6.707A1 1 0 013 6V4z"/></svg></div>
             <span class="card-title">Filter</span>
           </div>
-
           <div class="filter-grid">
             <div class="field" style="margin:0"><label>Dari tanggal</label><input type="date" id="f-dari"></div>
             <div class="field" style="margin:0"><label>Sampai</label><input type="date" id="f-sampai"></div>
@@ -1154,67 +729,38 @@ tr:hover td { background: var(--surface2); }
             <div class="field" style="margin:0">
               <label>Keperluan</label>
               <select id="f-keperluan-filter">
-                <option value="">Semua</option>
-                <option>Maintenance</option><option>Perbaikan</option><option>Instalasi baru</option>
+                <option value="">Semua</option><option>Maintenance</option><option>Perbaikan</option><option>Instalasi baru</option>
               </select>
             </div>
           </div>
-
           <div class="btn-group" style="margin-top:10px">
-            <button class="btn btn-primary btn-sm" onclick="loadData()">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L13 13.414V19a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-7.586L3.293 6.707A1 1 0 013 6V4z"/>
-              </svg>
-              Terapkan
-            </button>
+            <button class="btn btn-primary btn-sm" onclick="loadData()"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L13 13.414V19a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-7.586L3.293 6.707A1 1 0 013 6V4z"/></svg>Terapkan</button>
             <button class="btn btn-sm" onclick="resetFilter()">Reset</button>
-            <button class="btn btn-sm" style="margin-left:auto" onclick="exportCSV()">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
-              </svg>
-              Unduh CSV
-            </button>
+            <button class="btn btn-sm" style="margin-left:auto" onclick="exportCSV()"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Unduh CSV</button>
           </div>
         </div>
-
         <div class="card" style="padding:0;overflow:hidden">
           <div class="table-wrap">
             <table>
               <thead>
-                <tr>
-                  <th>Tanggal</th>
-                  <th>Emp ID</th>
-                  <th>Nama</th>
-                  <th>Lokasi</th>
-                  <th>Keperluan</th>
-                  <th>Foto</th>
-                  <th>Hasil</th>
-                </tr>
+                <tr><th>Tanggal</th><th>Emp ID</th><th>Nama</th><th>Lokasi</th><th>Keperluan</th><th>Foto</th><th>Hasil</th></tr>
               </thead>
               <tbody id="data-tbody"></tbody>
             </table>
           </div>
           <div id="data-empty" class="empty" style="display:none">
-            <div class="empty-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-              </svg>
-            </div>
+            <div class="empty-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div>
             <p>Tidak ada data ditemukan</p>
           </div>
         </div>
         <div class="spacer-24"></div>
       </div>
 
-      <!-- ── PAGE: QR LOKASI ── -->
+      <!-- PAGE: QR LOKASI -->
       <div class="apage" id="apage-qr">
         <div class="card">
           <div class="card-header">
-            <div class="card-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
-              </svg>
-            </div>
+            <div class="card-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg></div>
             <span class="card-title">Tambah Lokasi Baru</span>
           </div>
           <div class="btn-group" style="flex-wrap:wrap;gap:8px">
@@ -1224,21 +770,15 @@ tr:hover td { background: var(--surface2); }
           </div>
           <p style="font-size:12px;color:var(--text2);margin-top:10px">QR membawa URL unik yang mengisi form otomatis saat discan.</p>
         </div>
-
         <div id="qr-list"></div>
         <div class="spacer-24"></div>
       </div>
 
-      <!-- ── PAGE: PENGATURAN ── -->
+      <!-- PAGE: PENGATURAN -->
       <div class="apage" id="apage-setting">
         <div class="card">
           <div class="card-header">
-            <div class="card-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101"/>
-                <path stroke-linecap="round" stroke-linejoin="round" d="M14.828 14.828a4 4 0 015.656 0l4 4a4 4 0 01-5.656 5.656l-1.1-1.1"/>
-              </svg>
-            </div>
+            <div class="card-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101"/><path stroke-linecap="round" stroke-linejoin="round" d="M14.828 14.828a4 4 0 015.656 0l4 4a4 4 0 01-5.656 5.656l-1.1-1.1"/></svg></div>
             <span class="card-title">Integrasi Google Sheets</span>
           </div>
           <div class="field">
@@ -1247,67 +787,40 @@ tr:hover td { background: var(--surface2); }
           </div>
           <p style="font-size:12px;color:var(--text2)">URL dari hasil deploy Google Apps Script. Data form dikirim ke endpoint ini.</p>
         </div>
-
         <div class="card">
           <div class="card-header">
-            <div class="card-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9"/>
-              </svg>
-            </div>
+            <div class="card-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9"/></svg></div>
             <span class="card-title">URL Hosting Aplikasi</span>
           </div>
           <div class="field">
             <label>Base URL</label>
             <input type="url" id="cfg-base" placeholder="https://example.github.io/visit-recorder.html">
           </div>
-          <p style="font-size:12px;color:var(--text2)">URL hosting file ini, digunakan saat generate link QR.</p>
         </div>
-
         <div class="card">
           <div class="card-header">
-            <div class="card-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
-              </svg>
-            </div>
+            <div class="card-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
             <span class="card-title">Akun Admin</span>
           </div>
           <div id="admin-accounts"></div>
           <button class="btn btn-sm" style="margin-top:10px" onclick="addAccount()">+ Tambah Akun</button>
-          <p style="font-size:11px;color:var(--text3);margin-top:10px">⚠ Perubahan akun tersimpan di browser lokal ini saja.</p>
         </div>
-
-        <button class="btn btn-primary" onclick="saveConfig()">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/>
-          </svg>
-          Simpan Pengaturan
-        </button>
+        <button class="btn btn-primary" onclick="saveConfig()">Simpan Pengaturan</button>
         <div class="spacer-24"></div>
       </div>
 
-      <!-- ── PAGE: DATA PEKERJA ── -->
+      <!-- PAGE: DATA PEKERJA -->
       <div class="apage" id="apage-pekerja">
         <div class="card">
           <div class="card-header">
-            <div class="card-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
-              </svg>
-            </div>
+            <div class="card-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg></div>
             <span class="card-title">Tambah Pekerja Baru</span>
           </div>
           <div class="field">
             <label>Employee ID</label>
             <div style="display:flex;gap:8px;align-items:center">
               <input type="text" id="pk-id" placeholder="Klik Generate atau isi manual" style="flex:1">
-              <button class="btn btn-sm" onclick="generateEmpId()">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width:13px;height:13px">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-                </svg>
-                Generate
-              </button>
+              <button class="btn btn-sm" onclick="generateEmpId()">Generate</button>
             </div>
           </div>
           <div class="field">
@@ -1315,62 +828,32 @@ tr:hover td { background: var(--surface2); }
             <input type="text" id="pk-nama" placeholder="Contoh: Budi Santoso">
           </div>
           <div class="btn-group" style="margin-top:4px">
-            <button class="btn btn-primary" onclick="savePekerja()">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
-              </svg>
-              Simpan Pekerja
-            </button>
-            <button class="btn btn-sm" onclick="loadPekerjaList()">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-              </svg>
-              Refresh
-            </button>
+            <button class="btn btn-primary" onclick="savePekerja()">Simpan Pekerja</button>
+            <button class="btn btn-sm" onclick="loadPekerjaList()">Refresh</button>
           </div>
         </div>
-
         <div class="card" style="padding:0;overflow:hidden">
           <div style="padding:12px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
-            <div class="card-icon" style="margin:0">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
-              </svg>
-            </div>
+            <div class="card-icon" style="margin:0"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
             <span class="card-title">Daftar Pekerja</span>
           </div>
-          <div id="pk-list">
-            <div class="empty">
-              <div class="empty-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-              </div>
-              <p>Belum ada data pekerja</p>
-            </div>
-          </div>
+          <div id="pk-list"></div>
         </div>
         <div class="spacer-24"></div>
       </div>
 
-      <!-- ── PAGE: ABOUT ── -->
+      <!-- PAGE: ABOUT -->
       <div class="apage" id="apage-about">
         <div class="about-wrap">
-          <div class="about-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-            </svg>
-          </div>
-          <div class="about-blink">
-            Aplikasi record kunjungan<br>Project by Era<br>Mei 2026
-          </div>
+          <div class="about-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div>
+          <div class="about-blink">Aplikasi record kunjungan<br>Project by Era<br>Mei 2026</div>
         </div>
         <div class="spacer-24"></div>
       </div>
-
     </div>
   </div>
 </div>
-
-</div><!-- end shell -->
+</div>
 
 <!-- QR PRINT MODAL -->
 <div class="modal-overlay" id="print-modal">
@@ -1388,12 +871,7 @@ tr:hover td { background: var(--surface2); }
       <input type="text" id="qr-print-lbl" placeholder="Contoh: Gudang Utama" oninput="updatePrintLabel()">
     </div>
     <div class="btn-group" style="margin-top:14px">
-      <button class="btn btn-primary" onclick="doPrint()">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
-        </svg>
-        Cetak
-      </button>
+      <button class="btn btn-primary" onclick="doPrint()">Cetak</button>
       <button class="btn" onclick="closeModal('print-modal')">Batal</button>
     </div>
   </div>
@@ -1405,295 +883,136 @@ tr:hover td { background: var(--surface2); }
 <script>
 'use strict';
 
-// ─── STATE ───────────────────────────────────────────────
 let CFG = {
   gasUrl: 'https://script.google.com/macros/s/AKfycbx7yhi4XHOht4n48Fk32UCqtJv5NjkgHSpsYKXf0vSP9V3uwfwK5EIrL8DmDELPlId7/exec',
   baseUrl: 'https://bowonitikan.github.io/visitproject.github.io/visit-recorder.html',
-  admins: [
-    { user: 'admin', pass: 'erawibowo', role: 'admin' },
-    { user: 'opr',   pass: '123',       role: 'opr'   }
-  ],
-  locations: [
-    { code: 'LOK-GUDANG-01', gkp: 'GKP-001', label: 'Gudang Utama' },
-    { code: 'LOK-KANTOR-02', gkp: 'GKP-002', label: 'Kantor Pusat' },
-    { code: 'LOK-PANEL-03',  gkp: 'GKP-003', label: 'Panel Listrik' }
-  ]
+  admins: [{ user: 'admin', pass: 'erawibowo', role: 'admin' }, { user: 'opr', pass: '123', role: 'opr' }],
+  locations: [{ code: 'LOK-GUDANG-01', gkp: 'GKP-001', label: 'Gudang Utama' }]
 };
 
-let session = null;      // logged-in user
-let tableData = [];      // current admin table data
+let session = null;
+let tableData = [];
 let gpsValue = '';
 let sidebarOpen = false;
 let printIdx = -1;
 
+// VARIABEL KOMPRESI FOTO
+let compressedFotoBase64 = '';
+let compressedFotoName = '';
+
 const SAMPLE = [
-  { Tanggal:'2025-04-29', Jam:'08:15', 'Employee ID':'EMP-001', 'Nama Pekerja':'Budi Santoso', 'Kode QR':'LOK-GUDANG-01', GKP:'GKP-001', Keperluan:'Maintenance',    Hasil:'Selesai',       GPS:'-7.4014, 109.2316' },
-  { Tanggal:'2025-04-28', Jam:'10:30', 'Employee ID':'EMP-002', 'Nama Pekerja':'Siti Rahayu',  'Kode QR':'LOK-KANTOR-02', GKP:'GKP-002', Keperluan:'Perbaikan',      Hasil:'Selesai',       GPS:'-7.4021, 109.2320' },
-  { Tanggal:'2025-04-27', Jam:'14:00', 'Employee ID':'EMP-003', 'Nama Pekerja':'Agus Wijaya',  'Kode QR':'LOK-GUDANG-01', GKP:'GKP-001', Keperluan:'Instalasi baru', Hasil:'Belum selesai', GPS:'-7.4014, 109.2316' },
-  { Tanggal:'2025-04-26', Jam:'09:45', 'Employee ID':'EMP-001', 'Nama Pekerja':'Budi Santoso', 'Kode QR':'LOK-PANEL-03',  GKP:'GKP-003', Keperluan:'Maintenance',    Hasil:'Selesai',       GPS:'-7.4030, 109.2310' }
+  { Tanggal:'2025-04-29', Jam:'08:15', 'Employee ID':'EMP-001', 'Nama Pekerja':'Budi Santoso', 'Kode QR':'LOK-GUDANG-01', GKP:'GKP-001', Keperluan:'Maintenance', Hasil:'Selesai', GPS:'-7.4014, 109.2316' }
 ];
 
-// ─── INIT ─────────────────────────────────────────────────
 function init() {
   loadConfig();
   const p = new URLSearchParams(location.search);
-  if (p.get('view') === 'admin') {
-    showScreen('login');
-  } else {
-    showScreen('form');
-    applyURLParams(p);
-    stampDateTime();
-    checkGasWarning();
-    populateEmpDropdown();
-    startConnMonitor();
+  if (p.get('view') === 'admin') { showScreen('login'); } else {
+    showScreen('form'); applyURLParams(p); stampDateTime(); checkGasWarning(); populateEmpDropdown(); startConnMonitor();
   }
 }
-
-// ─── SCREEN SWITCHING ─────────────────────────────────────
-function showScreen(name) {
-  document.querySelectorAll('.screen').forEach(s => {
-    s.style.display = 'none';
-    s.classList.remove('active');
-  });
-  const el = document.getElementById('screen-' + name);
-  el.style.display = 'flex';
-  el.classList.add('active');
-}
+function showScreen(name) { document.querySelectorAll('.screen').forEach(s => { s.style.display = 'none'; s.classList.remove('active'); }); const el = document.getElementById('screen-' + name); el.style.display = 'flex'; el.classList.add('active'); }
 function goAdmin() { showScreen('login'); }
-
-// ─── CONFIG ───────────────────────────────────────────────
-function loadConfig() {
-  try {
-    const raw = localStorage.getItem('rkv_v4');
-    if (!raw) return;
-    const s = JSON.parse(raw);
-    if (s.gasUrl)    CFG.gasUrl    = s.gasUrl;
-    if (s.baseUrl)   CFG.baseUrl   = s.baseUrl;
-    if (s.admins?.length)    CFG.admins    = s.admins;
-    if (s.locations?.length) CFG.locations = s.locations;
-  } catch {}
-}
-
-function saveConfig() {
-  CFG.gasUrl  = q('cfg-gas').value.trim();
-  CFG.baseUrl = q('cfg-base').value.trim();
-  persist();
-  checkGasWarning();
-  renderQRList();
-  toast('Pengaturan disimpan ✓', 'success');
-}
-
-function persist() {
-  localStorage.setItem('rkv_v4', JSON.stringify(CFG));
-}
-
-function checkGasWarning() {
-  const el = q('gas-alert');
-  if (el) el.style.display = CFG.gasUrl ? 'none' : 'flex';
-}
-
-function fillConfigForm() {
-  q('cfg-gas').value  = CFG.gasUrl  || '';
-  q('cfg-base').value = CFG.baseUrl || '';
-  renderAccounts();
-}
-
-// ─── URL PARAMS ───────────────────────────────────────────
-function applyURLParams(p) {
-  const qr  = p.get('qr')  || p.get('kode') || '';
-  const gkp = p.get('gkp') || '';
-  if (qr) {
-    q('f-qr').value = qr;
-    q('banner-qr').textContent = qr;
-    q('banner-qr').style.display = 'block';
-    q('banner-empty').style.display = 'none';
-  }
-  if (gkp) q('f-gkp').value = gkp;
-}
-
-function stampDateTime() {
-  const now = new Date();
-  q('f-tanggal').value = now.toISOString().slice(0, 10);
-  q('f-jam').value     = now.toTimeString().slice(0, 5);
-}
-
-// ─── GPS ──────────────────────────────────────────────────
+function loadConfig() { try { const raw = localStorage.getItem('rkv_v4'); if (!raw) return; const s = JSON.parse(raw); if (s.gasUrl) CFG.gasUrl = s.gasUrl; if (s.baseUrl) CFG.baseUrl = s.baseUrl; if (s.admins?.length) CFG.admins = s.admins; if (s.locations?.length) CFG.locations = s.locations; } catch {} }
+function saveConfig() { CFG.gasUrl = q('cfg-gas').value.trim(); CFG.baseUrl = q('cfg-base').value.trim(); persist(); checkGasWarning(); renderQRList(); toast('Pengaturan disimpan ✓', 'success'); }
+function persist() { localStorage.setItem('rkv_v4', JSON.stringify(CFG)); }
+function checkGasWarning() { const el = q('gas-alert'); if (el) el.style.display = CFG.gasUrl ? 'none' : 'flex'; }
+function fillConfigForm() { q('cfg-gas').value = CFG.gasUrl || ''; q('cfg-base').value = CFG.baseUrl || ''; renderAccounts(); }
+function applyURLParams(p) { const qr = p.get('qr') || p.get('kode') || ''; const gkp = p.get('gkp') || ''; if (qr) { q('f-qr').value = qr; q('banner-qr').textContent = qr; q('banner-qr').style.display = 'block'; q('banner-empty').style.display = 'none'; } if (gkp) q('f-gkp').value = gkp; }
+function stampDateTime() { const now = new Date(); q('f-tanggal').value = now.toISOString().slice(0, 10); q('f-jam').value = now.toTimeString().slice(0, 5); }
 function getGPS() {
-  const dot = q('gps-dot'), txt = q('gps-text'), btn = q('btn-gps');
-  dot.className = 'gps-dot active';
-  txt.textContent = 'Mengambil lokasi GPS...';
-  btn.disabled = true;
-
+  const dot = q('gps-dot'), txt = q('gps-text'), btn = q('btn-gps'); dot.className = 'gps-dot active'; txt.textContent = 'Mengambil lokasi GPS...'; btn.disabled = true;
   if (!navigator.geolocation) { gpsError('GPS tidak didukung browser ini'); return; }
-
   navigator.geolocation.getCurrentPosition(
-    pos => {
-      gpsValue = `${pos.coords.latitude.toFixed(6)}, ${pos.coords.longitude.toFixed(6)}`;
-      txt.textContent = gpsValue;
-      btn.disabled = false;
-      toast('GPS berhasil diambil ✓', 'success');
-    },
-    err => gpsError('GPS gagal: izin ditolak atau timeout'),
-    { timeout: 12000, enableHighAccuracy: true }
+    pos => { gpsValue = `${pos.coords.latitude.toFixed(6)}, ${pos.coords.longitude.toFixed(6)}`; txt.textContent = gpsValue; btn.disabled = false; toast('GPS berhasil diambil ✓', 'success'); },
+    err => gpsError('GPS gagal: izin ditolak atau timeout'), { timeout: 12000, enableHighAccuracy: true }
   );
 }
+function gpsError(msg) { q('gps-dot').className = 'gps-dot error'; q('gps-text').textContent = 'Tidak tersedia'; q('btn-gps').disabled = false; gpsValue = ''; toast(msg, 'warn'); }
 
-function gpsError(msg) {
-  q('gps-dot').className = 'gps-dot error';
-  q('gps-text').textContent = 'Tidak tersedia';
-  q('btn-gps').disabled = false;
-  gpsValue = '';
-  toast(msg, 'warn');
-}
+const WORKERS_DEFAULT = [ { id: 'EMP-001', nama: 'Budi Santoso' }, { id: 'EMP-002', nama: 'Siti Rahayu' } ];
+function fillDropdown(workers) { const sel = q('f-empid'); sel.innerHTML = '<option value="">— Pilih Employee ID —</option>' + workers.map(w => `<option value="${esc(w.id)}" data-nama="${esc(w.nama)}">${esc(w.id)} — ${esc(w.nama)}</option>`).join(''); }
 
-// ─── WORKER DROPDOWN ──────────────────────────────────────
-// Daftar pekerja — admin bisa tambah/edit di pengaturan,
-// atau diambil dari Apps Script jika gasUrl tersedia.
-// Data fallback jika Sheets tidak tersedia
-const WORKERS_DEFAULT = [
-  { id: 'EMP-001', nama: 'Budi Santoso' },
-  { id: 'EMP-002', nama: 'Siti Rahayu'  },
-  { id: 'EMP-003', nama: 'Agus Wijaya'  },
-  { id: 'EMP-004', nama: 'Dewi Lestari' },
-  { id: 'EMP-005', nama: 'Rudi Hermawan'},
-];
-
-function fillDropdown(workers) {
-  const sel = q('f-empid');
-  sel.innerHTML = '<option value="">— Pilih Employee ID —</option>' +
-    workers.map(w => `<option value="${esc(w.id)}" data-nama="${esc(w.nama)}">${esc(w.id)} — ${esc(w.nama)}</option>`).join('');
-}
-
-// ── GET ke Apps Script: coba fetch dulu, fallback ke JSONP ──
 async function fetchGAS(params) {
   const qs = new URLSearchParams(params).toString();
-
-  // Cara 1: fetch biasa (bekerja jika CORS OK)
-  try {
-    const res  = await Promise.race([
-      fetch(CFG.gasUrl + '?' + qs, { redirect: 'follow' }),
-      new Promise((_, rej) => setTimeout(() => rej('timeout'), 8000))
-    ]);
-    if (res.ok) {
-      const data = await res.json();
-      return data;
-    }
-  } catch {}
-
-  // Cara 2: JSONP (bypass CORS, butuh Apps Script support callback)
+  try { const res = await Promise.race([ fetch(CFG.gasUrl + '?' + qs, { redirect: 'follow' }), new Promise((_, rej) => setTimeout(() => rej('timeout'), 8000)) ]); if (res.ok) { return await res.json(); } } catch {}
   return new Promise((resolve, reject) => {
-    const cbName = '_gas_cb_' + Date.now();
-    const url    = CFG.gasUrl + '?' + qs + '&callback=' + cbName;
-    const script = document.createElement('script');
-    const timer  = setTimeout(() => { cleanup(); reject(new Error('timeout')); }, 10000);
-
+    const cbName = '_gas_cb_' + Date.now(); const url = CFG.gasUrl + '?' + qs + '&callback=' + cbName; const script = document.createElement('script'); const timer = setTimeout(() => { cleanup(); reject(new Error('timeout')); }, 10000);
     window[cbName] = (data) => { cleanup(); resolve(data); };
-
-    function cleanup() {
-      clearTimeout(timer);
-      delete window[cbName];
-      if (script.parentNode) script.parentNode.removeChild(script);
-    }
-
-    script.onerror = () => { cleanup(); reject(new Error('script error')); };
-    script.src = url;
-    document.head.appendChild(script);
+    function cleanup() { clearTimeout(timer); delete window[cbName]; if (script.parentNode) script.parentNode.removeChild(script); }
+    script.onerror = () => { cleanup(); reject(new Error('script error')); }; script.src = url; document.head.appendChild(script);
   });
 }
 
 async function populateEmpDropdown() {
-  const sel = q('f-empid');
-  sel.innerHTML = '<option value="">Memuat data pekerja...</option>';
-  sel.disabled  = true;
-
-  if (!CFG.gasUrl) {
-    sel.disabled = false;
-    fillDropdown(getCachedWorkers());
-    return;
-  }
-
-  // Coba hingga 2x jika gagal (pertama bisa timeout karena cold start GAS)
+  const sel = q('f-empid'); sel.innerHTML = '<option value="">Memuat data pekerja...</option>'; sel.disabled = true;
+  if (!CFG.gasUrl) { sel.disabled = false; fillDropdown(getCachedWorkers()); return; }
   for (let attempt = 1; attempt <= 2; attempt++) {
-    try {
-      const data = await fetchGAS({ action: 'list-pekerja' });
-      if (data.workers && data.workers.length > 0) {
-        localStorage.setItem('rkv_workers', JSON.stringify(data.workers));
-        fillDropdown(data.workers);
-        sel.disabled = false;
-        return;
-      }
-    } catch {
-      if (attempt === 1) {
-        // tunggu 1.5 detik sebelum retry
-        await sleep(1500);
-      }
-    }
+    try { const data = await fetchGAS({ action: 'list-pekerja' }); if (data.workers && data.workers.length > 0) { localStorage.setItem('rkv_workers', JSON.stringify(data.workers)); fillDropdown(data.workers); sel.disabled = false; return; } } catch { if (attempt === 1) await sleep(1500); }
   }
-
-  // Kedua percobaan gagal — pakai cache
-  fillDropdown(getCachedWorkers());
-  sel.disabled = false;
+  fillDropdown(getCachedWorkers()); sel.disabled = false;
 }
+function getCachedWorkers() { try { const raw = localStorage.getItem('rkv_workers'); if (raw) return JSON.parse(raw); } catch {} return WORKERS_DEFAULT; }
+function onEmpSelect() { const sel = q('f-empid'); const opt = sel.options[sel.selectedIndex]; q('f-nama').value = opt ? (opt.dataset.nama || '') : ''; }
+function onHasilChange() { const val = q('f-hasil').value; const show = val === 'Belum selesai'; q('field-alasan').style.display = show ? 'block' : 'none'; if (!show) q('f-alasan').value = ''; }
 
-function getCachedWorkers() {
-  try {
-    const raw = localStorage.getItem('rkv_workers');
-    if (raw) return JSON.parse(raw);
-  } catch {}
-  return WORKERS_DEFAULT;
-}
-
-function onEmpSelect() {
-  const sel = q('f-empid');
-  const opt = sel.options[sel.selectedIndex];
-  q('f-nama').value = opt ? (opt.dataset.nama || '') : '';
-}
-
-function onHasilChange() {
-  const val = q('f-hasil').value;
-  const show = val === 'Belum selesai';
-  const field = q('field-alasan');
-  field.style.display = show ? 'block' : 'none';
-  if (!show) q('f-alasan').value = '';
-}
-
-// ─── SUBMIT FORM ──────────────────────────────────────────
-// ─── FOTO UPLOAD ──────────────────────────────────────
+// ─── FOTO UPLOAD & KOMPRESI ──────────────────────────────────────
 function onFotoSelected(inputEl) {
   const file = inputEl.files[0];
   if (!file) return;
   
-  const errEl  = q('foto-error');
-  const sizeMB = (file.size / (1024*1024)).toFixed(2);
-  
-  // Validasi ukuran
-  if (file.size > 2 * 1024 * 1024) {
-    errEl.style.display = 'block';
-    clearFoto();
-    return;
-  }
-  errEl.style.display = 'none';
-  
-  // Simpan file ke input utama menggunakan DataTransfer
-  const dt = new DataTransfer();
-  dt.items.add(file);
-  q('f-foto').files = dt.files;
-  
-  // Tampilkan preview
-  const wrap = q('foto-preview-wrap');
-  const img  = q('foto-preview-img');
-  const name = q('foto-preview-name');
-  const size = q('foto-size');
+  // Sembunyikan error karena kita akan kompres otomatis
+  q('foto-error').style.display = 'none';
   
   const reader = new FileReader();
-  reader.onload = (e) => {
+  reader.onload = function(e) {
+    const img = new Image();
+    img.onload = function() {
+      // Tentukan batas maksimal dimensi foto
+      const MAX_WIDTH = 1024;
+      const MAX_HEIGHT = 1024;
+      let width = img.width;
+      let height = img.height;
+
+      // Kalkulasi rasio ukuran baru
+      if (width > height) {
+        if (width > MAX_WIDTH) {
+          height *= MAX_WIDTH / width;
+          width = MAX_WIDTH;
+        }
+      } else {
+        if (height > MAX_HEIGHT) {
+          width *= MAX_HEIGHT / height;
+          height = MAX_HEIGHT;
+        }
+      }
+
+      // Gambar ulang ke canvas untuk kompresi
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+
+      // Konversi ke JPEG dengan kualitas 60% (0.6)
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.6);
+      
+      // Simpan base64 (tanpa prefix) dan nama file untuk dikirim
+      compressedFotoBase64 = dataUrl.split(',')[1];
+      compressedFotoName = file.name;
+
+      // Tampilkan ke UI
+      q('foto-preview-img').src = dataUrl;
+      q('foto-preview-wrap').style.display = 'flex';
+      q('foto-preview-name').textContent = file.name;
+      
+      // Hitung estimasi ukuran baru (KB)
+      const newSizeKB = Math.round((compressedFotoBase64.length * 3 / 4) / 1024);
+      q('foto-size').textContent = 'Terkrompresi: ~' + newSizeKB + ' KB';
+    }
     img.src = e.target.result;
-    wrap.style.display = 'flex';
-  };
+  }
   reader.readAsDataURL(file);
-  
-  name.textContent = file.name;
-  size.textContent = sizeMB + ' MB';
 }
 
 function clearFoto() {
@@ -1705,59 +1024,15 @@ function clearFoto() {
   q('foto-preview-name').textContent = '';
   q('foto-size').textContent = '';
   q('foto-error').style.display = 'none';
-}
-
-function checkFotoSize() {
-  // Dipanggil oleh f-foto (internal), tidak perlu logic tambahan
-}
-
-async function uploadFoto(file) {
-  if (!CFG.gasUrl) { 
-    toast('URL Apps Script belum dikonfigurasi', 'warn'); 
-    return null; 
-  }
   
-  return new Promise((resolve) => {
-    const reader = new FileReader();
-    reader.onload = async (e) => {
-      try {
-        const base64 = e.target.result.split(',')[1];
-        
-        // Gunakan FormData (bekerja dengan mode: no-cors)
-        const fd = new FormData();
-        fd.append('payload', JSON.stringify({
-          action: 'upload-foto',
-          fileName: file.name,
-          base64: base64
-        }));
-        
-        // Dengan mode: no-cors, response tidak bisa dibaca
-        // Jadi kita assume upload berhasil dan generate URL lokal
-        await fetch(CFG.gasUrl, { 
-          method: 'POST', 
-          mode: 'no-cors', 
-          body: fd 
-        });
-        
-        // Generate URL berdasarkan nama file (asumsi FOLDER_ID sudah diset)
-        // Format: https://drive.google.com/file/d/{fileId}/view
-        // Untuk saat ini, kita simpan nama file sebagai identifier
-        const fileUrl = 'File uploaded: ' + file.name;
-        toast('Foto berhasil diupload ✓', 'success');
-        resolve(fileUrl);
-      } catch (err) {
-        toast('Gagal upload foto: ' + err.message, 'error');
-        resolve('');
-      }
-    };
-    reader.readAsDataURL(file);
-  });
+  // Reset variabel kompresi
+  compressedFotoBase64 = '';
+  compressedFotoName = '';
 }
 
 async function submitForm() {
   const get = id => q(id).value.trim();
   
-  // Validation
   const required = [
     ['f-empid', 'Employee ID'],
     ['f-keperluan',  'Keperluan'],
@@ -1779,17 +1054,6 @@ async function submitForm() {
     return;
   }
 
-  // Baca foto sebagai base64 jika ada
-  let fotoBase64 = '';
-  let fotoFileName = '';
-  const fotoInput = q('f-foto');
-  if (fotoInput.files && fotoInput.files[0]) {
-    const file = fotoInput.files[0];
-    fotoFileName = file.name;
-    q('submit-lbl').textContent = 'Membaca foto...';
-    fotoBase64 = await readFileAsBase64(file);
-  }
-
   const payload = {
     employeeId: get('f-empid'),
     nama:       get('f-nama'),
@@ -1802,8 +1066,8 @@ async function submitForm() {
     kodeQR:     get('f-qr'),
     gkp:        get('f-gkp'),
     gps:        gpsValue || 'Tidak diambil',
-    fotoFileName: fotoFileName,
-    fotoBase64: fotoBase64
+    fotoFileName: compressedFotoName,   // Menggunakan foto yang sudah dikompres
+    fotoBase64: compressedFotoBase64    // Menggunakan foto yang sudah dikompres
   };
 
   try {
@@ -1819,531 +1083,103 @@ async function submitForm() {
   setSubmitLoading(false);
 }
 
-// Helper: baca file menjadi base64
-function readFileAsBase64(file) {
-  return new Promise((resolve) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const base64 = e.target.result.split(',')[1];
-      resolve(base64);
-    };
-    reader.onerror = () => resolve('');
-    reader.readAsDataURL(file);
-  });
-}
+function setSubmitLoading(on) { q('btn-submit').disabled = on; q('submit-lbl').textContent = on ? 'Mengirim...' : 'Kirim Laporan'; q('submit-spin').classList.toggle('on', on); }
+function resetForm() { q('f-empid').value = ''; q('f-nama').value = ''; q('f-deskripsi').value = ''; q('f-alasan').value = ''; clearFoto(); q('field-alasan').style.display = 'none'; ['f-keperluan','f-hasil'].forEach(id => q(id).value = ''); gpsValue = ''; q('gps-text').textContent = 'Belum diambil'; q('gps-dot').className = 'gps-dot'; stampDateTime(); }
 
-function setSubmitLoading(on) {
-  q('btn-submit').disabled = on;
-  q('submit-lbl').textContent = on ? 'Mengirim...' : 'Kirim Laporan';
-  q('submit-spin').classList.toggle('on', on);
-}
+function doLogin() { const u = q('l-user').value.trim(); const p = q('l-pass').value; const found = CFG.admins.find(a => a.user === u && a.pass === p); q('login-err').style.display = found ? 'none' : 'flex'; if (!found) return; session = found; q('l-pass').value = ''; enterAdmin(); }
+function doLogout() { session = null; q('l-user').value = ''; q('login-err').style.display = 'none'; showScreen('login'); }
+function enterAdmin() { q('admin-user-lbl').textContent = session.user; const rb = q('role-badge'); const isAdmin = session.role === 'admin'; rb.textContent = isAdmin ? 'Admin' : 'Operator'; rb.className = 'badge ' + (isAdmin ? 'badge-purple' : 'badge-green'); q('nav-setting').style.display = isAdmin ? 'flex' : 'none'; q('nav-pekerja').style.display = 'flex'; q('nav-about').style.display = 'flex'; showScreen('admin'); fillConfigForm(); renderQRList(); loadData(); goPage('laporan'); }
+function toggleSidebar() { sidebarOpen = !sidebarOpen; q('sidebar').classList.toggle('open', sidebarOpen); q('hamburger').classList.toggle('open', sidebarOpen); }
+function closeSidebar() { sidebarOpen = false; q('sidebar').classList.remove('open'); q('hamburger').classList.remove('open'); }
+function goPage(name) { document.querySelectorAll('.apage').forEach(p => p.classList.remove('active')); document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active')); q('apage-' + name).classList.add('active'); const navEl = q('nav-' + name); if (navEl) navEl.classList.add('active'); closeSidebar(); if (name === 'pekerja') loadPekerjaList(); }
 
-function resetForm() {
-  q('f-empid').value = '';
-  q('f-nama').value  = '';
-  q('f-deskripsi').value = '';
-  q('f-alasan').value = '';
-  clearFoto();
-  q('field-alasan').style.display = 'none';
-  window.fotoUrl = '';
-  ['f-keperluan','f-hasil'].forEach(id => q(id).value = '');
-  gpsValue = '';
-  q('gps-text').textContent = 'Belum diambil';
-  q('gps-dot').className = 'gps-dot';
-  stampDateTime();
-}
-
-// ─── LOGIN / LOGOUT ───────────────────────────────────────
-function doLogin() {
-  const u = q('l-user').value.trim();
-  const p = q('l-pass').value;
-  const found = CFG.admins.find(a => a.user === u && a.pass === p);
-  q('login-err').style.display = found ? 'none' : 'flex';
-  if (!found) return;
-  session = found;
-  q('l-pass').value = '';
-  enterAdmin();
-}
-
-function doLogout() {
-  session = null;
-  q('l-user').value = '';
-  q('login-err').style.display = 'none';
-  showScreen('login');
-}
-
-function enterAdmin() {
-  q('admin-user-lbl').textContent = session.user;
-  const rb = q('role-badge');
-  const isAdmin = session.role === 'admin';
-  rb.textContent = isAdmin ? 'Admin' : 'Operator';
-  rb.className = 'badge ' + (isAdmin ? 'badge-purple' : 'badge-green');
-  q('nav-setting').style.display = isAdmin ? 'flex' : 'none';
-  q('nav-pekerja').style.display = 'flex';
-  q('nav-about').style.display   = 'flex';
-
-  showScreen('admin');
-  fillConfigForm();
-  renderQRList();
-  loadData();
-  goPage('laporan');
-}
-
-// ─── ADMIN NAVIGATION ─────────────────────────────────────
-function toggleSidebar() {
-  sidebarOpen = !sidebarOpen;
-  q('sidebar').classList.toggle('open', sidebarOpen);
-  q('hamburger').classList.toggle('open', sidebarOpen);
-}
-
-function closeSidebar() {
-  sidebarOpen = false;
-  q('sidebar').classList.remove('open');
-  q('hamburger').classList.remove('open');
-}
-
-function goPage(name) {
-  document.querySelectorAll('.apage').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-  q('apage-' + name).classList.add('active');
-  const navEl = q('nav-' + name);
-  if (navEl) navEl.classList.add('active');
-  closeSidebar();
-  if (name === 'pekerja') loadPekerjaList();
-}
-
-// ─── DATA / TABLE ─────────────────────────────────────────
 async function loadData() {
   if (!CFG.gasUrl) { renderTable(SAMPLE); return; }
   try {
     const params = new URLSearchParams({ action: 'get' });
-    const dari   = q('f-dari').value;
-    const sampai = q('f-sampai').value;
-    const cari   = q('f-cari').value.trim();
-    const kep    = q('f-keperluan-filter').value;
-    if (dari)   params.set('dari', dari);
-    if (sampai) params.set('sampai', sampai);
-    if (cari)   params.set('nama', cari);
-    if (kep)    params.set('keperluan', kep);
-
-    const data = await fetchGAS(Object.fromEntries(params.entries()));
-    tableData  = data.rows || [];
-    renderTable(tableData);
-  } catch {
-    toast('Gagal memuat data — menampilkan contoh', 'warn');
-    renderTable(SAMPLE);
-  }
+    const dari = q('f-dari').value; const sampai = q('f-sampai').value; const cari = q('f-cari').value.trim(); const kep = q('f-keperluan-filter').value;
+    if (dari) params.set('dari', dari); if (sampai) params.set('sampai', sampai); if (cari) params.set('nama', cari); if (kep) params.set('keperluan', kep);
+    const data = await fetchGAS(Object.fromEntries(params.entries())); tableData = data.rows || []; renderTable(tableData);
+  } catch { toast('Gagal memuat data — menampilkan contoh', 'warn'); renderTable(SAMPLE); }
 }
-
 function renderTable(data) {
-  const selesai = data.filter(r => val(r, 'Hasil') === 'Selesai').length;
-  const names   = new Set(data.map(r => val(r, 'Nama Pekerja')));
-
-  q('s-total').textContent   = data.length;
-  q('s-selesai').textContent  = selesai;
-  q('s-belum').textContent    = data.length - selesai;
-  q('s-pekerja').textContent  = names.size;
-
-  const tbody = q('data-tbody');
-  const empty = q('data-empty');
+  const selesai = data.filter(r => val(r, 'Hasil') === 'Selesai').length; const names = new Set(data.map(r => val(r, 'Nama Pekerja')));
+  q('s-total').textContent = data.length; q('s-selesai').textContent = selesai; q('s-belum').textContent = data.length - selesai; q('s-pekerja').textContent = names.size;
+  const tbody = q('data-tbody'); const empty = q('data-empty');
   if (!data.length) { tbody.innerHTML = ''; empty.style.display = 'block'; return; }
   empty.style.display = 'none';
-
   tbody.innerHTML = data.map(r => {
-    const hasil   = val(r, 'Hasil');
-    const alasan  = val(r, 'Alasan Belum Selesai') || val(r, 'alasan') || '';
-    const bc      = hasil === 'Selesai' ? 'badge-green' : 'badge-yellow';
-    const fotoUrl = val(r, 'Foto Obyek Pekerjaan') || val(r, 'fotoUrl') || '';
-    const kodeQr  = val(r,'Kode QR') || val(r,'kodeQR') || '';
-    const fotoCell = fotoUrl
-      ? `<td style="text-align:center;cursor:pointer" onclick="showPhotoModal('${fotoUrl}','${kodeQr}')"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;color:#0d9488"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></td>`
-      : '<td style="text-align:center;color:#a09d93">—</td>';
-    
-    // Badge Belum selesai clickable jika ada alasan
-    const hasilCell = hasil === 'Belum selesai' && alasan
-      ? `<td><span class="badge ${bc}" style="cursor:pointer" onclick="showAlasanModal('${alasan.replace(/'/g,'&#39;')}','${(val(r,'Nama Pekerja')||'').replace(/'/g,'&#39;')}')">
-          ${hasil} <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width:11px;height:11px;display:inline;vertical-align:middle;margin-left:2px"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        </span></td>`
-      : `<td><span class="badge ${bc}">${hasil}</span></td>`;
-
-    return `<tr>
-      <td>${val(r,'Tanggal')}<br><span class="mono-cell">${val(r,'Jam')}</span></td>
-      <td><span class="mono-cell">${val(r,'Employee ID') || val(r,'employeeId') || '—'}</span></td>
-      <td style="font-weight:500">${val(r,'Nama Pekerja') || val(r,'nama') || ''}</td>
-      <td><span class="mono-cell" style="font-size:10px">${kodeQr}</span></td>
-      <td>${val(r,'Keperluan') || val(r,'keperluan') || ''}</td>
-      ${fotoCell}
-      ${hasilCell}
-    </tr>`;
+    const hasil = val(r, 'Hasil'); const alasan = val(r, 'Alasan Belum Selesai') || val(r, 'alasan') || ''; const bc = hasil === 'Selesai' ? 'badge-green' : 'badge-yellow';
+    const fotoUrl = val(r, 'Foto Obyek Pekerjaan') || val(r, 'fotoUrl') || ''; const kodeQr = val(r,'Kode QR') || val(r,'kodeQR') || '';
+    const fotoCell = fotoUrl ? `<td style="text-align:center;cursor:pointer" onclick="showPhotoModal('${fotoUrl}','${kodeQr}')"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;color:#0d9488"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></td>` : '<td style="text-align:center;color:#a09d93">—</td>';
+    const hasilCell = hasil === 'Belum selesai' && alasan ? `<td><span class="badge ${bc}" style="cursor:pointer" onclick="showAlasanModal('${alasan.replace(/'/g,'&#39;')}','${(val(r,'Nama Pekerja')||'').replace(/'/g,'&#39;')}')">${hasil} <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width:11px;height:11px;display:inline;vertical-align:middle;margin-left:2px"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></span></td>` : `<td><span class="badge ${bc}">${hasil}</span></td>`;
+    return `<tr><td>${val(r,'Tanggal')}<br><span class="mono-cell">${val(r,'Jam')}</span></td><td><span class="mono-cell">${val(r,'Employee ID') || val(r,'employeeId') || '—'}</span></td><td style="font-weight:500">${val(r,'Nama Pekerja') || val(r,'nama') || ''}</td><td><span class="mono-cell" style="font-size:10px">${kodeQr}</span></td><td>${val(r,'Keperluan') || val(r,'keperluan') || ''}</td>${fotoCell}${hasilCell}</tr>`;
   }).join('');
 }
+function val(r, k) { return r[k] || r[k.toLowerCase()] || ''; }
+function resetFilter() { ['f-dari','f-sampai','f-cari'].forEach(id => q(id).value = ''); q('f-keperluan-filter').value = ''; loadData(); }
+function exportCSV() { const data = tableData.length ? tableData : SAMPLE; const cols = ['Tanggal','Jam','Employee ID','Nama Pekerja','Kode QR','GKP','Keperluan','Hasil','GPS']; const rows = data.map(r => cols.map(c => `"${(r[c]||'').replace(/"/g,'""')}"`).join(',')); const csv = [cols.join(','), ...rows].join('\n'); const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' })); a.download = `laporan_kunjungan_${new Date().toISOString().slice(0,10)}.csv`; a.click(); toast('CSV diunduh ✓', 'success'); }
 
-function val(r, k) {
-  return r[k] || r[k.toLowerCase()] || '';
-}
-
-function resetFilter() {
-  ['f-dari','f-sampai','f-cari'].forEach(id => q(id).value = '');
-  q('f-keperluan-filter').value = '';
-  loadData();
-}
-
-function exportCSV() {
-  const data = tableData.length ? tableData : SAMPLE;
-  const cols = ['Tanggal','Jam','Employee ID','Nama Pekerja','Kode QR','GKP','Keperluan','Hasil','GPS'];
-  const rows = data.map(r => cols.map(c => `"${(r[c]||'').replace(/"/g,'""')}"`).join(','));
-  const csv  = [cols.join(','), ...rows].join('\n');
-  const a    = document.createElement('a');
-  a.href     = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' }));
-  a.download = `laporan_kunjungan_${new Date().toISOString().slice(0,10)}.csv`;
-  a.click();
-  toast('CSV diunduh ✓', 'success');
-}
-
-// ─── QR LOCATIONS ─────────────────────────────────────────
-function baseURL() {
-  return (CFG.baseUrl || location.href.split('?')[0]).replace(/\/$/, '');
-}
-
-function qrURL(loc) {
-  return `${baseURL()}?qr=${encodeURIComponent(loc.code)}&gkp=${encodeURIComponent(loc.gkp)}`;
-}
-
+function baseURL() { return (CFG.baseUrl || location.href.split('?')[0]).replace(/\/$/, ''); }
+function qrURL(loc) { return `${baseURL()}?qr=${encodeURIComponent(loc.code)}&gkp=${encodeURIComponent(loc.gkp)}`; }
 function renderQRList() {
-  const el = q('qr-list');
-  if (!el) return;
-  if (!CFG.locations.length) {
-    el.innerHTML = `<div class="empty"><div class="empty-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg></div><p>Belum ada lokasi QR</p></div>`;
-    return;
-  }
+  const el = q('qr-list'); if (!el) return;
+  if (!CFG.locations.length) { el.innerHTML = `<div class="empty"><p>Belum ada lokasi QR</p></div>`; return; }
   el.innerHTML = CFG.locations.map((loc, i) => {
-    const url = qrURL(loc);
-    const img = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(url)}`;
-    return `<div class="qr-item">
-      <img class="qr-thumb" src="${img}" loading="lazy" alt="QR">
-      <div class="qr-info">
-        <div class="qr-name">${loc.label || loc.code} <span class="badge badge-blue">${loc.gkp}</span></div>
-        <div class="qr-code">${loc.code}</div>
-      </div>
-      <div class="qr-actions">
-        <button class="btn btn-sm btn-primary" onclick="openPrintModal(${i})">Cetak</button>
-        <button class="btn btn-sm" onclick="copyURL(${i})">Salin URL</button>
-        <button class="btn btn-sm btn-danger" onclick="removeQR(${i})">Hapus</button>
-      </div>
-    </div>`;
+    const url = qrURL(loc); const img = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(url)}`;
+    return `<div class="qr-item"><img class="qr-thumb" src="${img}" loading="lazy" alt="QR"><div class="qr-info"><div class="qr-name">${loc.label || loc.code} <span class="badge badge-blue">${loc.gkp}</span></div><div class="qr-code">${loc.code}</div></div><div class="qr-actions"><button class="btn btn-sm btn-primary" onclick="openPrintModal(${i})">Cetak</button><button class="btn btn-sm" onclick="copyURL(${i})">Salin URL</button><button class="btn btn-sm btn-danger" onclick="removeQR(${i})">Hapus</button></div></div>`;
   }).join('');
 }
-
-function addQR() {
-  const code = q('qr-new-code').value.trim().toUpperCase();
-  const gkp  = q('qr-new-gkp').value.trim().toUpperCase();
-  if (!code) { toast('Kode lokasi wajib diisi', 'error'); return; }
-  CFG.locations.push({ code, gkp: gkp || 'GKP-000', label: '' });
-  persist();
-  q('qr-new-code').value = '';
-  q('qr-new-gkp').value  = '';
-  renderQRList();
-  toast('Lokasi ditambahkan ✓', 'success');
-}
-
-function removeQR(i) {
-  CFG.locations.splice(i, 1);
-  persist();
-  renderQRList();
-  toast('Lokasi dihapus', 'success');
-}
-
-function copyURL(i) {
-  const url = qrURL(CFG.locations[i]);
-  navigator.clipboard.writeText(url)
-    .then(() => toast('URL disalin ✓', 'success'))
-    .catch(() => toast('Gagal menyalin URL', 'error'));
-}
-
-// ─── PRINT MODAL ──────────────────────────────────────────
-function openPrintModal(i) {
-  printIdx = i;
-  const loc = CFG.locations[i];
-  const url = qrURL(loc);
-  const img = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(url)}`;
-  q('qr-prev-img').src   = img;
-  q('qr-prev-name').textContent = loc.label || loc.code;
-  q('qr-prev-code').textContent = `${loc.code} | ${loc.gkp}`;
-  q('qr-print-lbl').value = loc.label || '';
-  openModal('print-modal');
-}
-
-function updatePrintLabel() {
-  const v = q('qr-print-lbl').value;
-  q('qr-prev-name').textContent = v || (CFG.locations[printIdx]?.code || '');
-  if (printIdx >= 0) {
-    CFG.locations[printIdx].label = v;
-    persist();
-  }
-}
-
-function doPrint() {
-  const loc = CFG.locations[printIdx];
-  const url = qrURL(loc);
-  const img = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(url)}`;
-  const label = loc.label || loc.code;
-  const pa = q('print-area');
-  pa.style.display = 'flex';
-  pa.innerHTML = `<div class="print-card">
-    <img src="${img}" alt="QR">
-    <div class="pc-name">${label}</div>
-    <div class="pc-code">${loc.code} | ${loc.gkp}</div>
-    <div class="pc-hint">Scan untuk rekam kunjungan</div>
-  </div>`;
-  const imgEl = pa.querySelector('img');
-  const finish = () => { window.print(); pa.style.display = 'none'; closeModal('print-modal'); renderQRList(); };
-  imgEl.onload  = finish;
-  imgEl.onerror = finish;
-}
-
-// ─── ADMIN ACCOUNTS ───────────────────────────────────────
-function renderAccounts() {
-  const el = q('admin-accounts');
-  if (!el) return;
-  el.innerHTML = CFG.admins.map((a, i) => `
-    <div class="setting-row">
-      <input type="text" value="${esc(a.user)}" placeholder="Username" style="flex:1" oninput="CFG.admins[${i}].user=this.value">
-      <input type="password" value="${esc(a.pass)}" placeholder="Password" style="flex:1" oninput="CFG.admins[${i}].pass=this.value">
-      <select style="width:88px;flex:none;font-size:12px" onchange="CFG.admins[${i}].role=this.value">
-        <option value="admin" ${a.role==='admin'?'selected':''}>Admin</option>
-        <option value="opr"   ${a.role==='opr'  ?'selected':''}>Operator</option>
-      </select>
-      <button class="btn btn-xs btn-danger" style="flex:none;padding:6px 9px" onclick="removeAccount(${i})">✕</button>
-    </div>`).join('');
-}
-
-function addAccount()    { CFG.admins.push({ user:'', pass:'', role:'opr' }); renderAccounts(); }
+function addQR() { const code = q('qr-new-code').value.trim().toUpperCase(); const gkp = q('qr-new-gkp').value.trim().toUpperCase(); if (!code) { toast('Kode lokasi wajib diisi', 'error'); return; } CFG.locations.push({ code, gkp: gkp || 'GKP-000', label: '' }); persist(); q('qr-new-code').value = ''; q('qr-new-gkp').value = ''; renderQRList(); toast('Lokasi ditambahkan ✓', 'success'); }
+function removeQR(i) { CFG.locations.splice(i, 1); persist(); renderQRList(); toast('Lokasi dihapus', 'success'); }
+function copyURL(i) { const url = qrURL(CFG.locations[i]); navigator.clipboard.writeText(url).then(() => toast('URL disalin ✓', 'success')).catch(() => toast('Gagal menyalin URL', 'error')); }
+function openPrintModal(i) { printIdx = i; const loc = CFG.locations[i]; const url = qrURL(loc); const img = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(url)}`; q('qr-prev-img').src = img; q('qr-prev-name').textContent = loc.label || loc.code; q('qr-prev-code').textContent = `${loc.code} | ${loc.gkp}`; q('qr-print-lbl').value = loc.label || ''; openModal('print-modal'); }
+function updatePrintLabel() { const v = q('qr-print-lbl').value; q('qr-prev-name').textContent = v || (CFG.locations[printIdx]?.code || ''); if (printIdx >= 0) { CFG.locations[printIdx].label = v; persist(); } }
+function doPrint() { const loc = CFG.locations[printIdx]; const url = qrURL(loc); const img = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(url)}`; const label = loc.label || loc.code; const pa = q('print-area'); pa.style.display = 'flex'; pa.innerHTML = `<div class="print-card"><img src="${img}" alt="QR"><div class="pc-name">${label}</div><div class="pc-code">${loc.code} | ${loc.gkp}</div><div class="pc-hint">Scan untuk rekam kunjungan</div></div>`; const imgEl = pa.querySelector('img'); const finish = () => { window.print(); pa.style.display = 'none'; closeModal('print-modal'); renderQRList(); }; imgEl.onload = finish; imgEl.onerror = finish; }
+function renderAccounts() { const el = q('admin-accounts'); if (!el) return; el.innerHTML = CFG.admins.map((a, i) => `<div class="setting-row"><input type="text" value="${esc(a.user)}" placeholder="Username" style="flex:1" oninput="CFG.admins[${i}].user=this.value"><input type="password" value="${esc(a.pass)}" placeholder="Password" style="flex:1" oninput="CFG.admins[${i}].pass=this.value"><select style="width:88px;flex:none;font-size:12px" onchange="CFG.admins[${i}].role=this.value"><option value="admin" ${a.role==='admin'?'selected':''}>Admin</option><option value="opr" ${a.role==='opr'?'selected':''}>Operator</option></select><button class="btn btn-xs btn-danger" style="flex:none;padding:6px 9px" onclick="removeAccount(${i})">✕</button></div>`).join(''); }
+function addAccount() { CFG.admins.push({ user:'', pass:'', role:'opr' }); renderAccounts(); }
 function removeAccount(i){ CFG.admins.splice(i,1); renderAccounts(); }
-
-// ─── MODAL HELPERS ────────────────────────────────────────
-function openModal(id)  { q(id).classList.add('open'); }
+function openModal(id) { q(id).classList.add('open'); }
 function closeModal(id) { q(id).classList.remove('open'); }
+document.addEventListener('click', e => { if (e.target.classList.contains('modal-overlay')) { e.target.classList.remove('open'); } });
 
-// Click overlay to close
-document.addEventListener('click', e => {
-  if (e.target.classList.contains('modal-overlay')) {
-    e.target.classList.remove('open');
-  }
-});
-
-// ─── TOAST ────────────────────────────────────────────────
 let toastTimer;
-function toast(msg, type = '') {
-  const el = q('toast');
-  el.textContent = msg;
-  el.className   = 'toast' + (type ? ' ' + type : '');
-  requestAnimationFrame(() => el.classList.add('show'));
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove('show'), 3000);
-}
-
-// ─── UTILS ────────────────────────────────────────────────
-function q(id)      { return document.getElementById(id); }
-function sleep(ms)  { return new Promise(r => setTimeout(r, ms)); }
-function esc(str)   { return (str||'').replace(/"/g,'&quot;'); }
-
-
-// ─── DATA PEKERJA PAGE ────────────────────────────────────
-function generateEmpId() {
-  const num  = String(Math.floor(10000 + Math.random() * 90000));
-  q('pk-id').value = 'GKP-' + num;
-}
-
+function toast(msg, type = '') { const el = q('toast'); el.textContent = msg; el.className = 'toast' + (type ? ' ' + type : ''); requestAnimationFrame(() => el.classList.add('show')); clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove('show'), 3000); }
+function q(id) { return document.getElementById(id); }
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+function esc(str) { return (str||'').replace(/"/g,'&quot;'); }
+function generateEmpId() { const num = String(Math.floor(10000 + Math.random() * 90000)); q('pk-id').value = 'GKP-' + num; }
 async function savePekerja() {
-  const empId = q('pk-id').value.trim();
-  const nama  = q('pk-nama').value.trim();
-  if (!empId) { toast('Employee ID wajib diisi atau di-generate', 'error'); return; }
-  if (!nama)  { toast('Nama pekerja wajib diisi', 'error'); return; }
-
+  const empId = q('pk-id').value.trim(); const nama = q('pk-nama').value.trim(); if (!empId) { toast('Employee ID wajib diisi atau di-generate', 'error'); return; } if (!nama) { toast('Nama pekerja wajib diisi', 'error'); return; }
   if (!CFG.gasUrl) { toast('URL Apps Script belum dikonfigurasi', 'warn'); return; }
-
-  const btn = document.querySelector('#apage-pekerja .btn-primary');
-  btn.disabled = true;
-  try {
-    const fd = new FormData();
-    fd.append('payload', JSON.stringify({ action: 'add-pekerja', empId, nama }));
-    await fetch(CFG.gasUrl, { method: 'POST', mode: 'no-cors', body: fd });
-    toast('Pekerja berhasil disimpan ✓', 'success');
-    q('pk-id').value   = '';
-    q('pk-nama').value = '';
-    await loadPekerjaList();
-    // Refresh dropdown form utama juga
-    populateEmpDropdown();
-  } catch {
-    toast('Gagal menyimpan ke Sheets', 'error');
-  }
-  btn.disabled = false;
+  const btn = document.querySelector('#apage-pekerja .btn-primary'); btn.disabled = true;
+  try { const fd = new FormData(); fd.append('payload', JSON.stringify({ action: 'add-pekerja', empId, nama })); await fetch(CFG.gasUrl, { method: 'POST', mode: 'no-cors', body: fd }); toast('Pekerja berhasil disimpan ✓', 'success'); q('pk-id').value = ''; q('pk-nama').value = ''; await loadPekerjaList(); populateEmpDropdown(); } catch { toast('Gagal menyimpan ke Sheets', 'error'); } btn.disabled = false;
 }
-
 async function loadPekerjaList() {
-  const el = q('pk-list');
-  el.innerHTML = '<div class="empty"><p>Memuat data...</p></div>';
-  if (!CFG.gasUrl) {
-    renderPekerjaList(getCachedWorkers());
-    return;
-  }
-  try {
-    const data    = await fetchGAS({ action: 'list-pekerja' });
-    const workers = data.workers || [];
-    if (workers.length) {
-      localStorage.setItem('rkv_workers', JSON.stringify(workers));
-      renderPekerjaList(workers);
-    } else {
-      renderPekerjaList([]);
-    }
-  } catch {
-    renderPekerjaList(getCachedWorkers());
-    toast('Gagal memuat dari Sheets, pakai data lokal', 'warn');
-  }
+  const el = q('pk-list'); el.innerHTML = '<div class="empty"><p>Memuat data...</p></div>';
+  if (!CFG.gasUrl) { renderPekerjaList(getCachedWorkers()); return; }
+  try { const data = await fetchGAS({ action: 'list-pekerja' }); const workers = data.workers || []; if (workers.length) { localStorage.setItem('rkv_workers', JSON.stringify(workers)); renderPekerjaList(workers); } else { renderPekerjaList([]); } } catch { renderPekerjaList(getCachedWorkers()); toast('Gagal memuat dari Sheets, pakai data lokal', 'warn'); }
 }
-
 function renderPekerjaList(workers) {
   const el = q('pk-list');
-  if (!workers.length) {
-    el.innerHTML = '<div class="empty"><div class="empty-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div><p>Belum ada data pekerja</p></div>';
-    return;
-  }
-  el.innerHTML = workers.map((w, i) => `
-    <div class="pekerja-row">
-      <span class="pekerja-id">${esc(w.id)}</span>
-      <span class="pekerja-nama">${esc(w.nama)}</span>
-    </div>`).join('');
+  if (!workers.length) { el.innerHTML = '<div class="empty"><p>Belum ada data pekerja</p></div>'; return; }
+  el.innerHTML = workers.map((w, i) => `<div class="pekerja-row"><span class="pekerja-id">${esc(w.id)}</span><span class="pekerja-nama">${esc(w.nama)}</span></div>`).join('');
 }
-
-
-// ─── CONNECTION STATUS ────────────────────────────────────
 let connCheckTimer = null;
-
-function setConnStatus(state) {
-  // state: 'online' | 'offline' | 'checking'
-  const badge = q('conn-badge');
-  const label = q('conn-label');
-  if (!badge) return;
-  badge.className = 'conn-status ' + state;
-  if (state === 'online')   label.textContent = 'Online';
-  if (state === 'offline')  label.textContent = 'Offline';
-  if (state === 'checking') label.textContent = 'Memeriksa...';
-}
-
-async function checkConnection() {
-  setConnStatus('checking');
-
-  // Jika tidak ada gasUrl, cek navigator.onLine saja
-  if (!CFG.gasUrl) {
-    setConnStatus(navigator.onLine ? 'online' : 'offline');
-    return;
-  }
-
-  // Ping Apps Script via JSONP dengan timeout 6 detik
-  try {
-    await Promise.race([
-      fetchGAS({ action: 'ping' }),
-      new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 6000))
-    ]);
-    setConnStatus('online');
-  } catch {
-    // Fallback: cek navigator.onLine
-    setConnStatus(navigator.onLine ? 'online' : 'offline');
-  }
-}
-
-function startConnMonitor() {
-  checkConnection();
-  // Cek ulang setiap 30 detik
-  connCheckTimer = setInterval(checkConnection, 30000);
-
-  // Langsung update saat browser detect perubahan jaringan
-  window.addEventListener('online',  () => checkConnection());
-  window.addEventListener('offline', () => setConnStatus('offline'));
-}
-
-// ─── ALASAN MODAL ─────────────────────────────────────────
-function showAlasanModal(alasan, nama) {
-  q('alasan-nama').textContent = nama || 'Pekerja';
-  q('alasan-text').textContent = alasan || '(tidak ada keterangan)';
-  q('alasan-modal').style.display = 'flex';
-}
-
-// ─── PHOTO MODAL ──────────────────────────────────────────
+function setConnStatus(state) { const badge = q('conn-badge'); const label = q('conn-label'); if (!badge) return; badge.className = 'conn-status ' + state; if (state === 'online') label.textContent = 'Online'; if (state === 'offline') label.textContent = 'Offline'; if (state === 'checking') label.textContent = 'Memeriksa...'; }
+async function checkConnection() { setConnStatus('checking'); if (!CFG.gasUrl) { setConnStatus(navigator.onLine ? 'online' : 'offline'); return; } try { await Promise.race([ fetchGAS({ action: 'ping' }), new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 6000)) ]); setConnStatus('online'); } catch { setConnStatus(navigator.onLine ? 'online' : 'offline'); } }
+function startConnMonitor() { checkConnection(); connCheckTimer = setInterval(checkConnection, 30000); window.addEventListener('online', () => checkConnection()); window.addEventListener('offline', () => setConnStatus('offline')); }
+function showAlasanModal(alasan, nama) { q('alasan-nama').textContent = nama || 'Pekerja'; q('alasan-text').textContent = alasan || '(tidak ada keterangan)'; q('alasan-modal').style.display = 'flex'; }
 function showPhotoModal(fotoUrl, nama) {
-  const modal = q('photo-modal');
-  const iframe = q('photo-iframe');
-  const loading = q('photo-loading');
-  const nameEl = q('photo-name');
-  const errEl = q('photo-error');
-  const linkEl = q('photo-link');
-  
-  modal.style.display = 'flex';
-  nameEl.textContent = nama || 'Foto';
-  linkEl.href = fotoUrl;
-  
-  // Sembunyikan semua elemen
-  iframe.style.display = 'none';
-  errEl.style.display = 'none';
-  loading.style.display = 'block';
-  
-  // Extract file ID dari Google Drive URL
-  let fileId = '';
-  
-  // Format 1: https://drive.google.com/file/d/FILE_ID/view
-  let match = fotoUrl.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9-_]+)/);
-  if (match && match[1]) {
-    fileId = match[1];
-  }
-  
-  // Format 2: https://drive.google.com/uc?id=FILE_ID
-  if (!fileId) {
-    match = fotoUrl.match(/id=([a-zA-Z0-9-_]+)/);
-    if (match && match[1]) {
-      fileId = match[1];
-    }
-  }
-  
-  if (fileId && fileId.length > 20) {
-    // Gunakan embed URL untuk iframe
-    const embedUrl = 'https://drive.google.com/file/d/' + fileId + '/preview';
-    console.log('Loading foto:', embedUrl);
-    iframe.src = embedUrl;
-    
-    // Tampilkan iframe setelah delay kecil
-    setTimeout(() => {
-      loading.style.display = 'none';
-      iframe.style.display = 'block';
-    }, 500);
-  } else {
-    // Fallback: tampilkan error dengan debug info
-    loading.style.display = 'none';
-    errEl.style.display = 'block';
-    console.log('Invalid Drive URL - fileId:', fileId, 'URL:', fotoUrl);
-  }
+  const modal = q('photo-modal'); const iframe = q('photo-iframe'); const loading = q('photo-loading'); const nameEl = q('photo-name'); const errEl = q('photo-error'); const linkEl = q('photo-link');
+  modal.style.display = 'flex'; nameEl.textContent = nama || 'Foto'; linkEl.href = fotoUrl; iframe.style.display = 'none'; errEl.style.display = 'none'; loading.style.display = 'block';
+  let fileId = ''; let match = fotoUrl.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9-_]+)/); if (match && match[1]) { fileId = match[1]; }
+  if (!fileId) { match = fotoUrl.match(/id=([a-zA-Z0-9-_]+)/); if (match && match[1]) { fileId = match[1]; } }
+  if (fileId && fileId.length > 20) { const embedUrl = 'https://drive.google.com/file/d/' + fileId + '/preview'; iframe.src = embedUrl; setTimeout(() => { loading.style.display = 'none'; iframe.style.display = 'block'; }, 500); } else { loading.style.display = 'none'; errEl.style.display = 'block'; }
 }
-
-function closePhotoModal(e) {
-  if (e && e.target.id !== 'photo-modal') return;
-  q('photo-modal').style.display = 'none';
-}
-
-// ─── LIVE CLOCK// ─── LIVE CLOCK ───────────────────────────────────────────
-function updateClock() {
-  const now  = new Date();
-  const days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
-  const hh   = String(now.getHours()).padStart(2, '0');
-  const mm   = String(now.getMinutes()).padStart(2, '0');
-  const ss   = String(now.getSeconds()).padStart(2, '0');
-  const dayEl  = document.getElementById('clock-day');
-  const timeEl = document.getElementById('clock-time');
-  if (dayEl)  dayEl.textContent  = days[now.getDay()];
-  if (timeEl) timeEl.textContent = hh + ':' + mm + ':' + ss;
-}
-updateClock();
-setInterval(updateClock, 1000);
-
-// ─── KICK OFF ─────────────────────────────────────────────
+function closePhotoModal(e) { if (e && e.target.id !== 'photo-modal') return; q('photo-modal').style.display = 'none'; }
+function updateClock() { const now = new Date(); const days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu']; const hh = String(now.getHours()).padStart(2, '0'); const mm = String(now.getMinutes()).padStart(2, '0'); const ss = String(now.getSeconds()).padStart(2, '0'); const dayEl = document.getElementById('clock-day'); const timeEl = document.getElementById('clock-time'); if (dayEl) dayEl.textContent = days[now.getDay()]; if (timeEl) timeEl.textContent = hh + ':' + mm + ':' + ss; }
+updateClock(); setInterval(updateClock, 1000);
 init();
 </script>
 
@@ -2352,28 +1188,10 @@ init();
   <div class="ticker-label">INFO</div>
   <div class="ticker-track">
     <div class="ticker-inner" id="ticker-inner">
-      <span class="ticker-item">
-        Untuk info panduan klik link berikut&nbsp;:&nbsp;
-        <a href="https://bowonitikan.github.io/visitproject.github.io/panduan.html" target="_blank">
-          https://bowonitikan.github.io/visitproject.github.io/panduan.html
-        </a>
-      </span>
-      <span class="ticker-sep">◆</span>
-      <span class="ticker-item">
-        Created by&nbsp;<a href="mailto:eranitikan@gmail.com" style="color:#f9c74f;font-weight:600">eRa</a>
-      </span>
-      <span class="ticker-sep">◆</span>
-      <span class="ticker-item">
-        Untuk info panduan klik link berikut&nbsp;:&nbsp;
-        <a href="https://bowonitikan.github.io/visitproject.github.io/panduan.html" target="_blank">
-          https://bowonitikan.github.io/visitproject.github.io/panduan.html
-        </a>
-      </span>
-      <span class="ticker-sep">◆</span>
-      <span class="ticker-item">
-        Created by&nbsp;<a href="mailto:eranitikan@gmail.com" style="color:#f9c74f;font-weight:600">eRa</a>
-      </span>
-      <span class="ticker-sep">◆</span>
+      <span class="ticker-item">Untuk info panduan klik link berikut&nbsp;:&nbsp;<a href="https://bowonitikan.github.io/visitproject.github.io/panduan.html" target="_blank">https://bowonitikan.github.io/visitproject.github.io/panduan.html</a></span><span class="ticker-sep">◆</span>
+      <span class="ticker-item">Created by&nbsp;<a href="mailto:eranitikan@gmail.com" style="color:#f9c74f;font-weight:600">eRa</a></span><span class="ticker-sep">◆</span>
+      <span class="ticker-item">Untuk info panduan klik link berikut&nbsp;:&nbsp;<a href="https://bowonitikan.github.io/visitproject.github.io/panduan.html" target="_blank">https://bowonitikan.github.io/visitproject.github.io/panduan.html</a></span><span class="ticker-sep">◆</span>
+      <span class="ticker-item">Created by&nbsp;<a href="mailto:eranitikan@gmail.com" style="color:#f9c74f;font-weight:600">eRa</a></span><span class="ticker-sep">◆</span>
     </div>
   </div>
 </div>
@@ -2383,25 +1201,11 @@ init();
   <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:24px" onclick="q('alasan-modal').style.display='none'">
     <div style="background:white;border-radius:16px;max-width:360px;width:100%;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.25)" onclick="event.stopPropagation()">
       <div style="background:linear-gradient(135deg,#f59e0b,#d97706);padding:14px 16px;display:flex;align-items:center;justify-content:space-between">
-        <div>
-          <div style="font-size:10px;color:rgba(255,255,255,0.75);font-weight:700;letter-spacing:0.5px">ALASAN BELUM SELESAI</div>
-          <div id="alasan-nama" style="font-size:14px;color:white;font-weight:700;margin-top:2px"></div>
-        </div>
+        <div><div style="font-size:10px;color:rgba(255,255,255,0.75);font-weight:700;letter-spacing:0.5px">ALASAN BELUM SELESAI</div><div id="alasan-nama" style="font-size:14px;color:white;font-weight:700;margin-top:2px"></div></div>
         <button onclick="q('alasan-modal').style.display='none'" style="background:rgba(255,255,255,0.2);border:none;color:white;font-size:18px;width:30px;height:30px;border-radius:50%;cursor:pointer">✕</button>
       </div>
-      <div style="padding:20px">
-        <div style="display:flex;gap:10px;align-items:flex-start">
-          <div style="width:36px;height:36px;border-radius:50%;background:#fffbeb;border:2px solid #fcd34d;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#d97706" stroke-width="2" style="width:18px;height:18px">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
-            </svg>
-          </div>
-          <div id="alasan-text" style="font-size:14px;color:#374151;line-height:1.7;flex:1"></div>
-        </div>
-      </div>
-      <div style="padding:0 20px 16px">
-        <button onclick="q('alasan-modal').style.display='none'" style="width:100%;padding:10px;border-radius:8px;border:none;background:linear-gradient(135deg,#f59e0b,#d97706);color:white;font-weight:600;font-family:inherit;cursor:pointer;font-size:13px">Tutup</button>
-      </div>
+      <div style="padding:20px"><div style="display:flex;gap:10px;align-items:flex-start"><div style="width:36px;height:36px;border-radius:50%;background:#fffbeb;border:2px solid #fcd34d;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#d97706" stroke-width="2" style="width:18px;height:18px"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg></div><div id="alasan-text" style="font-size:14px;color:#374151;line-height:1.7;flex:1"></div></div></div>
+      <div style="padding:0 20px 16px"><button onclick="q('alasan-modal').style.display='none'" style="width:100%;padding:10px;border-radius:8px;border:none;background:linear-gradient(135deg,#f59e0b,#d97706);color:white;font-weight:600;font-family:inherit;cursor:pointer;font-size:13px">Tutup</button></div>
     </div>
   </div>
 </div>
@@ -2411,29 +1215,20 @@ init();
   <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:20px" onclick="closePhotoModal(event)">
     <div style="background:white;border-radius:16px;padding:0;max-width:90%;max-height:90%;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.3)" onclick="event.stopPropagation()">
       <div style="background:linear-gradient(135deg, #0d9488 0%, #0f766e 100%);padding:12px 16px;display:flex;align-items:center;justify-content:space-between">
-        <div>
-          <div style="font-size:12px;color:rgba(255,255,255,0.7);font-weight:600">FOTO OBYEK PEKERJAAN</div>
-          <div id="photo-name" style="font-size:14px;color:white;font-weight:600;margin-top:2px">—</div>
-        </div>
+        <div><div style="font-size:12px;color:rgba(255,255,255,0.7);font-weight:600">FOTO OBYEK PEKERJAAN</div><div id="photo-name" style="font-size:14px;color:white;font-weight:600;margin-top:2px">—</div></div>
         <button onclick="closePhotoModal()" style="background:rgba(255,255,255,0.2);border:none;color:white;font-size:20px;width:32px;height:32px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>
       </div>
       <div style="padding:16px;text-align:center;background:white;max-height:70vh;overflow-y:auto;position:relative">
-        <div id="photo-loading" style="display:none;color:#5a5750;padding:40px 20px">
-          <div style="font-size:13px">Memuat foto...</div>
-        </div>
+        <div id="photo-loading" style="display:none;color:#5a5750;padding:40px 20px"><div style="font-size:13px">Memuat foto...</div></div>
         <iframe id="photo-iframe" style="width:100%;max-height:65vh;border:none;border-radius:8px;display:none" allow="autoplay"></iframe>
         <div id="photo-error" style="display:none;color:#991b1b;padding:16px;text-align:center">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width:40px;height:40px;margin:0 auto 8px;color:#991b1b">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-          </svg>
-          <p>Tidak dapat membuka foto</p>
-          <a id="photo-link" href="#" target="_blank" style="color:#0d9488;text-decoration:underline;font-size:12px;display:block;margin-top:8px">Buka di Google Drive →</a>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width:40px;height:40px;margin:0 auto 8px;color:#991b1b"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <p>Tidak dapat membuka foto</p><a id="photo-link" href="#" target="_blank" style="color:#0d9488;text-decoration:underline;font-size:12px;display:block;margin-top:8px">Buka di Google Drive →</a>
         </div>
       </div>
     </div>
   </div>
 </div>
-
 </body>
 </html>
 
