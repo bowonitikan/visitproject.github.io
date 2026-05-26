@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panduan Aplikasi Rekam Kunjungan</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #0d9488;
+    --secondary: #0f766e;
+    --accent: #2dd4bf;
+    --bg-dark: #042f2e;
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.15);
+    --glass-glow: rgba(45, 212, 191, 0.2);
+    --text-main: #ffffff;
+    --text-muted: #99f6e4;
+    --highlight: #fde047; /* Warna stabilo saat dibaca */
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+  body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    min-height: 100vh;
+    overflow-x: hidden;
+    line-height: 1.6;
+    perspective: 1000px;
+  }
+
+  /* EPIC ANIMATED BACKGROUND */
+  .bg-animation {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1;
+    background: radial-gradient(circle at 15% 50%, rgba(13, 148, 136, 0.4), transparent 50%),
+                radial-gradient(circle at 85% 30%, rgba(15, 118, 110, 0.5), transparent 50%),
+                radial-gradient(circle at 50% 80%, rgba(45, 212, 191, 0.3), transparent 50%);
+    background-color: var(--bg-dark);
+    animation: pulseBg 15s infinite alternate ease-in-out;
+  }
+  @keyframes pulseBg { 0% { transform: scale(1); } 100% { transform: scale(1.1); } }
+
+  .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; padding-bottom: 120px; }
+
+  /* HEADER */
+  header { text-align: center; margin-bottom: 50px; position: relative; z-index: 1; }
+  .logo-3d {
+    width: 80px; height: 80px; margin: 0 auto 20px;
+    background: linear-gradient(135deg, var(--accent), var(--primary));
+    border-radius: 20px; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 15px 35px var(--glass-glow), inset 0 2px 4px rgba(255,255,255,0.5);
+    transform: rotateZ(10deg) rotateX(15deg);
+    animation: floatLogo 4s infinite ease-in-out;
+  }
+  .logo-3d svg { width: 40px; height: 40px; color: white; transform: translateZ(20px); }
+  @keyframes floatLogo {
+    0%, 100% { transform: translateY(0) rotateZ(10deg) rotateX(15deg); }
+    50% { transform: translateY(-15px) rotateZ(5deg) rotateX(25deg); box-shadow: 0 25px 45px var(--glass-glow); }
+  }
+  
+  h1 { font-size: 2.5rem; font-weight: 800; line-height: 1.2; letter-spacing: -1px; text-shadow: 0 4px 20px rgba(0,0,0,0.5); margin-bottom: 10px; background: linear-gradient(to right, #fff, #99f6e4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .copyright { font-size: 1rem; font-weight: 600; color: var(--accent); padding: 8px 20px; background: rgba(45,212,191,0.1); border: 1px solid rgba(45,212,191,0.3); border-radius: 30px; display: inline-block; box-shadow: 0 4px 15px rgba(0,0,0,0.2); backdrop-filter: blur(5px); }
+
+  /* SCREENSHOTS AREA (4 GAMBAR) */
+  .screenshot-container {
+    display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-bottom: 60px;
+    perspective: 1200px;
+  }
+  .ss-wrapper {
+    position: relative; width: 220px; height: auto;
+    border-radius: 24px; padding: 10px;
+    background: linear-gradient(145deg, rgba(255,255,255,0.15), rgba(255,255,255,0.02));
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 2px 4px rgba(255,255,255,0.3);
+    backdrop-filter: blur(10px); 
+    transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+  .ss-wrapper:hover { transform: rotateY(0deg) rotateX(0deg) scale(1.15) !important; z-index: 20 !important; box-shadow: 0 30px 60px rgba(13,148,136,0.6); }
+  .ss-wrapper img {
+    width: 100%; height: auto; object-fit: cover; border-radius: 14px;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+  }
+  .ss-label {
+    text-align: center; color: var(--accent); font-size: 0.85rem; font-weight: 700;
+    margin-top: 10px; text-transform: uppercase; letter-spacing: 1px;
+  }
+
+  /* GLASSMORPHISM CARDS */
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 50px; }
+  .glass-card {
+    background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border); border-radius: 24px; padding: 30px 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
+    transform-style: preserve-3d; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative; overflow: hidden;
+  }
+  .glass-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(13,148,136,0.4); border-color: rgba(255,255,255,0.3); }
+
+  .step-num { position: absolute; top: -15px; right: -15px; font-size: 6rem; font-weight: 800; color: rgba(255,255,255,0.03); transform: translateZ(-10px); z-index: -1; }
+  .icon-3d {
+    width: 60px; height: 60px; background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0));
+    border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    margin-bottom: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); transform: translateZ(30px);
+  }
+  .icon-3d svg { width: 30px; height: 30px; color: var(--accent); }
+  
+  .glass-card h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 12px; }
+  .glass-card p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; }
+
+  /* SECTION TITLES */
+  .section-title {
+    display: flex; align-items: center; justify-content: center; gap: 15px; margin: 50px 0 30px;
+    font-size: 1.8rem; font-weight: 800; border-bottom: 2px solid rgba(255,255,255,0.1); padding-bottom: 15px;
+  }
+  .section-title svg { width: 35px; height: 35px; color: var(--accent); filter: drop-shadow(0 0 8px var(--accent)); }
+
+  /* HIGHLIGHT UNTUK TTS (HANYA GARIS BAWAH) */
+  .tts-word { transition: all 0.2s ease; }
+  .tts-word.active { 
+    color: var(--highlight); 
+    border-bottom: 3px solid var(--highlight); 
+    font-weight: 800; 
+    text-shadow: 0 0 10px rgba(253, 224, 71, 0.5);
+  }
+
+  /* FLOATING SPEAKER BUTTON (MELAYANG) */
+  .fab-speaker {
+    position: fixed; bottom: 30px; right: 30px; width: 65px; height: 65px;
+    background: linear-gradient(135deg, #14b8a6, #0f766e);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6), inset 0 2px 4px rgba(255,255,255,0.5);
+    cursor: pointer; z-index: 9999; border: 2px solid rgba(255,255,255,0.3);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  .fab-speaker svg { width: 32px; height: 32px; color: white; }
+  .fab-speaker:hover { transform: scale(1.15); box-shadow: 0 15px 40px rgba(45, 212, 191, 0.5); }
+  .fab-speaker.playing {
+    animation: pulseSpeaker 1.5s infinite; background: linear-gradient(135deg, #f59e0b, #b45309); border-color: #fde047;
+  }
+  @keyframes pulseSpeaker { 0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); } 70% { box-shadow: 0 0 0 20px rgba(245, 158, 11, 0); } 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); } }
+  .fab-tooltip {
+    position: absolute; right: 85px; background: rgba(0,0,0,0.8); color: white; padding: 6px 12px;
+    border-radius: 8px; font-size: 13px; font-weight:bold; white-space: nowrap; pointer-events: none; opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .fab-speaker:hover .fab-tooltip { opacity: 1; }
+
+  /* FOOTER */
+  footer {
+    text-align: center; margin-top: 40px; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.1);
+    color: var(--text-muted); font-size: 0.95rem;
+  }
+  .email-link {
+    display: inline-flex; align-items: center; gap: 8px; margin-top: 15px; padding: 10px 20px;
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 30px; color: #fff; text-decoration: none; font-weight: 600;
+    transition: all 0.3s;
+  }
+  .email-link:hover { background: var(--primary); box-shadow: 0 5px 15px rgba(13,148,136,0.5); transform: translateY(-3px); }
+
+  @media (max-width: 600px) {
+    h1 { font-size: 2rem; } .glass-card { padding: 25px 20px; } .ss-wrapper { width: 100%; max-width: 250px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-animation"></div>
+
+<div class="container">
+  
+  <!-- HERO HEADER -->
+  <header>
+    <div class="logo-3d">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+    </div>
+    <h1 class="tts-source">Panduan Operasional Aplikasi Rekam Kunjungan</h1>
+    <div class="copyright">&copy; Era Wibowo &bull; Mei 2026</div>
+  </header>
+
+  <!-- SCREENSHOTS AREA (4 GAMBAR BERJEJER EFEK 3D) -->
+  <div class="section-title">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+    <span class="tts-source">Tampilan Antarmuka Aplikasi</span>
+  </div>
+  
+  <div class="screenshot-container">
+    <!-- Gambar 1: Form Pekerja -->
+    <div class="ss-wrapper" style="transform: rotateY(15deg) rotateZ(-2deg); z-index: 1;">
+      <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiK4Sd_2ipSuIhl5_uw3ofW0JjC7ekWa1gEQP_uEFMt_eCv3hLgf731BAEQulNrwLDSY2_RF5dnHucn9kXzjU_dSB8r1j6yoY7rW5GNAMesBd_kjjse_Sss6D4dUjd_BGBvPq_Q6r71qxWl26hAmmgAuWAlgdKA0z6ynQQLNCAS3Q7u2_dj0FGuZeEflo0/s320/p1.jpg" alt="Form Pekerja">
+      <div class="ss-label">1. Form Pekerja</div>
+    </div>
+    <!-- Gambar 2: Portal Admin / Login -->
+    <div class="ss-wrapper" style="transform: rotateY(5deg) scale(1.05); z-index: 3;">
+      <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjRKgTpfH6HftXhbBlgAghcZmqF4GTVhrj6mB0oj-V3W25trvORUdzvmZ-AQkVXVfloon8Ppw1meW2yUWiyOzkpesVr8bE86DnP_mzSJsLnpUm5U3vNLM3L2plRnGzezQgZEaI4_Tkt91NdknV8Wlb6kJhJ4nLW5Rs3ZOS25_HEU43MVbBVh5z2nPcoGc8/s320/p2.jpg" alt="Portal Admin">
+      <div class="ss-label">2. Login Admin</div>
+    </div>
+    <!-- Gambar 3: Laporan -->
+    <div class="ss-wrapper" style="transform: rotateY(-5deg) scale(1.05); z-index: 3;">
+      <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhEu-Ej_e3b9LPHpBPYrVGCqOv2TgxXo-lbl8jsX1eQgIzWJd9ocrp8YeRpfDM7o9tWvLlAbmJWD-3rO_TOz79Oa4CK5FiS7VZDJgoOcyr3tjGlzrC1Xn_PMJbT630RoUiVpGML-DnOUCeIpsay-UhBBpIw_cltpk7VEHEwMHt5Nh-gcdct_2TPtJAZYWw/s320/p3.jpg" alt="Dashboard Laporan">
+      <div class="ss-label">3. Laporan</div>
+    </div>
+    <!-- Gambar 4: QR Lokasi -->
+    <div class="ss-wrapper" style="transform: rotateY(-15deg) rotateZ(2deg); z-index: 1;">
+      <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgGv_zzblR7GRnx_x6uXKb25zwMO6fDbqT_yETqfRVHsAVrla0PMFyBiINp3j5PFt_-qzhdfgN9Y5_vsnsNlFSCJnvCEZmj3XXOwzbZMRz2unFW3acjUVdWL-cO03K8mTh6GQxHJQSjiza6nxjivDxmNKHagDGijtJBwoi6hcjRuFze5Knavp4BgbBW7u0/s320/p4.jpg" alt="QR Lokasi">
+      <div class="ss-label">4. QR Lokasi</div>
+    </div>
+  </div>
+
+  <!-- SECTION 1: PEKERJA -->
+  <div class="section-title">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
+    <span class="tts-source">Alur Pencatatan Pekerja</span>
+  </div>
+
+  <div class="grid">
+    <div class="glass-card">
+      <div class="step-num">1</div>
+      <div class="icon-3d"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L13 13.414V19a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-7.586L3.293 6.707A1 1 0 013 6V4z"/></svg></div>
+      <h3 class="tts-source">Scan QR Code Lokasi</h3>
+      <p class="tts-source">Gunakan kamera HP untuk menscan QR yang tertempel di lokasi. Form akan terbuka dan otomatis mengisi Kode QR serta Nama Lokasi.</p>
+    </div>
+    <div class="glass-card">
+      <div class="step-num">2</div>
+      <div class="icon-3d"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg></div>
+      <h3 class="tts-source">Isi Identitas dan Ambil GPS</h3>
+      <p class="tts-source">Pilih ID Karyawan Anda pada daftar. Nama Anda akan muncul otomatis. Selanjutnya tekan tombol Ambil GPS agar titik kordinat saat ini terekam.</p>
+    </div>
+    <div class="glass-card">
+      <div class="step-num">3</div>
+      <div class="icon-3d"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
+      <h3 class="tts-source">Ambil Bukti Foto Obyek</h3>
+      <p class="tts-source">Jepret foto obyek pekerjaan sebagai bukti. Sistem dibekali fitur kompresi otomatis untuk mengecilkan memori foto tanpa mengurangi kualitas bukti.</p>
+    </div>
+    <div class="glass-card">
+      <div class="step-num">4</div>
+      <div class="icon-3d"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div>
+      <h3 class="tts-source">Kirim Laporan</h3>
+      <p class="tts-source">Pilih hasil akhir pekerjaan anda. Jika belum selesai cantumkan alasannya. Tekan Kirim Laporan dan data langsung masuk ke Pusat Server.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 2: ADMIN -->
+  <div class="section-title">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+    <span class="tts-source">Fasilitas Admin Panel</span>
+  </div>
+
+  <div class="grid">
+    <div class="glass-card">
+      <div class="icon-3d"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg></div>
+      <h3 class="tts-source">Gerbang Utama Admin</h3>
+      <p class="tts-source">Klik tombol Admin di bagian atas untuk masuk ke mode pengendalian. Gunakan hak akses sandi yang Anda miliki untuk perlindungan ganda.</p>
+    </div>
+    <div class="glass-card">
+      <div class="icon-3d"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></div>
+      <h3 class="tts-source">Laporan dan Cetak C S V</h3>
+      <p class="tts-source">Menu Laporan menampilkan rekap aktual lengkap dengan fitur penyaring data. Anda bisa mencetak laporan rekam jejak tersebut ke bentuk C S V.</p>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="tts-source" style="font-weight:600; color:white;">Aplikasi Rekam Kunjungan Versi 4</div>
+    <div class="tts-source">Dirancang khusus untuk keandalan dan kecepatan operasional industri modern.</div>
+    
+    <a href="mailto:eranitikan@gmail.com" class="email-link">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+      eranitikan@gmail.com
+    </a>
+  </footer>
+
+</div>
+
+<!-- FLOATING SPEAKER BUTTON -->
+<div class="fab-speaker" id="tts-btn" onclick="toggleTTS()">
+  <span class="fab-tooltip" id="tooltip-text">Dengarkan Panduan</span>
+  <!-- Ikon Play -->
+  <svg id="icon-play" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5 10v4a2 2 0 002 2h2l4 4V4L9 8H7a2 2 0 00-2 2z" />
+  </svg>
+  <!-- Ikon Stop -->
+  <svg id="icon-stop" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="display:none;">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+    <path stroke-linecap="round" stroke-linejoin="round" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
+  </svg>
+</div>
+
+<!-- SCRIPTS: TTS DENGAN HIGHLIGHT & SUARA REPORTASE PEREMPUAN INDONESIA -->
+<script>
+  const synth = window.speechSynthesis;
+  let isPlaying = false;
+  let utterances = [];
+  let currentUIdx = 0;
+  let voicesLoaded = false;
+
+  // Memaksa browser meload daftar suara (sebagian browser membutuhkannya)
+  function loadVoices() {
+    synth.getVoices();
+    voicesLoaded = true;
+  }
+  if (speechSynthesis.onvoiceschanged !== undefined) {
+    speechSynthesis.onvoiceschanged = loadVoices;
+  }
+
+  // Bungkus setiap kata di dalam class "tts-source" dengan tag <span>
+  function prepareText() {
+    const blocks = document.querySelectorAll('.tts-source');
+    
+    blocks.forEach(block => {
+      if (block.querySelector('.tts-word')) return;
+      
+      const text = block.innerText;
+      const words = text.split(/(\s+)/); 
+      block.innerHTML = ''; 
+
+      let wordSpans = [];
+      let cleanText = '';
+
+      words.forEach(word => {
+        if (word.trim() === '') {
+          block.appendChild(document.createTextNode(word));
+          cleanText += word;
+        } else {
+          let span = document.createElement('span');
+          span.className = 'tts-word';
+          span.innerText = word;
+          block.appendChild(span);
+          wordSpans.push({ element: span, startIndex: cleanText.length });
+          cleanText += word;
+        }
+      });
+
+      if (cleanText.trim().length > 0) {
+        let u = new SpeechSynthesisUtterance(cleanText);
+        
+        // PENGATURAN MODE REPORTASE
+        u.lang = 'id-ID'; 
+        u.pitch = 1.2;  // Sedikit lebih tinggi (Ciri khas reportase)
+        u.rate = 1.05;  // Temponya sedikit dinamis & tegas
+        u.volume = 1.0;
+
+        // Mencari Suara Perempuan Berbahasa Indonesia
+        const voices = synth.getVoices();
+        let idVoice = voices.find(v => v.lang === 'id-ID' && (v.name.includes('Female') || v.name.includes('Google') || v.name.includes('Gadis') || v.name.includes('Microsoft Andika')));
+        if(!idVoice) idVoice = voices.find(v => v.lang.includes('id')); // Fallback apapun bahasa indonesianya
+        if(idVoice) u.voice = idVoice;
+
+        // Event saat pembacaan pindah kata
+        u.onboundary = (e) => {
+          if (e.name === 'word') {
+            document.querySelectorAll('.tts-word.active').forEach(s => s.classList.remove('active'));
+            for (let i = wordSpans.length - 1; i >= 0; i--) {
+              if (e.charIndex >= wordSpans[i].startIndex) {
+                wordSpans[i].element.classList.add('active');
+                
+                // Auto-scroll jika teks berada di luar layar
+                let rect = wordSpans[i].element.getBoundingClientRect();
+                if (rect.top > window.innerHeight - 100 || rect.bottom < 100) {
+                  wordSpans[i].element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+                break;
+              }
+            }
+          }
+        };
+
+        // Lanjut ke blok kalimat berikutnya
+        u.onend = () => {
+          document.querySelectorAll('.tts-word.active').forEach(s => s.classList.remove('active'));
+          currentUIdx++;
+          if (currentUIdx < utterances.length && isPlaying) {
+            synth.speak(utterances[currentUIdx]);
+          } else {
+            stopTTS();
+          }
+        };
+
+        utterances.push(u);
+      }
+    });
+  }
+
+  function toggleTTS() {
+    if (isPlaying) { stopTTS(); } else { startTTS(); }
+  }
+
+  function startTTS() {
+    synth.cancel(); 
+    if (utterances.length === 0) prepareText();
+    
+    // Set ulang voice jika load API suara baru selesai
+    const voices = synth.getVoices();
+    let idVoice = voices.find(v => v.lang === 'id-ID' && (v.name.includes('Female') || v.name.includes('Google') || v.name.includes('Gadis')));
+    if(!idVoice) idVoice = voices.find(v => v.lang.includes('id'));
+    utterances.forEach(u => { if(idVoice) u.voice = idVoice; });
+
+    currentUIdx = 0;
+    isPlaying = true;
+    
+    // Animasi tombol melayang
+    document.getElementById('tts-btn').classList.add('playing');
+    document.getElementById('icon-play').style.display = 'none';
+    document.getElementById('icon-stop').style.display = 'block';
+    document.getElementById('tooltip-text').innerText = 'Hentikan Suara';
+
+    if (utterances.length > 0) synth.speak(utterances[0]);
+  }
+
+  function stopTTS() {
+    synth.cancel();
+    isPlaying = false;
+    
+    document.getElementById('tts-btn').classList.remove('playing');
+    document.getElementById('icon-play').style.display = 'block';
+    document.getElementById('icon-stop').style.display = 'none';
+    document.getElementById('tooltip-text').innerText = 'Dengarkan Panduan';
+
+    document.querySelectorAll('.tts-word.active').forEach(s => s.classList.remove('active'));
+  }
+  
+  // Hentikan saat pengguna menutup layar
+  window.onbeforeunload = () => { synth.cancel(); }
+</script>
+</body>
+</html>
